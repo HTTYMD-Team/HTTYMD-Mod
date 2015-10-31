@@ -1,0 +1,122 @@
+entity.httymd.TerribleTerror.name=Terrible Terror
+entity.httymd.Skrill.name=Skrill
+entity.httymd.NightFury.name=Night Fury
+
+key.categories.httymd=HTTYMD
+
+item.httymd:sword_gronkle.name=Gronkle Iron Sword
+item.httymd:axe_gronkle.name=Gronkle Iron Axe
+item.httymd:pickaxe_gronkle.name=Gronkle Iron Pickaxe
+item.httymd:shovel_gronkle.name=Gronkle Iron Shovel
+item.httymd:hoe_gronkle.name=Gronkle Iron Hoe
+
+item.httymd:club_wood.name=Wooden Club
+item.httymd:club_stone.name=Stone Club
+item.httymd:club_iron.name=Iron Club
+item.httymd:club_gronkle.name=Gronkle Iron Club
+item.httymd:club_gold.name=Gold Club
+item.httymd:club_emerald.name=Diamond Club
+
+item.httymd:dagger_wood.name=Wooden Dagger
+item.httymd:dagger_stone.name=Stone Dagger
+item.httymd:dagger_iron.name=Iron Dagger
+item.httymd:dagger_gronkle.name=Gronkle Iron Dagger
+item.httymd:dagger_gold.name=Gold Dagger
+item.httymd:dagger_emerald.name=Diamond Dagger
+
+item.httymd:hammer_wood.name=Wooden Warhammer
+item.httymd:hammer_stone.name=Stone Warhammer
+item.httymd:hammer_iron.name=Iron Warhammer
+item.httymd:hammer_gronkle.name=Gronkle Iron Warhammer
+item.httymd:hammer_gold.name=Gold Warhammer
+item.httymd:hammer_emerald.name=Diamond Warhammer
+
+item.httymd:mace_wood.name=Wooden Mace
+item.httymd:mace_stone.name=Stone Mace
+item.httymd:mace_iron.name=Iron Mace
+item.httymd:mace_gronkle.name=Gronkle Iron Mace
+item.httymd:mace_gold.name=Gold Mace
+item.httymd:mace_emerald.name=Diamond Mace
+
+item.httymd:waraxe_wood.name=Wooden Battleaxe
+item.httymd:waraxe_stone.name=Stone Battleaxe
+item.httymd:waraxe_iron.name=Iron Battleaxe
+item.httymd:waraxe_gold.name=Gold Battleaxe
+item.httymd:waraxe_emerald.name=Diamond Battleaxe
+item.httymd:waraxe_gronkle.name=Gronkle Iron Battleaxe
+
+item.httymd:crossbow.name=Crossbow
+item.httymd:flame_sword.name=Dragon Blade
+
+item.httymd:shield_wood.name=Wooden Shield
+item.httymd:shield_stone.name=Stone Shield
+item.httymd:shield_iron.name=Iron Shield
+item.httymd:shield_gold.name=Gold Shield
+item.httymd:shield_emerald.name=Diamond Shield
+item.httymd:shield_gronkle.name=Gronkle Iron Shield
+
+item.httymd:gsuit_helmet.name=Gliding Suit Helmet
+item.httymd:gsuit_chestplate.name=Gliding Suit Chestplate
+item.httymd:gsuit_leggings.name=Gliding Suit Leggings
+item.httymd:gsuit_boots.name=Gliding Suit Boots
+
+item.httymd:hcomb.name=Honeycomb
+item.httymd:sflower.name=Scented Flower
+item.httymd:crab.name=Crab
+item.httymd:fweed.name=Fireweed
+item.httymd:dnip.name=Dragon-Nip
+item.httymd:mutton.name=Cooked Mutton
+item.httymd:mutton_raw.name=Raw Mutton
+
+item.httymd:giron_ingot.name=Gronkle Iron Ingot
+item.httymd:wing_item.name=Wing
+
+item.httymd:egg_spawn.spawn.text=Spawn %s
+
+itemGroup.httymd:mcdTab=HTTYMD Tab
+
+death.attack.httymd:dragon.direct.1=Dragon Bite
+death.attack.httymd:dragon.direct.2=Dragon Clawed
+death.attack.httymd:dragon.ability.projectile.fire=Dragon Fire
+
+item.potato.name=The-Vegetable-No-One-Dares-Name
+item.potatoBaked.name=The-Baked-Vegetable-No-One-Dares-Name
+item.potatoPoisonous.name=The-Poisonous-Vegetable-No-One-Dares-Name
+
+item.httymd:zipple_gas_cont.name=Zippleback Gas Vial
+httymd:zipple_gas_cont.produceType=Gas
+
+item.httymd:night_saliva_cont.name=Nightmare Saliva Tank
+httymd:night_saliva_cont.produceType=Saliva
+
+httymd:itemNBT.milliliter=Ounces
+httymd:itemNBT.empty=Empty
+
+httymd:name.special.add.rider=%s the Rider
+httymd:name.special.add.tamer=% the Master Tamer
+httymd:name.special.add.ruthless=%s the Ruthless
+httymd:name.special.add.slayed=%s the Slayed
+httymd:name.special.add.relentless=%s the Relentless
+httymd:name.special.add.excited=%s the Excited
+httymd:name.special.add.champion=%s the Champion
+httymd:name.special.add.sailor=%s the Sailor
+httymd:name.random.smelly=%s the Smelly
+httymd:name.random.angry=%s the Angry
+httymd:name.random.fat=%s the Fat
+httymd:name.random.big=%s the Big
+httymd:name.random.wimp=%s the Wimp
+httymd:name.random.dragonslayer=%s the Dragon Slayer
+httymd:name.random.meatslapper=%s the Meat Slapper
+httymd:name.random.murderer=%s the Murderer
+httymd:name.random.nut=%s the Nut
+httymd:name.random.jerk=%s the Jerk
+httymd:name.random.melon=%s the Melon
+httymd:name.random.jackolatern=%s the Jack'o'Latern
+httymd:name.random.blind=%s the Blind
+httymd:name.random.crazy=%s the Crazy
+httymd:name.random.freak=%s the Freak
+httymd:name.random.broken=%s the Broken
+httymd:name.random.stupid=%s the Stupid
+
+httymd:name.special.add.s322=%s the Dragon Trainer
+httymd:name.special.add.cmmr=%s the Night Fury

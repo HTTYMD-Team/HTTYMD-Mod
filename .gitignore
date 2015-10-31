@@ -1,0 +1,10 @@
+.gradle/
+.idea/
+.settings/
+.project
+.classpath
+bin/
+libs/
+classes/
+minecraft/
+HTTYMD.iml

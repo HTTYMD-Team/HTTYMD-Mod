@@ -1,0 +1,10 @@
+{
+	"mob.nadder.random" :
+	{
+		"category": "neutral",
+        "sounds":
+        [
+			"mob/nadder/random1"
+		]
+	}
+}
