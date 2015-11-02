@@ -17,7 +17,7 @@ import net.minecraft.item.ItemSword;
 
 public class ItemWeapon extends ItemSword implements IRegisterable {
 	protected float attackDamage;
-	
+
 	public ItemWeapon(Item.ToolMaterial toolMaterial, String weaponName, float weaponDamage) {
 		this(toolMaterial, weaponName, weaponDamage, CreativeTab.DRAGON_TAB);
 	}
@@ -26,7 +26,7 @@ public class ItemWeapon extends ItemSword implements IRegisterable {
 		this(weaponName + "_" + toolMaterial.toString(), toolMaterial, weaponDam, tab);
 		this.attackDamage = weaponDam + toolMaterial.getDamageVsEntity();
 	}
-	
+
 	public ItemWeapon(String name, Item.ToolMaterial weaponMat, float weaponDam, CreativeTabs tab) {
 		super(weaponMat);
 		this.setCreativeTab(tab);

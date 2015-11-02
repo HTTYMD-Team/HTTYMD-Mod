@@ -28,9 +28,9 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemWeaponCrossbow extends ItemExtension {
-	
+
 	public static final String NBT_POWER = "BowStoredPower";
-	
+
 	public static final float RESET_POWER = 0.0F;
 
 	public final ArrayList<String> iconList = new ArrayList<String>();
@@ -74,26 +74,27 @@ public class ItemWeaponCrossbow extends ItemExtension {
 
 	public ItemStack onStartUsing(ItemStack item, World world, EntityLivingBase entity) {
 		boolean bowDraw = this.isBowDrawn(item);
-		boolean isCreative = entity instanceof EntityPlayer ? ((EntityPlayer) entity).capabilities.isCreativeMode : false;
+		boolean isCreative = entity instanceof EntityPlayer ? ((EntityPlayer) entity).capabilities.isCreativeMode
+				: false;
 
 		if (bowDraw) {
-			if(entity.isSneaking()) {
+			if (entity.isSneaking()) {
 				this.insertToInventory(entity, new ItemStack(Items.arrow, 1));
 				this.resetBow(item);
 				return item;
 			}
-				
+
 			float arrowPower = this.getBowPower(item);
 			EntityArrow entityarrow = new EntityArrow(world, entity, arrowPower * 2);
 			if (arrowPower > 1) {
 				entityarrow.setIsCritical(true);
 			}
-			
+
 			int powerLevel = EnchantmentHelper.getEnchantmentLevel(Enchantment.power.effectId, item);
 			if (powerLevel > 0) {
 				entityarrow.setDamage(entityarrow.getDamage() + (double) powerLevel * 0.5D + 0.5D);
 			}
-			
+
 			int knockbackLevel = EnchantmentHelper.getEnchantmentLevel(Enchantment.punch.effectId, item);
 			if (knockbackLevel > 0) {
 				entityarrow.setKnockbackStrength(knockbackLevel);
@@ -104,7 +105,8 @@ public class ItemWeaponCrossbow extends ItemExtension {
 			}
 
 			item.damageItem(1, entity);
-			world.playSoundAtEntity(entity, "random.bow", 1, 1 / (itemRand.nextFloat() * 0.4F + 1.2F) + arrowPower * 0.5F);
+			world.playSoundAtEntity(entity, "random.bow", 1,
+					1 / (itemRand.nextFloat() * 0.4F + 1.2F) + arrowPower * 0.5F);
 
 			if (isCreative) {
 				entityarrow.canBePickedUp = 2;
@@ -141,7 +143,7 @@ public class ItemWeaponCrossbow extends ItemExtension {
 			if (event.isCanceled()) {
 				return;
 			}
-			
+
 			durationDelta = event.charge;
 			if (pullInventory(entity, item, Items.arrow)) {
 				float arrowPower = (float) durationDelta / 20;
@@ -157,7 +159,9 @@ public class ItemWeaponCrossbow extends ItemExtension {
 				}
 
 				this.setBowPower(item, arrowPower);
-				world.playSoundAtEntity(entity, "mob.sheep.shear", 2.0F, 0.8F);// Best loading sound
+				world.playSoundAtEntity(entity, "mob.sheep.shear", 2.0F, 0.8F);// Best
+																				// loading
+																				// sound
 			}
 		}
 	}
@@ -213,7 +217,7 @@ public class ItemWeaponCrossbow extends ItemExtension {
 
 		iconArray[0] = itemIcon;
 		for (int i = 1; i < iconArray.length; ++i) {
-			iconArray[i] = registry.registerIcon(this.getIconString() + "_" + iconList.get(i-1));
+			iconArray[i] = registry.registerIcon(this.getIconString() + "_" + iconList.get(i - 1));
 		}
 	}
 
@@ -241,14 +245,15 @@ public class ItemWeaponCrossbow extends ItemExtension {
 	}
 
 	public void setBowPower(ItemStack stack, float power) {
-		if(!stack.hasTagCompound()) stack.setTagCompound(new NBTTagCompound());
+		if (!stack.hasTagCompound())
+			stack.setTagCompound(new NBTTagCompound());
 		stack.getTagCompound().setFloat(NBT_POWER, power);
 	}
 
 	public float getBowPower(ItemStack stack) {
 		if (!stack.hasTagCompound() || !stack.getTagCompound().hasKey(NBT_POWER)) {
 			resetBow(stack);
-			return RESET_POWER; //quicker, might as well optimize anyway
+			return RESET_POWER; // quicker, might as well optimize anyway
 		}
 		return stack.getTagCompound().getFloat(NBT_POWER);
 	}
@@ -260,4 +265,4 @@ public class ItemWeaponCrossbow extends ItemExtension {
 	public void resetBow(ItemStack stack) {
 		setBowPower(stack, RESET_POWER);
 	}
-} 
+}

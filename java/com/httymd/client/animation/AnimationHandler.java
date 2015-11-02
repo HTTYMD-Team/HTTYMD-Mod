@@ -41,7 +41,8 @@ public class AnimationHandler {
 			long time = System.currentTimeMillis();
 			long currentStep = (time - currentStart);
 
-			if (currentStep > currentAnimation.duration && (!currentIsLoop || nextAnimation != null || nextPriority == Priority.WAIT_FOR_ANIM_TO_FINISH))
+			if (currentStep > currentAnimation.duration
+					&& (!currentIsLoop || nextAnimation != null || nextPriority == Priority.WAIT_FOR_ANIM_TO_FINISH))
 				switchAnimation();
 
 			currentAnimation.animate(dragon, currentStep);

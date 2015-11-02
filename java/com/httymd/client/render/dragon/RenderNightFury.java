@@ -13,7 +13,8 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class RenderNightFury extends RenderDragon {
-	private static final ResourceLocation entityTextures = new ResourceLocation(HTTYMDMod.ID + ":textures/entities/NightFury" + ".png");
+	private static final ResourceLocation entityTextures = new ResourceLocation(
+			HTTYMDMod.ID + ":textures/entities/NightFury" + ".png");
 
 	public RenderNightFury(ModelBase p_i1253_1_, float p_i1253_2_) {
 		super(p_i1253_1_, p_i1253_2_);
@@ -23,7 +24,7 @@ public class RenderNightFury extends RenderDragon {
 		return entityTextures;
 	}
 
-        @Override
+	@Override
 	protected ResourceLocation getEntityTexture(Entity p_110775_1_) {
 		return this.getEntityTexture((EntityNightFury) p_110775_1_);
 	}

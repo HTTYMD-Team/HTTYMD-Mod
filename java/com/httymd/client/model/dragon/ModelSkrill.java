@@ -5,6 +5,7 @@ import com.httymd.client.model.ModelDragon;
 import net.minecraft.client.model.ModelRenderer;
 
 public class ModelSkrill extends ModelDragon {
+
 	public ModelSkrill() {
 		textureWidth = 512;
 		textureHeight = 256;

@@ -13,8 +13,9 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class RenderSkrill extends RenderDragon {
-	private static final ResourceLocation entityTextures = new ResourceLocation(HTTYMDMod.ID + ":textures/entities/Skrill.png");
-	
+	private static final ResourceLocation entityTextures = new ResourceLocation(
+			HTTYMDMod.ID + ":textures/entities/Skrill.png");
+
 	public RenderSkrill(ModelBase p_i1253_1_, float p_i1253_2_) {
 		super(p_i1253_1_, p_i1253_2_);
 	}

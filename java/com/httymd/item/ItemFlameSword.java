@@ -16,7 +16,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 
-public class ItemFlameSword extends ItemWeapon implements IToggleable {
+public class ItemFlameSword extends ItemWeapon {
 
 	public static final String DISABLED_SUFFIX = "_disabled";
 	private static final String NBT_ISON = "IsOn";
@@ -95,15 +95,15 @@ public class ItemFlameSword extends ItemWeapon implements IToggleable {
 		world.createExplosion(entity, entity.posX, entity.posY, entity.posZ, explosionSize, false);
 	}
 
-	@Override
 	public void onToggle(ItemStack stack, boolean toggle) {
+		if (!(stack.getItem() instanceof ItemFlameSword))
+			return;
 		if (!stack.hasTagCompound())
 			stack.setTagCompound(new NBTTagCompound());
 		stack.getTagCompound().setBoolean(NBT_ISON, toggle);
 		this.attackDamage = toggle ? this.defaultDamage : 1;
 	}
 
-	@Override
 	public boolean isToggled(ItemStack stack) {
 		if (stack.getItem() instanceof ItemFlameSword && stack.hasTagCompound()) {
 			return stack.getTagCompound().getBoolean(NBT_ISON);

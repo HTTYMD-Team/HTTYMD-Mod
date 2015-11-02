@@ -27,11 +27,7 @@ import cpw.mods.fml.common.event.FMLServerStartedEvent;
 import cpw.mods.fml.common.event.FMLServerStoppedEvent;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
-@Mod(
-		modid = HTTYMDMod.ID,
-		name = HTTYMDMod.NAME,
-		guiFactory = HTTYMDMod.GUIFACORY
-	)
+@Mod(modid = HTTYMDMod.ID, name = HTTYMDMod.NAME, guiFactory = HTTYMDMod.GUIFACORY)
 public class HTTYMDMod {
 
 	//////////////////////////////////////////////////////
@@ -49,28 +45,24 @@ public class HTTYMDMod {
 	@Instance(ID)
 	public static HTTYMDMod INSTANCE;
 
-	@SidedProxy(
-			modId = ID,
-			clientSide = CLIENT_PROXY,
-			serverSide = COMMON_PROXY
-	)
+	@SidedProxy(modId = ID, clientSide = CLIENT_PROXY, serverSide = COMMON_PROXY)
 	public static CommonProxy proxy;
 
 	private ModMetadata metadata;
 	private Config config;
 	private final Logger log = LogManager.getLogger(NAME);
-	
+
 	private ArrayList<String> dragonNameList = new ArrayList<String>();
 
 	public static void registerDragonName(String name) {
 		INSTANCE.dragonNameList.add(name);
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	public static ArrayList<String> getDragonList() {
 		return (ArrayList<String>) INSTANCE.dragonNameList.clone();
 	}
-	
+
 	public static ModMetadata getMetadata() {
 		return INSTANCE.metadata;
 	}
@@ -82,21 +74,23 @@ public class HTTYMDMod {
 	public static Logger getLogger() {
 		return INSTANCE.log;
 	}
-	
+
 	public static CreativeTab getCreativeTab() {
 		return CreativeTab.DRAGON_TAB;
 	}
-	
-	public static void registerEntity(Class<? extends Entity> entityClass, String entityName, int solidColor, int spotColor) {
+
+	public static void registerEntity(Class<? extends Entity> entityClass, String entityName, int solidColor,
+			int spotColor) {
 		EntityRegister.createEntity(entityClass, entityName, solidColor, spotColor);
 	}
 
 	@EventHandler
 	public void modPreInit(FMLPreInitializationEvent event) {
 		config = new Config(event);
-		metadata = event.getModMetadata();		  
+		metadata = event.getModMetadata();
 		proxy.onPreInit(event);
-		StatListMod.registerStats(); //Guarantees stats register with all information
+		StatListMod.registerStats(); // Guarantees stats register with all
+										// information
 	}
 
 	@EventHandler
@@ -120,10 +114,10 @@ public class HTTYMDMod {
 	public void onServerStopped(FMLServerStoppedEvent evt) {
 		proxy.onServerStopped(evt);
 	}
-	
+
 	@SubscribeEvent
 	public void onConfigChanged(OnConfigChangedEvent eventArgs) {
-		if( eventArgs.modID.equals(ID) ) {
+		if (eventArgs.modID.equals(ID)) {
 			config.syncConfig();
 		}
 	}

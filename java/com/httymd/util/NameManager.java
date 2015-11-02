@@ -43,9 +43,9 @@ public class NameManager {
 			public String get(EntityLivingBase entity, String currentName) {
 				if (!(entity instanceof EntityPlayer))
 					return null;
-				
+
 				String id = ((EntityPlayer) entity).getGameProfile().getId().toString();
-				
+
 				if (id == "b2848781-aafe-454b-a87d-89ceffad585f") {
 					return "s322";
 				}
@@ -66,12 +66,12 @@ public class NameManager {
 
 				if (Utils.hasPlayerGained(ply, StatListMod.distanceByDragon, 3000)) {
 					return "rider";
-				} /* else if (Utils.hasPlayerGained(ply, 
-						StatListMod.dragonsRidden.get("nightfury"), //for some reason fails
-						1)) {
-					return "tamer";
-				}*/
-				
+				} /*
+					 * else if (Utils.hasPlayerGained(ply,
+					 * StatListMod.dragonsRidden.get("nightfury"), //for some
+					 * reason fails 1)) { return "tamer"; }
+					 */
+
 				if (Utils.hasPlayerGained(ply, StatList.playerKillsStat, 100)) {
 					return "relentless";
 				} else if (Utils.hasPlayerGained(ply, StatList.deathsStat, 100)) {

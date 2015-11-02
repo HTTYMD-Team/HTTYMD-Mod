@@ -13,8 +13,9 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class RenderTerribleTerror extends RenderDragon {
-	private static final ResourceLocation entityTextures = new ResourceLocation(HTTYMDMod.ID + ":textures/entities/TerribleTerror" + ".png");
-	
+	private static final ResourceLocation entityTextures = new ResourceLocation(
+			HTTYMDMod.ID + ":textures/entities/TerribleTerror" + ".png");
+
 	public RenderTerribleTerror(ModelBase p_i1253_1_, float p_i1253_2_) {
 		super(p_i1253_1_, p_i1253_2_);
 	}
@@ -23,7 +24,7 @@ public class RenderTerribleTerror extends RenderDragon {
 		return entityTextures;
 	}
 
-        @Override
+	@Override
 	protected ResourceLocation getEntityTexture(Entity p_110775_1_) {
 		return this.getEntityTexture((EntityTerribleTerror) p_110775_1_);
 	}

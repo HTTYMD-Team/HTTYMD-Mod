@@ -44,8 +44,7 @@ public abstract class ModelDragonNew extends ModelBase {
 	public abstract Animation getFlying();
 
 	@Override
-	public void render(Entity entity, float f, float f1, float f2, float f3,
-			float f4, float f5) {
+	public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {
 
 		setRotationAngles(f, f1, f2, f3, f4, f5, entity);
 
@@ -54,11 +53,9 @@ public abstract class ModelDragonNew extends ModelBase {
 		boolean flying = ((EntityTameableFlying) entity).isFlying();
 
 		if (flying)
-			animationHandler.addAnimation(getFlying(),
-					Priority.WAIT_FOR_ANIM_TO_FINISH, true);
+			animationHandler.addAnimation(getFlying(), Priority.WAIT_FOR_ANIM_TO_FINISH, true);
 		else
-			animationHandler.addAnimation(getIdle(),
-					Priority.WAIT_FOR_ANIM_TO_FINISH, true);
+			animationHandler.addAnimation(getIdle(), Priority.WAIT_FOR_ANIM_TO_FINISH, true);
 
 		float pitch = flying ? entity.rotationPitch : 0;
 		GL11.glRotatef(pitch / 2, 1, 0, 0);
@@ -86,8 +83,7 @@ public abstract class ModelDragonNew extends ModelBase {
 	 * @param entity
 	 */
 	@Override
-	public void setRotationAngles(float f, float f1, float f2, float f3,
-			float f4, float f5, Entity entity) {
+	public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5, Entity entity) {
 		if (getHead() != null) {
 			getHead().rotateAngleX = f4 / (180F / (float) Math.PI);
 			getHead().rotateAngleY = f3 / (180F / (float) Math.PI);
@@ -104,8 +100,7 @@ public abstract class ModelDragonNew extends ModelBase {
 		} else {
 			if (getLegs() != null)
 				for (int i = 0; i < getLegs().size(); i++)
-					getLegs().get(i).rotateAngleX = (i % 2 == 0 ? 1 : -1)
-							* MathHelper.cos(f * 0.6662F) * 1.4f * f1;
+					getLegs().get(i).rotateAngleX = (i % 2 == 0 ? 1 : -1) * MathHelper.cos(f * 0.6662F) * 1.4f * f1;
 		}
 
 		animationHandler.animate();

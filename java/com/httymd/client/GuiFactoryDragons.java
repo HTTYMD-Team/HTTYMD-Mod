@@ -10,7 +10,7 @@ public class GuiFactoryDragons implements IModGuiFactory {
 
 	@Override
 	public void initialize(Minecraft minecraftInstance) {
-		
+
 	}
 
 	@Override
@@ -24,8 +24,7 @@ public class GuiFactoryDragons implements IModGuiFactory {
 	}
 
 	@Override
-	public RuntimeOptionGuiHandler getHandlerFor(
-			RuntimeOptionCategoryElement element) {
+	public RuntimeOptionGuiHandler getHandlerFor(RuntimeOptionCategoryElement element) {
 		return null;
 	}
 

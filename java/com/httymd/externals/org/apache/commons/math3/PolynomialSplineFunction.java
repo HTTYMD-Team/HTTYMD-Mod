@@ -45,7 +45,8 @@ import java.util.Arrays;
  * <ol>
  * <li>The knot array is searched to find the segment to which <code>x</code>
  * belongs. If <code>x</code> is less than the smallest knot point or greater
- * than the largest one, an <code>IllegalArgumentException</code> is thrown.</li>
+ * than the largest one, an <code>IllegalArgumentException</code> is thrown.
+ * </li>
  * <li>Let <code>j</code> be the index of the largest knot point that is less
  * than or equal to <code>x</code>. The value returned is <br>
  * <code>polynomials[j](x - knot[j])</code></li>
@@ -91,8 +92,7 @@ public class PolynomialSplineFunction {
 	 *             if the {@code knots} array is not strictly increasing.
 	 *
 	 */
-	public PolynomialSplineFunction(double knots[],
-			PolynomialFunction polynomials[]) {
+	public PolynomialSplineFunction(double knots[], PolynomialFunction polynomials[]) {
 		if (knots == null || polynomials == null) {
 			throw new RuntimeException("Null argument");
 		}
@@ -100,8 +100,7 @@ public class PolynomialSplineFunction {
 			throw new RuntimeException("Number is to small: " + knots.length);
 		}
 		if (knots.length - 1 != polynomials.length) {
-			throw new RuntimeException("Dimensions does not match! "
-					+ polynomials.length + " & " + knots.length);
+			throw new RuntimeException("Dimensions does not match! " + polynomials.length + " & " + knots.length);
 		}
 		MathArrays.checkOrder(knots);
 

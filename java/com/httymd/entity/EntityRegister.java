@@ -11,26 +11,28 @@ import cpw.mods.fml.common.registry.EntityRegistry;
 
 public class EntityRegister {
 
-    private static int nextID = 0;
-    private static CreativeTabs currentTab = HTTYMDMod.getCreativeTab();
+	private static int nextID = 0;
+	private static CreativeTabs currentTab = HTTYMDMod.getCreativeTab();
 
-    public static void createEntity(Class<? extends Entity> entityClass, String entityName, int solidColor, int spotColor) {
-        if (nextID < 1) {
-            nextID = HTTYMDMod.getConfig().getStartEntityID();
-            if (nextID == -1) {
-                nextID = EntityRegistry.findGlobalUniqueEntityId();
-            }
-        } else {
-            nextID += 1;
-        }        
-        EntityRegistry.registerModEntity(entityClass, entityName, nextID, HTTYMDMod.INSTANCE, 50, 2, true);
-        HTTYMDMod.registerDragonName(entityName);
-        ItemSpawnEgg egg = (ItemSpawnEgg) (new ItemSpawnEgg(entityName, solidColor, spotColor).setCreativeTab(currentTab));
-        egg.registerItem();
-        ItemRegistry.spawnEggIDMapping.put(nextID, egg);
-    }
-    
-    public static void setCurrentTab(CreativeTabs tab) {
-    	currentTab = tab;
-    }
+	public static void createEntity(Class<? extends Entity> entityClass, String entityName, int solidColor,
+			int spotColor) {
+		if (nextID < 1) {
+			nextID = HTTYMDMod.getConfig().getStartEntityID();
+			if (nextID == -1) {
+				nextID = EntityRegistry.findGlobalUniqueEntityId();
+			}
+		} else {
+			nextID += 1;
+		}
+		EntityRegistry.registerModEntity(entityClass, entityName, nextID, HTTYMDMod.INSTANCE, 50, 2, true);
+		HTTYMDMod.registerDragonName(entityName);
+		ItemSpawnEgg egg = (ItemSpawnEgg) (new ItemSpawnEgg(entityName, solidColor, spotColor)
+				.setCreativeTab(currentTab));
+		egg.registerItem();
+		ItemRegistry.spawnEggIDMapping.put(nextID, egg);
+	}
+
+	public static void setCurrentTab(CreativeTabs tab) {
+		currentTab = tab;
+	}
 }

@@ -16,7 +16,6 @@
  */
 package com.httymd.externals.org.apache.commons.math3;
 
-
 /**
  * Computes a natural (also known as "free", "unclamped") cubic spline
  * interpolation for the data set.
@@ -63,8 +62,7 @@ public class SplineInterpolator {
 	 */
 	public PolynomialSplineFunction interpolate(double x[], double y[]) {
 		if (x.length != y.length) {
-			throw new RuntimeException("Dimensions does not match! " + x.length
-					+ " & " + y.length);
+			throw new RuntimeException("Dimensions does not match! " + x.length + " & " + y.length);
 		}
 
 		if (x.length < 3) {
@@ -90,10 +88,8 @@ public class SplineInterpolator {
 		for (int i = 1; i < n; i++) {
 			g = 2d * (x[i + 1] - x[i - 1]) - h[i - 1] * mu[i - 1];
 			mu[i] = h[i] / g;
-			z[i] = (3d
-					* (y[i + 1] * h[i - 1] - y[i] * (x[i + 1] - x[i - 1]) + y[i - 1]
-							* h[i]) / (h[i - 1] * h[i]) - h[i - 1] * z[i - 1])
-					/ g;
+			z[i] = (3d * (y[i + 1] * h[i - 1] - y[i] * (x[i + 1] - x[i - 1]) + y[i - 1] * h[i]) / (h[i - 1] * h[i])
+					- h[i - 1] * z[i - 1]) / g;
 		}
 
 		// cubic spline coefficients -- b is linear, c quadratic, d is cubic
@@ -107,8 +103,7 @@ public class SplineInterpolator {
 
 		for (int j = n - 1; j >= 0; j--) {
 			c[j] = z[j] - mu[j] * c[j + 1];
-			b[j] = (y[j + 1] - y[j]) / h[j] - h[j] * (c[j + 1] + 2d * c[j])
-					/ 3d;
+			b[j] = (y[j + 1] - y[j]) / h[j] - h[j] * (c[j + 1] + 2d * c[j]) / 3d;
 			d[j] = (c[j + 1] - c[j]) / (3d * h[j]);
 		}
 

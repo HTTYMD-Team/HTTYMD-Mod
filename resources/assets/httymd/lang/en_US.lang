@@ -1,6 +1,7 @@
 entity.httymd.TerribleTerror.name=Terrible Terror
 entity.httymd.Skrill.name=Skrill
 entity.httymd.NightFury.name=Night Fury
+entity.httymd.DeadlyNadder.name=Deadly Nadder
 
 key.categories.httymd=HTTYMD
 
@@ -75,8 +76,8 @@ item.httymd:egg_spawn.spawn.text=Spawn %s
 
 itemGroup.httymd:mcdTab=HTTYMD Tab
 
-death.attack.httymd:dragon.direct.1=Dragon Bite
-death.attack.httymd:dragon.direct.2=Dragon Clawed
+death.attack.httymd:dragon.direct.1=%1$s was eaten by %2$s
+death.attack.httymd:dragon.direct.2=%1$s was mauled by %2$s
 death.attack.httymd:dragon.ability.projectile.fire=Dragon Fire
 
 item.potato.name=The-Vegetable-No-One-Dares-Name

@@ -162,14 +162,15 @@ public class ItemRegistry {
 		// 20.0F, EntityNightmare.class);
 
 		foods = EnumFoodType.generateFood();
-		
+
 		ItemUtils.addFish(new ItemStack(foods.get(EnumFoodType.CRAB).iterator().next(), 1), 50);
-	}	
-	
+	}
+
 	/**
-     * Only use is for items that don't use meta, or don't do special texture/model junk
-     */
-    public static void registerItem(Item item, String regName){
-    	GameRegistry.registerItem(item, regName);
-    }
+	 * Only use is for items that don't use meta, or don't do special
+	 * texture/model junk
+	 */
+	public static void registerItem(Item item, String regName) {
+		GameRegistry.registerItem(item, regName);
+	}
 }

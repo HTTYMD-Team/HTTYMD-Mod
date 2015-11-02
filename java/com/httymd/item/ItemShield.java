@@ -37,7 +37,8 @@ public class ItemShield extends ItemExtension {
 	public static float getDamageReduction(ItemStack stack) {
 		if (stack.getItem() instanceof ItemShield) {
 			ItemShield shield = (ItemShield) stack.getItem();
-			return shield.defDamageReduction + (stack.getTagCompound() != null ? stack.getTagCompound().getFloat(NBT_DAMAGE_REDUCER) : 0);
+			return shield.defDamageReduction
+					+ (stack.getTagCompound() != null ? stack.getTagCompound().getFloat(NBT_DAMAGE_REDUCER) : 0);
 		}
 
 		return 0;

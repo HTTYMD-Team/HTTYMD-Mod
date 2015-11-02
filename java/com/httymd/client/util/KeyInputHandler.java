@@ -10,26 +10,27 @@ import java.util.BitSet;
 
 public class KeyInputHandler {
 
-    public static final String CAT = "key.categories.httymd";
-    //public static final KeyBinding KEY_DRA_UP = new KeyBinding("key.dragon.fly.up", Keyboard.KEY_R, CAT);
-    
-    private final SimpleNetworkWrapper network;
-    private final ControlMessage cm = new ControlMessage();
+	public static final String CAT = "key.categories.httymd";
+	// public static final KeyBinding KEY_DRA_UP = new
+	// KeyBinding("key.dragon.fly.up", Keyboard.KEY_R, CAT);
 
-    public KeyInputHandler(SimpleNetworkWrapper n) {
-        this.network = n;
+	private final SimpleNetworkWrapper network;
+	private final ControlMessage cm = new ControlMessage();
 
-        //ClientRegistry.registerKeyBinding(KEY_DRA_UP);
-    }
+	public KeyInputHandler(SimpleNetworkWrapper n) {
+		this.network = n;
 
-    @SuppressWarnings("unused")
+		// ClientRegistry.registerKeyBinding(KEY_DRA_UP);
+	}
+
+	@SuppressWarnings("unused")
 	@SubscribeEvent
-    public void onTick(ClientTickEvent evt) {
-        BitSet flags = cm.getFlags();
-        //flags.set(0, KEY_DRA_UP.getIsKeyPressed());
-        if (cm.hasChanged()) {
-            network.sendToServer(cm);
-        }
-    }
+	public void onTick(ClientTickEvent evt) {
+		BitSet flags = cm.getFlags();
+		// flags.set(0, KEY_DRA_UP.getIsKeyPressed());
+		if (cm.hasChanged()) {
+			network.sendToServer(cm);
+		}
+	}
 
 }
