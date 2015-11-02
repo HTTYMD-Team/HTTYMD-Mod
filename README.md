@@ -5,9 +5,11 @@ The Minecraft Mod that adds the (movie) HTTYD universe to Minecraft (and more)
 #### Important
 This is the 1.7.10 branch
 
-### Mod Users
+####Before you post an issue:
+Search the **[issue tracker]** for it first
 
-**Search [here][1] _before_** reporting issues to the [issue tracker][1]
+####If you have a log:
+Use [gist](https://gist.github.com) or [pastebin](http://pastebin.com/)
 
 ### Contributers
 

@@ -24,7 +24,7 @@ idea {
 
 apply plugin: 'forge'
 
-version = "1.7.10-10.13.2.1230F-1.0R"
+version = "1.7.10-10.13.2.1230F-1.0.1R"
 group= "com.httymd" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "HTTYMD"
 

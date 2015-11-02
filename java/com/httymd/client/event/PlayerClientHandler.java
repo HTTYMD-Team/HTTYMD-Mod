@@ -43,7 +43,7 @@ public class PlayerClientHandler {
 		ItemStack stack = Utils.getArmor(event.entity, 2);
 		if (stack == null)
 			return;
-		ItemGlideArmor armor = (ItemGlideArmor) stack.getItem();
+		ItemGlideArmor armor = stack.getItem() instanceof ItemGlideArmor ? (ItemGlideArmor) stack.getItem() : null;
 		if (armor != null) {
 			if (armor.isGliding(stack)) {
 				glideRender.doRender(event.entity, event.x, event.y + event.entity.yOffset, event.z, 0.0F, playerTicks);

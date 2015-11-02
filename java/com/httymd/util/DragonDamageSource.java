@@ -1,13 +1,14 @@
 package com.httymd.util;
 
-import org.apache.commons.lang3.RandomUtils;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.EntityDamageSourceIndirect;
+import scala.util.Random;
 
 public class DragonDamageSource {
 
+	private static final Random rng = new Random();
+	
 	public static EntityDamageSource getAbilityDamage(Entity attacker, Entity source, String add) {
 		return attacker == null ? new EntityDamageSource(Utils.getModString("dragon.ability") + add, source)
 				: new EntityDamageSourceIndirect(Utils.getModString("dragon.ability") + add, source, attacker);
@@ -34,7 +35,7 @@ public class DragonDamageSource {
 	}
 
 	public static EntityDamageSource getDirectDamage(Entity attacker) {
-		return new EntityDamageSource(Utils.getModString("dragon.direct." + RandomUtils.nextInt(1, 3)), attacker);
+		return new EntityDamageSource(Utils.getModString("dragon.direct." + rng.nextInt(2)+1), attacker);
 	}
 
 }
