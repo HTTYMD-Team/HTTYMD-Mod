@@ -37,7 +37,7 @@ public class EntityNightFury extends EntityDragon {
 		// Ground
 		this.tasks.addTask(1, new EntityAISwimming(this));
 		this.tasks.addTask(2, new EntityAIAttackOnCollide(this, 1.0D, true));
-		this.tasks.addTask(3, new EntityAIFollowOwner(this, 1.3D, 50F, 5F));
+		this.tasks.addTask(4, new EntityAIFollowOwner(this, 1.1D, 8F, 40F));
 		this.tasks.addTask(4, new EntityAITempt(this, 0.5, Items.fish, true));
 		this.tasks.addTask(4, new EntityAIMate(this, 1.0D));
 		this.tasks.addTask(5, new EntityAIWander(this, 1.0D));

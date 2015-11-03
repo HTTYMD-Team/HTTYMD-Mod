@@ -35,7 +35,7 @@ public class DragonDamageSource {
 	}
 
 	public static EntityDamageSource getDirectDamage(Entity attacker) {
-		return new EntityDamageSource(Utils.getModString("dragon.direct." + rng.nextInt(2)+1), attacker);
+		return new EntityDamageSource(Utils.getModString("dragon.direct." + Integer.toString(rng.nextInt(2)+1)), attacker);
 	}
 
 }

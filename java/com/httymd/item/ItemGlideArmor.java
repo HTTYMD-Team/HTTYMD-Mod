@@ -33,11 +33,11 @@ public class ItemGlideArmor extends ItemArmorExtension implements ISpecialArmor 
 
 	public boolean isFlyable(EntityLivingBase entity) {
 		boolean flag = entity != null
-				&& (!entity.onGround || !entity.isInWater() || !entity.isInsideOfMaterial(Material.lava));
-
+				&& (!entity.onGround && !entity.isInWater() && !entity.isInsideOfMaterial(Material.lava));
+		
 		if (entity instanceof EntityPlayer)
-			flag = flag && ((EntityPlayer) entity).capabilities.isFlying;
-
+			flag = flag && !((EntityPlayer) entity).capabilities.isFlying;
+		
 		for (int slot : this.getRequiredSlotsForFlight()) {
 			ItemStack armor = entity.getEquipmentInSlot(slot + 1);
 			flag = flag && (armor != null && armor.getItem() instanceof ItemGlideArmor);
@@ -46,7 +46,7 @@ public class ItemGlideArmor extends ItemArmorExtension implements ISpecialArmor 
 	}
 
 	public boolean canGlide(EntityLivingBase entity, ItemStack stack) {
-		boolean flag = !entity.isClientWorld() && this.isFlyable(entity)
+		boolean flag = this.isFlyable(entity)
 				&& ((entity.motionY < -1.0 && entity.moveForward >= 0.1 && entity.isSneaking())
 						|| this.isGliding(stack));
 		return flag;

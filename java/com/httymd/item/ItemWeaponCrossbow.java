@@ -32,6 +32,7 @@ public class ItemWeaponCrossbow extends ItemExtension {
 	public static final String NBT_POWER = "BowStoredPower";
 
 	public static final float RESET_POWER = 0.0F;
+	public static final float MAX_POWER = 1.7F;
 
 	public final ArrayList<String> iconList = new ArrayList<String>();
 
@@ -146,7 +147,7 @@ public class ItemWeaponCrossbow extends ItemExtension {
 
 			durationDelta = event.charge;
 			if (pullInventory(entity, item, Items.arrow)) {
-				float arrowPower = (float) durationDelta / 20;
+				float arrowPower = (float) (durationDelta * 0.05F);
 				arrowPower = ((arrowPower * arrowPower + arrowPower * 2) / 3) * 2;
 
 				if ((double) arrowPower < 0.1D) {
@@ -154,8 +155,8 @@ public class ItemWeaponCrossbow extends ItemExtension {
 					return;
 				}
 
-				if (arrowPower > 2) {
-					arrowPower = 2;
+				if (arrowPower > MAX_POWER) {
+					arrowPower = MAX_POWER;
 				}
 
 				this.setBowPower(item, arrowPower);
