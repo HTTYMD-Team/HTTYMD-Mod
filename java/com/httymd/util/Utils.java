@@ -1,5 +1,6 @@
 package com.httymd.util;
 
+import java.lang.reflect.Field;
 import java.util.UUID;
 
 import com.httymd.HTTYMDMod;
@@ -18,6 +19,16 @@ import net.minecraft.world.World;
 
 public class Utils {
 	public static final double GRAVITY_FORCE = 0.6d;
+	private static Field isJumpingField = null;
+	
+	static {
+		 try {
+			isJumpingField = EntityLivingBase.class.getField("isJumping");
+			isJumpingField.setAccessible(true);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 
 	/**
 	 * Retrieves the statistic value for a StatBase field

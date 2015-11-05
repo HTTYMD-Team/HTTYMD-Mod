@@ -6,6 +6,7 @@ import com.httymd.HTTYMDMod;
 import com.httymd.item.registry.ItemRegistry;
 import com.httymd.util.Utils;
 
+import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.EntityLivingBase;
@@ -125,10 +126,19 @@ public abstract class EntityTameableFlying extends EntityTameable implements ITa
 		return true;
 	}
 
+	/**
+	 * Retrieves if this entity is inside a liquid material 
+	 * (provides a better cross-mod implementation then {@link Entity#isInsideOfMaterial(Material)})
+	 */
+	public boolean isInLiquid() {
+        return this.worldObj.getBlock(MathHelper.floor_double(this.posX), 
+        		MathHelper.floor_double(this.posY), MathHelper.floor_double(this.posZ)).getMaterial().isLiquid();
+	}
+	
 	@Override
 	public void moveEntityWithHeading(float strafe, float forward) {
 		if (this.isFlying()) {
-			if ((!this.isAirBelow(1) && this.motionY < 0) || this.isOffsetPositionInLiquid(1, 1, 1)) {
+			if ((!this.isAirBelow(1) && this.motionY < -0.1) || this.isInLiquid()) {
 				// How could you fly in a liquid? :P
 				this.setFlying(false);
 				this.moveEntityWithHeading(strafe, forward);
@@ -167,13 +177,9 @@ public abstract class EntityTameableFlying extends EntityTameable implements ITa
 	}
 
 	public EntityLivingBase getOwner() {
-		if (this.isTamed() == false)
-			return null;
-		EntityLivingBase result = super.getOwner();
-		if (result == null)
-			result = this.owner;
+		EntityLivingBase result = this.owner != null ? this.owner : super.getOwner();
 		if (result == null) {
-			Iterator<?> it = this.worldObj.getLoadedEntityList().iterator();
+			Iterator<?> it = this.worldObj.loadedEntityList.iterator();
 			while (it.hasNext()) {
 				Entity e = (Entity) it.next();
 				if (e == null || !(e instanceof EntityLivingBase))
@@ -185,6 +191,7 @@ public abstract class EntityTameableFlying extends EntityTameable implements ITa
 			}
 		}
 		this.owner = result;
+		if(this.owner != null) this.setTamed(true);
 		return result;
 	}
 
@@ -232,6 +239,7 @@ public abstract class EntityTameableFlying extends EntityTameable implements ITa
 				return true;
 		} else if (HTTYMDMod.getConfig().isDebugMode() && hand.getItem() == ItemRegistry.wing) {
 			this.onTakeoff();
+			return true;
 		} else if (!this.isTamed() && this.isTameItem(hand) && this.isTameable(player)) {
 			if (!player.capabilities.isCreativeMode && --hand.stackSize <= 0) {
 				player.inventory.setInventorySlotContents(player.inventory.currentItem, (ItemStack) null);

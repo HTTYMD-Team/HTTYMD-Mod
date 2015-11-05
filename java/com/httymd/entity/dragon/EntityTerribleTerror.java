@@ -1,5 +1,6 @@
 package com.httymd.entity.dragon;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIAttackOnCollide;
@@ -63,5 +64,17 @@ public class EntityTerribleTerror extends EntityDragon {
 	@Override
 	public boolean isTameItem(ItemStack s) {
 		return s.getItem() == Items.fish;
+	}
+	
+	@Override
+	public boolean isRideableBy(Entity e) {
+		double deltaX = this.boundingBox.maxX - this.boundingBox.minX;
+		double deltaY = this.boundingBox.maxY - this.boundingBox.minY;
+		double deltaZ = this.boundingBox.maxZ - this.boundingBox.minZ;
+		double eDeltaX = e.boundingBox.maxX - e.boundingBox.minX;
+		double eDeltaY = e.boundingBox.maxY - e.boundingBox.minY;
+		double eDeltaZ = e.boundingBox.maxZ - e.boundingBox.minZ;
+		return super.isRideableBy(e) && eDeltaX < deltaX * 0.5 && eDeltaY < deltaY * 0.5 && eDeltaZ < deltaZ * 0.5; 
+		//Entity e must be less then half as small as the terror to ride
 	}
 }

@@ -6,6 +6,7 @@ import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
@@ -40,6 +41,10 @@ public class EntityDragon extends EntityTameableFlying {
 	public boolean isStartled() {
 		return this.isStartled;
 	}
+	
+	public boolean isRideableBy(Entity rider) {
+		return this.riddenByEntity == null || rider == this.riddenByEntity;
+	}
 
 	public void setStartled(boolean startled) {
 		this.isStartled = startled;
@@ -70,6 +75,24 @@ public class EntityDragon extends EntityTameableFlying {
 		} else {
 			this.dataWatcher.updateObject(16, Byte.valueOf((byte) (b0 & -(BOOL_IS_ANGRY + 1))));
 		}
+	}
+	
+	private void onMount(Entity mounter) {
+		mounter.rotationYaw = this.rotationYaw;
+		mounter.rotationPitch = this.rotationPitch;
+
+        if (!this.worldObj.isRemote)
+        {
+        	mounter.mountEntity(this);
+        }
+	}
+	
+	public boolean interact(EntityPlayer ply) {
+		if(this.isOwner(ply) && this.isRideableBy(ply)) {
+			this.onMount(ply);
+			return true;
+		}
+		return super.interact(ply);
 	}
 
 	@Override
