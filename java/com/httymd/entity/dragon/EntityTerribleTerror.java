@@ -65,7 +65,7 @@ public class EntityTerribleTerror extends EntityDragon {
 	public boolean isTameItem(ItemStack s) {
 		return s.getItem() == Items.fish;
 	}
-	
+
 	@Override
 	public boolean isRideableBy(Entity e) {
 		double deltaX = this.boundingBox.maxX - this.boundingBox.minX;
@@ -74,7 +74,7 @@ public class EntityTerribleTerror extends EntityDragon {
 		double eDeltaX = e.boundingBox.maxX - e.boundingBox.minX;
 		double eDeltaY = e.boundingBox.maxY - e.boundingBox.minY;
 		double eDeltaZ = e.boundingBox.maxZ - e.boundingBox.minZ;
-		return super.isRideableBy(e) && eDeltaX < deltaX * 0.5 && eDeltaY < deltaY * 0.5 && eDeltaZ < deltaZ * 0.5; 
-		//Entity e must be less then half as small as the terror to ride
+		return super.isRideableBy(e) && eDeltaX < deltaX * 0.5 && eDeltaY < deltaY * 0.5 && eDeltaZ < deltaZ * 0.5;
+		// Entity e must be less then half as small as the terror to ride
 	}
 }

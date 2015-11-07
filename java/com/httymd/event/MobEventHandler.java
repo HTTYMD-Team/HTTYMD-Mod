@@ -26,15 +26,16 @@ public class MobEventHandler {
 					event.entity.posZ, stack));
 		}
 	}
-	
+
 	/**
 	 * Currently enables dragons to jump if the rider tries to jump
 	 */
 	@SubscribeEvent
 	public void onEvent(LivingEvent.LivingJumpEvent event) {
-		if(event.entityLiving.ridingEntity instanceof EntityDragon) {
+		if (event.entityLiving.ridingEntity instanceof EntityDragon) {
 			EntityDragon dragon = (EntityDragon) event.entityLiving.ridingEntity;
-			if(dragon.isRideableBy(event.entityLiving)) dragon.getJumpHelper().doJump();
+			if (dragon.isRideableBy(event.entityLiving))
+				dragon.getJumpHelper().doJump();
 		}
 	}
 

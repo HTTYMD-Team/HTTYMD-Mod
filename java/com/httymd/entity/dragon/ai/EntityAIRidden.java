@@ -16,7 +16,7 @@ public class EntityAIRidden extends EntityAIBase {
 		this.riddenEntity = ridden;
 		this.setMutexBits(3);
 	}
-	
+
 	@Override
 	public boolean isInterruptible() {
 		return false;
@@ -53,11 +53,12 @@ public class EntityAIRidden extends EntityAIBase {
 		if (this.riddenEntity instanceof EntityDragon) {
 			EntityDragon draco = (EntityDragon) this.riddenEntity;
 			if (!draco.isFlying()) {
-				if (this.rider.getHeldItem() != null && this.rider.getHeldItem().getItem() == ItemRegistry.wing && this.riddenEntity.onGround)
+				if (this.rider.getHeldItem() != null && this.rider.getHeldItem().getItem() == ItemRegistry.wing
+						&& this.riddenEntity.onGround)
 					draco.onTakeoff();
 			}
 		}
-		if(!this.rider.worldObj.isRemote)
+		if (!this.rider.worldObj.isRemote)
 			this.riddenEntity.moveEntityWithHeading(strafe, forward);
 	}
 

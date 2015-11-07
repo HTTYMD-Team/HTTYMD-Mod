@@ -127,14 +127,15 @@ public abstract class EntityTameableFlying extends EntityTameable implements ITa
 	}
 
 	/**
-	 * Retrieves if this entity is inside a liquid material 
-	 * (provides a better cross-mod implementation then {@link Entity#isInsideOfMaterial(Material)})
+	 * Retrieves if this entity is inside a liquid material (provides a better
+	 * cross-mod implementation then {@link Entity#isInsideOfMaterial(Material)}
+	 * )
 	 */
 	public boolean isInLiquid() {
-        return this.worldObj.getBlock(MathHelper.floor_double(this.posX), 
-        		MathHelper.floor_double(this.posY), MathHelper.floor_double(this.posZ)).getMaterial().isLiquid();
+		return this.worldObj.getBlock(MathHelper.floor_double(this.posX), MathHelper.floor_double(this.posY),
+				MathHelper.floor_double(this.posZ)).getMaterial().isLiquid();
 	}
-	
+
 	@Override
 	public void moveEntityWithHeading(float strafe, float forward) {
 		if (this.isFlying()) {
@@ -191,7 +192,8 @@ public abstract class EntityTameableFlying extends EntityTameable implements ITa
 			}
 		}
 		this.owner = result;
-		if(this.owner != null) this.setTamed(true);
+		if (this.owner != null)
+			this.setTamed(true);
 		return result;
 	}
 
@@ -210,11 +212,12 @@ public abstract class EntityTameableFlying extends EntityTameable implements ITa
 	@Override
 	protected void updateFallState(double p_70064_1_, boolean p_70064_3_) {
 		if (this.isFlying()) {
-			if (this.fallDistance > 3) {
-				this.setFlying(true);
-				this.fallDistance = 0;
-			}
+			this.fallDistance = 0;
 		} else {
+			if (this.fallDistance > 3.2F) {
+				this.setFlying(true);
+				this.updateFallState(p_70064_1_, p_70064_3_);
+			}
 			super.updateFallState(p_70064_1_, p_70064_3_);
 		}
 	}
@@ -254,17 +257,13 @@ public abstract class EntityTameableFlying extends EntityTameable implements ITa
 					this.setOwnerString(player.getUniqueID().toString());
 					this.playTameEffect(true);
 					this.worldObj.setEntityState(this, (byte) 7);
-					HTTYMDMod.getLogger().info("Entity: " + this + " has been tamed");
 				} else {
 					this.playTameEffect(false);
 					this.worldObj.setEntityState(this, (byte) 6);
-					HTTYMDMod.getLogger().info("Entity: " + this + " not been tamed");
 				}
 			}
-
 			return true;
 		}
-
 		return super.interact(player);
 	}
 
@@ -281,6 +280,8 @@ public abstract class EntityTameableFlying extends EntityTameable implements ITa
 
 	@Override
 	public EntityAgeable createChild(EntityAgeable mate) {
+		if (!this.getClass().equals(mate.getClass()))
+			return null;
 		try {
 			return this.getClass().getConstructor(World.class).newInstance(this.worldObj);
 		} catch (Exception e) {

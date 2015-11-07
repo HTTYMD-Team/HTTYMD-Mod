@@ -28,7 +28,8 @@ public class ItemFoodDrop extends ItemFoodExtension implements IDrop {
 
 	public ItemStack getDrop(EntityLivingBase entity, DamageSource source, int lootLevel, boolean recentHit,
 			int value) {
-		if (this.isCooked && source == DamageSource.onFire || !this.isCooked && source != DamageSource.onFire)
+		boolean isCookedFood = this.isCooked && entity.isBurning();
+		if (isCookedFood || !isCookedFood)
 			return new ItemStack(this,
 					MathHelper.ceiling_float_int(entity.getRNG().nextFloat() + 0.2F * 3) + lootLevel);
 		return null;
