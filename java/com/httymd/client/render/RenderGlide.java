@@ -1,21 +1,21 @@
 package com.httymd.client.render;
 
+import org.lwjgl.opengl.GL11;
+
 import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.renderer.entity.RenderPlayer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 
-import org.lwjgl.opengl.GL11;
-
 public class RenderGlide extends RenderPlayer {
-
+	
 	public RenderGlide() {
 		super();
 		if (mainModel instanceof ModelBiped) {
-			mainModel = new ModelGlide((ModelBiped) mainModel);
-			modelArmor = new ModelGlide((ModelBiped) modelArmor);
-			modelArmorChestplate = new ModelGlide((ModelBiped) modelArmorChestplate);
+			mainModel = new ModelGlide(0);
+			modelArmor = new ModelGlide(0);
+			modelArmorChestplate = new ModelGlide(0);
 			modelArmor.bipedRightArm.mirror = true;
 			modelArmor.bipedRightLeg.mirror = true;
 			modelArmorChestplate.bipedRightArm.mirror = true;
@@ -32,7 +32,7 @@ public class RenderGlide extends RenderPlayer {
 
 		GL11.glPushMatrix();
 		GL11.glRotated(angle, -cos, 0, -sin);
-		super.doRender(player, p_76986_2, 0.0F, p_76986_6, p_76986_8, p_76986_9_);
+		super.doRender(player, p_76986_2, p_76986_4, p_76986_6, p_76986_8, p_76986_9_);
 		GL11.glPopMatrix();
 	}
 
@@ -44,8 +44,8 @@ public class RenderGlide extends RenderPlayer {
 
 	public static class ModelGlide extends ModelBiped {
 
-		public ModelGlide(ModelBiped model) {
-			super(0, 0, 64, 64);
+		public ModelGlide(float scale) {
+			super(scale, 0, 64, 32);
 			heldItemLeft = 0;
 			heldItemRight = 0;
 			isSneak = false;
@@ -64,5 +64,4 @@ public class RenderGlide extends RenderPlayer {
 			bipedLeftLeg.rotateAngleX = 0;
 		}
 	}
-
 }

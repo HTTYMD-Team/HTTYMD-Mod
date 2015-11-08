@@ -193,11 +193,10 @@ public abstract class EntityTameableFlying extends EntityTameable implements ITa
 	}
 
 	/**
-	 * I have no idea what this function represents (if you know what it does,
-	 * please rename)
+	 * Determines whether our owner should be defended
 	 */
-	public boolean unsureFunction(EntityLivingBase target, EntityLivingBase targetOwner) {
-		return super.func_142018_a(target, targetOwner);
+	public boolean shouldDefendOwner(EntityLivingBase attacker, EntityLivingBase ourOwner) {
+		return super.func_142018_a(attacker, ourOwner);
 	}
 
 	@Override
@@ -282,6 +281,6 @@ public abstract class EntityTameableFlying extends EntityTameable implements ITa
 
 	@Override
 	public boolean func_142018_a(EntityLivingBase p_142018_1_, EntityLivingBase p_142018_2_) {
-		return this.unsureFunction(p_142018_1_, p_142018_2_);
+		return this.shouldDefendOwner(p_142018_1_, p_142018_2_);
 	}
 }

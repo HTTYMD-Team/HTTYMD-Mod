@@ -2,7 +2,6 @@ package com.httymd.client.model;
 
 import com.httymd.client.render.RenderGlide;
 
-import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 
@@ -12,8 +11,8 @@ public class ModelGlideSuit extends RenderGlide.ModelGlide {
 	ModelRenderer RightWing;
 	ModelRenderer BackFin;
 
-	public ModelGlideSuit(ModelBiped baseModel) {
-		super(baseModel);
+	public ModelGlideSuit(float scale) {
+		super(scale);
 		this.textureWidth = 64;
 		this.textureHeight = 64;
 		this.LeftWing = new ModelRenderer(this, 0, 32);

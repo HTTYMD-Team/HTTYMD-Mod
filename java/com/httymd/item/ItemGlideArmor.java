@@ -1,65 +1,67 @@
 package com.httymd.item;
 
-import java.util.List;
-
+import com.httymd.HTTYMDMod;
 import com.httymd.client.model.ModelGlideSuit;
+import com.httymd.item.util.ItemUtils.EnumArmorType;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.block.material.Material;
 import net.minecraft.client.model.ModelBiped;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ISpecialArmor;
 
 public class ItemGlideArmor extends ItemArmorExtension implements ISpecialArmor {
 
-	public static final String NBT_FLYING = "IsGliding";
+	public static final String NBT_GLIDING = "IsGliding";
 
 	public ItemGlideArmor(String name, ArmorMaterial mat, int type) {
 		super(name, mat, type);
 	}
 
-	protected int[] getRequiredSlotsForFlight() {
-		return new int[] { 1, 2 };
+	protected EnumArmorType[] getRequiredSlotsForFlight() {
+		return new EnumArmorType[] { EnumArmorType.CHESTPLATE, EnumArmorType.LEGGINGS };
+	}
+	
+	private boolean isInLiquid(EntityLivingBase entity) {
+		return entity.worldObj.getBlock(MathHelper.floor_double(entity.posX), MathHelper.floor_double(entity.posY),
+				MathHelper.floor_double(entity.posZ)).getMaterial().isLiquid();
 	}
 
 	public boolean isFlyable(EntityLivingBase entity) {
 		boolean flag = entity != null
-				&& (!entity.onGround && !entity.isInWater() && !entity.isInsideOfMaterial(Material.lava));
+				&& (!entity.onGround && !this.isInLiquid(entity));
 		
 		if (entity instanceof EntityPlayer)
 			flag = flag && !((EntityPlayer) entity).capabilities.isFlying;
 		
-		for (int slot : this.getRequiredSlotsForFlight()) {
-			ItemStack armor = entity.getEquipmentInSlot(slot + 1);
+		for (EnumArmorType slot : this.getRequiredSlotsForFlight()) {
+			ItemStack armor = entity.getEquipmentInSlot(slot.ordinal() + 1);
 			flag = flag && (armor != null && armor.getItem() instanceof ItemGlideArmor);
 		}
 		return flag;
 	}
 
 	public boolean canGlide(EntityLivingBase entity, ItemStack stack) {
-		boolean flag = this.isFlyable(entity)
-				&& ((entity.motionY < -1.0 && entity.moveForward >= 0.1 && entity.isSneaking())
-						|| this.isGliding(stack));
-		return flag;
+		boolean canGlide = this.isFlyable(entity) 
+				&& (this.isGliding(stack) || (entity.motionY < -1.0 && entity.moveForward >= 0.1 && entity.isSneaking()));
+		setGliding(stack, canGlide);
+		return canGlide;
 	}
 
 	public boolean isGliding(ItemStack stack) {
-		boolean flag;
+		if (stack == null) return false;
 		if (!stack.hasTagCompound()) {
 			stack.setTagCompound(new NBTTagCompound());
-			return false;
+			return this.isGliding(stack);
 		} else
-			flag = stack.getTagCompound().getBoolean(NBT_FLYING);
-		return flag;
+			return stack.getTagCompound().getBoolean(NBT_GLIDING);
 	}
 
 	public static void setGliding(ItemStack stack, boolean gliding) {
@@ -67,7 +69,7 @@ public class ItemGlideArmor extends ItemArmorExtension implements ISpecialArmor 
 			return;
 		if (!stack.hasTagCompound())
 			stack.setTagCompound(new NBTTagCompound());
-		stack.getTagCompound().setBoolean(NBT_FLYING, gliding);
+		stack.getTagCompound().setBoolean(NBT_GLIDING, gliding);
 	}
 
 	@Override
@@ -77,7 +79,6 @@ public class ItemGlideArmor extends ItemArmorExtension implements ISpecialArmor 
 
 	public void onArmorTick(World world, EntityLivingBase entity, ItemStack stack) {
 		boolean canGlide = this.canGlide(entity, stack);
-		setGliding(stack, canGlide);
 		if (canGlide) {
 			entity.motionX = -(Math.sin(Math.toRadians(entity.getRotationYawHead())) * ((2 + entity.moveForward) / 3));
 			entity.motionZ = (Math.cos(Math.toRadians(entity.getRotationYawHead())) * ((2 + entity.moveForward) / 3));
@@ -92,35 +93,19 @@ public class ItemGlideArmor extends ItemArmorExtension implements ISpecialArmor 
 		}
 	}
 
-	public void onUpdate(ItemStack stack, World world, Entity holder, int p_77663_4_, boolean p_77663_5_) {
-		if (!(holder instanceof EntityLivingBase) || !this.canGlide((EntityLivingBase) holder, stack)) {
-			setGliding(stack, false);
-		}
-		super.onUpdate(stack, world, holder, p_77663_4_, p_77663_5_);
-	}
-
 	public boolean onDroppedByPlayer(ItemStack stack, EntityPlayer player) {
 		setGliding(stack, false);
 		return super.onDroppedByPlayer(stack, player);
-	}
-
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	@Override
-	public void getSubItems(Item item, CreativeTabs tab, List list) {
-		for (int i = 0; i < 1; i++) {
-			ItemStack is = new ItemStack(item, 1);
-			list.add(is);
-		}
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
 	public ModelBiped getArmorModel(EntityLivingBase entityLiving, ItemStack itemStack, int armorSlot) {
 		if (isGliding(itemStack)) {
-			if (armorSlot == 2) {
-				return new ModelGlideSuit(new ModelBiped(1.0F));
+			if (armorSlot == EnumArmorType.LEGGINGS.ordinal()) {
+				return new ModelGlideSuit(1.0F);
 			} else {
-				return new ModelGlideSuit(new ModelBiped(0.5F));
+				return new ModelGlideSuit(0.5F);
 			}
 		}
 		return super.getArmorModel(entityLiving, itemStack, armorSlot);
@@ -129,10 +114,10 @@ public class ItemGlideArmor extends ItemArmorExtension implements ISpecialArmor 
 	@Override
 	public ArmorProperties getProperties(EntityLivingBase entity, ItemStack armor, DamageSource source, double damage,
 			int slot) {
-		if (source == DamageSource.fall && this.canGlide(entity, armor)) {
-			return new ArmorProperties(1, 1, 1);
+		if (source == DamageSource.fall && this.isGliding(armor)) {
+			return new ArmorProperties(1, 1, 200);
 		}
-		return new ArmorProperties(0, this.damageReduceAmount / 25D, this.getMaxDamage() + 1 - armor.getItemDamage());
+		return new ArmorProperties(0, 0, 0);
 	}
 
 	@Override
@@ -142,8 +127,18 @@ public class ItemGlideArmor extends ItemArmorExtension implements ISpecialArmor 
 
 	@Override
 	public void damageArmor(EntityLivingBase entity, ItemStack armor, DamageSource source, int damage, int slot) {
-		if (source == DamageSource.fall && this.canGlide(entity, armor))
+		if (source == DamageSource.fall && this.isGliding(armor))
 			return;
 		armor.damageItem(damage, entity);
+	}
+	
+	@Override
+	@SideOnly(Side.CLIENT)
+	public String getArmorTexture(ItemStack stack, Entity entity, int slot, String type) {
+		if(this.isGliding(stack) && slot == EnumArmorType.CHESTPLATE.ordinal()) {
+			return HTTYMDMod.ID + ":textures/armor/" + getRegistryName().substring(0, getRegistryName().lastIndexOf("_"))
+					+ "_fins.png";
+		}
+		return super.getArmorTexture(stack, entity, slot, type);
 	}
 }

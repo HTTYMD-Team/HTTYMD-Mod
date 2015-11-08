@@ -106,12 +106,12 @@ public class ItemUtils {
 	 *            The {@link ArmorMaterial} of the new armor
 	 */
 	public static Item[] generateArmor(Class<? extends ItemArmorExtension> clazz, String baseName, ArmorMaterial mat) {
-		final String[] ARMORNAMES = { "helmet", "chestplate", "leggings", "boots" };
-		ItemArmorExtension[] armor = new ItemArmorExtension[ARMORNAMES.length];
-		for (int i = 0; i < ARMORNAMES.length; i++) {
+		int armorSize = EnumArmorType.values().length;
+		ItemArmorExtension[] armor = new ItemArmorExtension[armorSize];
+		for (int i = 0; i < armorSize; i++) {
 			try {
 				armor[i] = clazz.getConstructor(String.class, ArmorMaterial.class, int.class)
-						.newInstance(baseName + "_" + ARMORNAMES[i], mat, i);
+						.newInstance(baseName + "_" + EnumArmorType.values()[i].toString().toLowerCase(), mat, i);
 				armor[i] = (ItemArmorExtension) armor[i].registerItem();
 			} catch (Exception ex) {
 				HTTYMDMod.getLogger().fatal(ex);
@@ -147,5 +147,27 @@ public class ItemUtils {
 		ItemArmor.ArmorMaterial mat = EnumHelper.addArmorMaterial(name, durability, reductionAmounts, enchantability);
 		mat.customCraftingMaterial = craftingMaterial;
 		return mat;
+	}
+	
+	/**
+	 * A utility enum for determining a difference between armor types (for easy of access)
+	 */
+	public static enum EnumArmorType {
+		/**
+		 * Represents a helmet
+		 */
+		HELMET,
+		/**
+		 * Represents a chestplate
+		 */
+		CHESTPLATE,
+		/**
+		 * Represents leggings (pants)
+		 */
+		LEGGINGS,
+		/**
+		 * Represents boots
+		 */
+		BOOTS;
 	}
 }

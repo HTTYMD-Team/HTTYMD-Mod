@@ -5,7 +5,6 @@ import java.util.UUID;
 import com.httymd.HTTYMDMod;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -46,17 +45,6 @@ public class Utils {
 
 	public static String getModString(String str) {
 		return HTTYMDMod.ID + ":" + str;
-	}
-
-	public static ItemStack getArmor(EntityLivingBase entity, int slot) {
-		if (entity instanceof EntityPlayer) {
-			EntityPlayer player = (EntityPlayer) entity;
-			return player.getCurrentArmor(slot);
-		} else if (entity instanceof EntityLiving) {
-			EntityLiving living = (EntityLiving) entity;
-			return living.getEquipmentInSlot(slot + 1);
-		}
-		return null;
 	}
 
 	/**
