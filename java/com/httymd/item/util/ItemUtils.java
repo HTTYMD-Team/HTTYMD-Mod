@@ -148,9 +148,10 @@ public class ItemUtils {
 		mat.customCraftingMaterial = craftingMaterial;
 		return mat;
 	}
-	
+
 	/**
-	 * A utility enum for determining a difference between armor types (for easy of access)
+	 * A utility enum for determining a difference between armor types (for easy
+	 * of access)
 	 */
 	public static enum EnumArmorType {
 		/**

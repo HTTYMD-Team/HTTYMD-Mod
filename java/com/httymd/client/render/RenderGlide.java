@@ -2,14 +2,22 @@ package com.httymd.client.render;
 
 import org.lwjgl.opengl.GL11;
 
+import com.httymd.client.model.ModelGlideSuit;
+import com.httymd.item.ItemGlideArmor;
+import com.httymd.item.util.ItemUtils.EnumArmorType;
+
 import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.model.ModelBiped;
+import net.minecraft.client.renderer.entity.RenderBiped;
 import net.minecraft.client.renderer.entity.RenderPlayer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.item.ItemArmor;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.client.ForgeHooksClient;
 
 public class RenderGlide extends RenderPlayer {
-	
+
 	public RenderGlide() {
 		super();
 		if (mainModel instanceof ModelBiped) {
@@ -23,23 +31,87 @@ public class RenderGlide extends RenderPlayer {
 		}
 	}
 
-	@Override
-	public void doRender(AbstractClientPlayer player, double p_76986_2, double p_76986_4, double p_76986_6,
-			float p_76986_8, float p_76986_9_) {
-		float angle = -100;
-		double sin = Math.sin(player.rotationYaw / 180 * Math.PI);
-		double cos = Math.cos(player.rotationYaw / 180 * Math.PI);
+	protected int shouldRenderPass(AbstractClientPlayer ply, int slot, float p_77032_3_) {
+		int result = super.shouldRenderPass(ply, slot, p_77032_3_);
+		ItemStack s = ply.getCurrentArmor(3 - slot);
+		if (s != null && s.getItem() instanceof ItemGlideArmor && this.modelArmor instanceof ModelGlideSuit) {
+			this.bindTexture(RenderBiped.getArmorResource(ply, s, 5, null));
+			ModelGlideSuit modelArmor = slot == 2 ? (ModelGlideSuit) this.modelArmor
+					: (ModelGlideSuit) this.modelArmorChestplate;
+			modelArmor.bipedHead.showModel = slot == 0;
+			modelArmor.bipedHeadwear.showModel = slot == 0;
+			modelArmor.bipedBody.showModel = slot == 1 || slot == 2;
+			modelArmor.bipedRightArm.showModel = slot == 1;
+			modelArmor.bipedLeftArm.showModel = slot == 1;
+			modelArmor.bipedRightLeg.showModel = slot == 2 || slot == 3;
+			modelArmor.bipedLeftLeg.showModel = slot == 2 || slot == 3;
+			modelArmor.LeftWing.showModel = slot == 1;
+			modelArmor.RightWing.showModel = slot == 1;
+			modelArmor = (ModelGlideSuit) ForgeHooksClient.getArmorModel(ply, s, slot, modelArmor);
+			modelArmor.onGround = this.mainModel.onGround;
+			modelArmor.isRiding = this.mainModel.isRiding;
+			modelArmor.isChild = this.mainModel.isChild;
 
-		GL11.glPushMatrix();
-		GL11.glRotated(angle, -cos, 0, -sin);
-		super.doRender(player, p_76986_2, p_76986_4, p_76986_6, p_76986_8, p_76986_9_);
-		GL11.glPopMatrix();
+			// Move outside if to allow for more then just CLOTH
+			int j = ((ItemArmor) s.getItem()).getColor(s);
+			if (j != -1) {
+				float f1 = (float) (j >> 16 & 255) / 255.0F;
+				float f2 = (float) (j >> 8 & 255) / 255.0F;
+				float f3 = (float) (j & 255) / 255.0F;
+				GL11.glColor3f(f1, f2, f3);
+
+				if (s.isItemEnchanted()) {
+					return 31;
+				}
+
+				return 16;
+			}
+
+			GL11.glColor3f(1.0F, 1.0F, 1.0F);
+
+			if (s.isItemEnchanted()) {
+				return 15;
+			}
+
+			return 1;
+		}
+		return result;
 	}
 
 	@Override
-	protected void renderModel(EntityLivingBase p_77036_1_, float p_77036_2_, float p_77036_3_, float p_77036_4_,
-			float p_77036_5_, float p_77036_6_, float p_77036_7_) {
-		super.renderModel(p_77036_1_, p_77036_2_, p_77036_3_, p_77036_4_, p_77036_5_, p_77036_6_ - 75.0F, p_77036_7_);
+	public void doRender(AbstractClientPlayer player, double p_76986_2, double p_76986_4, double p_76986_6,
+			float p_76986_8, float p_76986_9_) {
+		float pitchTiltAngle = -90;
+		double playerYawSin = Math.sin(player.rotationYaw / 180 * Math.PI);
+		double playerYawCos = Math.cos(player.rotationYaw / 180 * Math.PI);
+
+		GL11.glPushMatrix();
+		GL11.glRotated(pitchTiltAngle, -playerYawCos, 0, -playerYawSin);
+		super.doRender(player, p_76986_2, p_76986_4, p_76986_6, p_76986_8, p_76986_9_);
+		this.renderWings(player, 0.0625F);
+		GL11.glPopMatrix();
+	}
+
+	public void renderWings(Entity e, float f5) {
+		if (this.modelArmor instanceof ModelGlideSuit) {
+			String textureResource = null;
+			ItemStack stack = null;
+			if (e instanceof EntityLivingBase) {
+				for (int i = 0; i < EnumArmorType.values().length; i++) {
+					stack = ((EntityLivingBase) e).getEquipmentInSlot(3 - i);
+					if (stack != null && stack.getItem() instanceof ItemArmor)
+						break;
+					else
+						stack = null;
+				}
+				if (stack != null)
+					textureResource = ((ItemArmor) stack.getItem()).getArmorTexture(stack, e, 5, null);
+			}
+			if (textureResource != null) {
+				this.bindTexture(RenderBiped.getArmorResource(e, stack, 5, null));
+				((ModelGlideSuit) this.modelArmor).renderWings(e, f5);
+			}
+		}
 	}
 
 	public static class ModelGlide extends ModelBiped {
@@ -52,14 +124,23 @@ public class RenderGlide extends RenderPlayer {
 			aimedBow = false;
 		}
 
+		public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {
+			final float headAngleAligner = -75.0f;
+			super.render(entity, f, f1, f2, f3, f4 + headAngleAligner, f5);
+			this.isSneak = false;
+		}
+
 		@Override
 		public void setRotationAngles(float p_78087_1_, float p_78087_2_, float p_78087_3_, float p_78087_4_,
 				float p_78087_5_, float p_78087_6_, Entity p_78087_7_) {
+			this.isSneak = false;
+			// Prevents all alternate arm angles
 			super.setRotationAngles(0.0F, 0.0F, 0.0F, p_78087_4_, p_78087_5_, p_78087_6_, p_78087_7_);
-			float bendAngle = 70;
+			float armBendAngle = 70;
 
-			bipedRightArm.rotateAngleZ = bendAngle;
-			bipedLeftArm.rotateAngleZ = -bendAngle;
+			bipedRightArm.rotateAngleZ = armBendAngle;
+			bipedLeftArm.rotateAngleZ = -armBendAngle;
+			// Prevents any other leg movement
 			bipedRightLeg.rotateAngleX = 0;
 			bipedLeftLeg.rotateAngleX = 0;
 		}

@@ -39,15 +39,16 @@ public class PlayerClientHandler {
 		if (!(event.entity instanceof EntityPlayer) || event.renderer == glideRender || event.entity != ent) {
 			return;
 		}
-		
+
 		ItemStack stack = null;
-		for(EnumArmorType type : EnumArmorType.values()) {
+		for (EnumArmorType type : EnumArmorType.values()) {
 			stack = event.entity.getEquipmentInSlot(type.ordinal());
-			if(stack != null && stack.getItem() instanceof ItemGlideArmor) break;
+			if (stack != null && stack.getItem() instanceof ItemGlideArmor)
+				break;
 		}
 		if (stack == null || !(stack.getItem() instanceof ItemGlideArmor))
 			return;
-		if (((ItemGlideArmor)stack.getItem()).isGliding(stack)) {
+		if (((ItemGlideArmor) stack.getItem()).isGliding(stack)) {
 			glideRender.doRender(event.entity, event.x, event.y + event.entity.yOffset, event.z, 0.0F, playerTicks);
 			event.setCanceled(true);
 		}

@@ -7,9 +7,9 @@ import net.minecraft.entity.Entity;
 
 public class ModelGlideSuit extends RenderGlide.ModelGlide {
 
-	ModelRenderer LeftWing;
-	ModelRenderer RightWing;
-	ModelRenderer BackFin;
+	public ModelRenderer LeftWing;
+	public ModelRenderer RightWing;
+	public ModelRenderer BackFin;
 
 	public ModelGlideSuit(float scale) {
 		super(scale);
@@ -34,22 +34,11 @@ public class ModelGlideSuit extends RenderGlide.ModelGlide {
 	public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {
 		super.render(entity, f, f1, f2, f3, f4, f5);
 		setRotationAngles(f, f1, f2, f3, f4, f5, entity);
+	}
 
+	public void renderWings(Entity entity, float f5) {
 		LeftWing.render(f5);
 		RightWing.render(f5);
 		// BackFin.render(f5);
 	}
-
-	@SuppressWarnings("unused")
-	private void setRotation(ModelRenderer model, float x, float y, float z) {
-		model.rotateAngleX = x;
-		model.rotateAngleY = y;
-		model.rotateAngleZ = z;
-	}
-
-	@Override
-	public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5, Entity entity) {
-		super.setRotationAngles(f, f1, f2, f3, f4, f5, entity);
-	}
-
 }
