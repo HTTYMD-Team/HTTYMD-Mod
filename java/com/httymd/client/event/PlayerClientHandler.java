@@ -42,7 +42,7 @@ public class PlayerClientHandler {
 
 		ItemStack stack = null;
 		for (EnumArmorType type : EnumArmorType.values()) {
-			stack = event.entity.getEquipmentInSlot(type.ordinal());
+			stack = event.entity.getEquipmentInSlot(type.ordinal() + 1);
 			if (stack != null && stack.getItem() instanceof ItemGlideArmor)
 				break;
 		}

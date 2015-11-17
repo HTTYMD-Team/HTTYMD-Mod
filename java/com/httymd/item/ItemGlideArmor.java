@@ -10,6 +10,7 @@ import net.minecraft.client.model.ModelBiped;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
@@ -51,6 +52,13 @@ public class ItemGlideArmor extends ItemArmorExtension implements ISpecialArmor 
 		boolean canGlide = this.isFlyable(entity) && (this.isGliding(stack)
 				|| (entity.motionY < -1.0 && entity.moveForward >= 0.1 && entity.isSneaking()));
 		setGliding(stack, canGlide);
+		if (canGlide) {
+			for (int i = 1; i <= 4; i++) {
+				ItemStack armor = entity.getEquipmentInSlot(i);
+				if (armor != null && armor.getItem() instanceof ItemGlideArmor)
+					((ItemGlideArmor) armor.getItem()).setGliding(armor, true);
+			}
+		}
 		return canGlide;
 	}
 
@@ -64,7 +72,7 @@ public class ItemGlideArmor extends ItemArmorExtension implements ISpecialArmor 
 			return stack.getTagCompound().getBoolean(NBT_GLIDING);
 	}
 
-	public static void setGliding(ItemStack stack, boolean gliding) {
+	public void setGliding(ItemStack stack, boolean gliding) {
 		if (!(stack.getItem() instanceof ItemGlideArmor))
 			return;
 		if (!stack.hasTagCompound())

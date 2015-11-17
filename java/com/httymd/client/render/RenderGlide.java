@@ -31,9 +31,13 @@ public class RenderGlide extends RenderPlayer {
 		}
 	}
 
+	// TODO what does this method even do? is it exactly the same as
+	// super.shouldRenderPass()?
+	@Override
 	protected int shouldRenderPass(AbstractClientPlayer ply, int slot, float p_77032_3_) {
 		int result = super.shouldRenderPass(ply, slot, p_77032_3_);
 		ItemStack s = ply.getCurrentArmor(3 - slot);
+
 		if (s != null && s.getItem() instanceof ItemGlideArmor && this.modelArmor instanceof ModelGlideSuit) {
 			this.bindTexture(RenderBiped.getArmorResource(ply, s, 5, null));
 			ModelGlideSuit modelArmor = slot == 2 ? (ModelGlideSuit) this.modelArmor
@@ -82,6 +86,11 @@ public class RenderGlide extends RenderPlayer {
 	public void doRender(AbstractClientPlayer player, double p_76986_2, double p_76986_4, double p_76986_6,
 			float p_76986_8, float p_76986_9_) {
 		float pitchTiltAngle = -90;
+		if (player.moveForward < 0)
+			pitchTiltAngle = -80;
+		if (player.moveForward > 0)
+			pitchTiltAngle = -100;
+
 		double playerYawSin = Math.sin(player.rotationYaw / 180 * Math.PI);
 		double playerYawCos = Math.cos(player.rotationYaw / 180 * Math.PI);
 
@@ -98,6 +107,8 @@ public class RenderGlide extends RenderPlayer {
 			ItemStack stack = null;
 			if (e instanceof EntityLivingBase) {
 				for (int i = 0; i < EnumArmorType.values().length; i++) {
+					// TODO is it really (3 - i) and not (i + 1)? 0: Tool in
+					// Hand; 1-4: Armor
 					stack = ((EntityLivingBase) e).getEquipmentInSlot(3 - i);
 					if (stack != null && stack.getItem() instanceof ItemArmor)
 						break;
@@ -136,13 +147,25 @@ public class RenderGlide extends RenderPlayer {
 			this.isSneak = false;
 			// Prevents all alternate arm angles
 			super.setRotationAngles(0.0F, 0.0F, 0.0F, p_78087_4_, p_78087_5_, p_78087_6_, p_78087_7_);
-			float armBendAngle = 70;
+			float armBendAngle = (float) (Math.PI / 180 * 45);
 
 			bipedRightArm.rotateAngleZ = armBendAngle;
 			bipedLeftArm.rotateAngleZ = -armBendAngle;
 			// Prevents any other leg movement
 			bipedRightLeg.rotateAngleX = 0;
 			bipedLeftLeg.rotateAngleX = 0;
+
+			System.out.println(bipedRightLeg.rotateAngleZ);
+			System.out.println(bipedLeftLeg.rotateAngleZ);
+
+			if (((AbstractClientPlayer) p_78087_7_).moveForward < 0) {
+				float legBendAngle = (float) (Math.PI / 180 * 30);
+				bipedRightLeg.rotateAngleZ = legBendAngle;
+				bipedLeftLeg.rotateAngleZ = -legBendAngle;
+			} else {
+				bipedRightLeg.rotateAngleZ = 0;
+				bipedLeftLeg.rotateAngleZ = 0;
+			}
 		}
 	}
 }
