@@ -24,26 +24,25 @@ public class ClientProxy extends CommonProxy {
 	@Override
 	public void onInit(FMLInitializationEvent evt) {
 		super.onInit(evt);
-		this.registerRendering();
+		this.registerEntityRendering();
+		this.registerItemRendering();
 
-		keybindHandler = new KeyInputHandler(getNetwork());
+		keybindHandler = new KeyInputHandler(this.getNetwork());
 
 		MinecraftForge.EVENT_BUS.register(new PlayerClientHandler());
 	}
 
-	private void registerRendering() {
-		// RenderingRegistry.registerEntityRenderingHandler(EntityGronkle.class,
-		// new RenderGronkle(new ModelGronkle(), 1));
-		RenderingRegistry.registerEntityRenderingHandler(EntityNightFury.class,
-				new RenderNightFury(new ModelNightFury(), 2));
-		// RenderingRegistry.registerEntityRenderingHandler(EntityNightmare.class,
-		// new RenderNightmare(new ModelNightmare(), 1));
+	private void registerEntityRendering() {
+		// RenderingRegistry.registerEntityRenderingHandler(EntityGronkle.class, new RenderGronkle(new ModelGronkle(), 1));
+		RenderingRegistry.registerEntityRenderingHandler(EntityNightFury.class, new RenderNightFury(new ModelNightFury(), 2));
+		// RenderingRegistry.registerEntityRenderingHandler(EntityNightmare.class, new RenderNightmare(new ModelNightmare(), 1));
 		RenderingRegistry.registerEntityRenderingHandler(EntitySkrill.class, new RenderSkrill(new ModelSkrill(), 2));
-		RenderingRegistry.registerEntityRenderingHandler(EntityTerribleTerror.class,
-				new RenderTerribleTerror(new ModelTerribleTerror(), 1));
-		// RenderingRegistry.registerEntityRenderingHandler(EntityZippleback.class,
-		// new RenderZippleback(new ModelZippleback(), 1));
-		// MinecraftForgeClient.registerItemRenderer(ItemRegistry.zippleGasContainer,
-		// new RenderItemContainer());
+		RenderingRegistry.registerEntityRenderingHandler(EntityTerribleTerror.class, new RenderTerribleTerror(new ModelTerribleTerror(), 1));
+		// RenderingRegistry.registerEntityRenderingHandler(EntityZippleback.class, new RenderZippleback(new ModelZippleback(), 1));
+	}
+
+	private void registerItemRendering() {
+		// MinecraftForgeClient.registerItemRenderer(ItemRegistry.zippleGasContainer, new RenderItemContainer());
+		// empty for 1.8 compat
 	}
 }

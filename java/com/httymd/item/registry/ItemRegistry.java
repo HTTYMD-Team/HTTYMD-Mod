@@ -38,6 +38,7 @@ public class ItemRegistry {
 	private final static float swordD = 4f;
 
 	public static final HashMap<Integer, ItemSpawnEgg> spawnEggIDMapping = new HashMap<Integer, ItemSpawnEgg>();
+	public static final HashMap<String, Item> itemRegistry = new HashMap<String, Item>();
 
 	public static Item daggerWood;
 	public static Item clubWood;
@@ -172,5 +173,6 @@ public class ItemRegistry {
 	 */
 	public static void registerItem(Item item, String regName) {
 		GameRegistry.registerItem(item, regName);
+		itemRegistry.put(regName, item);
 	}
 }

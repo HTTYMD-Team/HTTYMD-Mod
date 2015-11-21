@@ -6,7 +6,7 @@ import net.minecraft.util.DamageSource;
 
 public interface IDrop {
 
-	public boolean isForEntity(EntityLivingBase entity);
-
 	public ItemStack getDrop(EntityLivingBase entity, DamageSource source, int lootLevel, boolean recentHit, int value);
+
+	public boolean isForEntity(EntityLivingBase entity);
 }

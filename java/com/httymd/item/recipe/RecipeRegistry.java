@@ -104,8 +104,8 @@ public class RecipeRegistry {
 
 		GameRegistry.addRecipe(new ItemStack(ItemRegistry.glideSuit[0]), "IWI", "LIL", 'I', Items.iron_ingot, 'W',
 				Blocks.wool, 'L', Items.leather);
-		GameRegistry.addRecipe(new ItemStack(ItemRegistry.glideSuit[1]), "LWL", "WLW", "LLL", 'L', Items.leather, 'W',
-				Blocks.wool, 'W', ItemRegistry.wing);
+		GameRegistry.addRecipe(new ItemStack(ItemRegistry.glideSuit[1]), "LWL", "#L#", "LLL", 'L', Items.leather, 'W',
+				Blocks.wool, '#', ItemRegistry.wing);
 		GameRegistry.addRecipe(new ItemStack(ItemRegistry.glideSuit[2]), "LLL", "I I", "L L", 'L', Items.leather, 'I',
 				Items.iron_ingot);
 		GameRegistry.addRecipe(new ItemStack(ItemRegistry.glideSuit[3]), "I I", "L L", 'I', Items.iron_ingot, 'L',

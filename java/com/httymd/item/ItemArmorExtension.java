@@ -2,10 +2,10 @@ package com.httymd.item;
 
 import com.httymd.HTTYMDMod;
 import com.httymd.item.registry.IRegisterable;
+import com.httymd.item.registry.ItemRegistry;
 import com.httymd.item.util.ItemUtils;
 import com.httymd.util.CreativeTab;
 
-import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.creativetab.CreativeTabs;
@@ -26,19 +26,20 @@ public class ItemArmorExtension extends ItemArmor implements IRegisterable {
 		this.setCreativeTab(tab);
 	}
 
+	@Override
+	@SideOnly(Side.CLIENT)
+	public String getArmorTexture(ItemStack stack, Entity entity, int slot, String type) {
+		return HTTYMDMod.ID + ":textures/armor/"
+				+ this.getRegistryName().substring(0, this.getRegistryName().lastIndexOf("_")) + "_"
+				+ (slot == 2 ? "2" : "1") + ".png";
+	}
+
 	public String getRegistryName() {
 		return ItemUtils.findRegistryName(this.getUnlocalizedName());
 	}
 
 	public ItemArmor registerItem() {
-		GameRegistry.registerItem(this, this.getRegistryName());
+		ItemRegistry.registerItem(this, this.getRegistryName());
 		return this;
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public String getArmorTexture(ItemStack stack, Entity entity, int slot, String type) {
-		return HTTYMDMod.ID + ":textures/armor/" + getRegistryName().substring(0, getRegistryName().lastIndexOf("_"))
-				+ "_" + (slot == 2 ? "2" : "1") + ".png";
 	}
 }

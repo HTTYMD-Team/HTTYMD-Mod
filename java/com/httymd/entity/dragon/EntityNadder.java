@@ -37,8 +37,8 @@ public class EntityNadder extends EntityDragon {
 	@Override
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
-		getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(10);
-		getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(0.2F);
-		getEntityAttribute(flyingSpeed).setBaseValue(1.7D);
+		this.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(10);
+		this.getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(0.2F);
+		this.getEntityAttribute(flyingSpeed).setBaseValue(1.7D);
 	}
 }

@@ -21,10 +21,24 @@ public class ItemUtils {
 	private static boolean supportsFishHooking = true;
 
 	/**
+	 * Creates and retrieves a new {@link ItemArmor.ArmorMaterial}
+	 *
+	 * @param craftingMaterial
+	 *            The material that can be used to repair armors that use this
+	 *            enum
+	 */
+	public static ItemArmor.ArmorMaterial addArmorMaterial(String name, int durability, int[] reductionAmounts,
+			int enchantability, Item craftingMaterial) {
+		ItemArmor.ArmorMaterial mat = EnumHelper.addArmorMaterial(name, durability, reductionAmounts, enchantability);
+		mat.customCraftingMaterial = craftingMaterial;
+		return mat;
+	}
+
+	/**
 	 * Adds a fishable itemstack through reflection to guarantee compatibility
 	 * with previous versions of Forge that don't support
 	 * {@link net.minecraftforge.common.FishingHooks FishingHooks}
-	 * 
+	 *
 	 * @return whether adding fishing hooks is possible in current version
 	 */
 	public static boolean addFish(ItemStack stack, int occurence) {
@@ -43,10 +57,25 @@ public class ItemUtils {
 	}
 
 	/**
-	 * Creates unlocalized name for standardization
+	 * Creates and retrieves a new {@link Item.ToolMaterial}
+	 *
+	 * @param craftingMaterial
+	 *            The material that can be used to repair tools that use this
+	 *            enum
 	 */
-	public static String findUnlocName(String name) {
-		return HTTYMDMod.ID + ":" + name.toLowerCase();
+	public static Item.ToolMaterial addToolMaterial(String name, int harvestLevel, int maxUses, float efficiency,
+			float damage, int enchantability, Item craftingMaterial) {
+		Item.ToolMaterial mat = EnumHelper.addToolMaterial(name, harvestLevel, maxUses, efficiency, damage,
+				enchantability);
+		mat.customCraftingMaterial = craftingMaterial;
+		return mat;
+	}
+
+	/**
+	 * Retrieves registry name from unlocalized name
+	 */
+	public static String findRegistryName(String unlocalizedName) {
+		return unlocalizedName.substring(unlocalizedName.lastIndexOf(':') + 1);
 	}
 
 	/**
@@ -57,10 +86,35 @@ public class ItemUtils {
 	}
 
 	/**
-	 * Retrieves registry name from unlocalized name
+	 * Creates unlocalized name for standardization
 	 */
-	public static String findRegistryName(String unlocalizedName) {
-		return unlocalizedName.substring(unlocalizedName.lastIndexOf(':') + 1);
+	public static String findUnlocName(String name) {
+		return HTTYMDMod.ID + ":" + name.toLowerCase();
+	}
+
+	/**
+	 * Creates an array of armor from a class extending from ItemArmorExtension,
+	 * uses reflection. (Reflection maybe be disgusting and slow, but this
+	 * provides efficiency, and is only ever called once on startup, and is
+	 * easier to manage)
+	 *
+	 * @param baseName
+	 *            The standardized prefix name to apply to the whole object
+	 * @param mat
+	 *            The {@link ArmorMaterial} of the new armor
+	 */
+	public static Item[] generateArmor(Class<? extends ItemArmorExtension> clazz, String baseName, ArmorMaterial mat) {
+		final String[] ARMORNAMES = { "helmet", "chestplate", "leggings", "boots" };
+		ItemArmorExtension[] armor = new ItemArmorExtension[ARMORNAMES.length];
+		for (int i = 0; i < ARMORNAMES.length; i++)
+			try {
+				armor[i] = clazz.getConstructor(String.class, ArmorMaterial.class, int.class)
+						.newInstance(baseName + "_" + ARMORNAMES[i], mat, i);
+				armor[i] = (ItemArmorExtension) armor[i].registerItem();
+			} catch (Exception ex) {
+				HTTYMDMod.getLogger().fatal(ex);
+			}
+		return armor;
 	}
 
 	/**
@@ -92,60 +146,5 @@ public class ItemUtils {
 		}
 
 		return result;
-	}
-
-	/**
-	 * Creates an array of armor from a class extending from ItemArmorExtension,
-	 * uses reflection. (Reflection maybe be disgusting and slow, but this
-	 * provides efficiency, and is only ever called once on startup, and is
-	 * easier to manage)
-	 * 
-	 * @param baseName
-	 *            The standardized prefix name to apply to the whole object
-	 * @param mat
-	 *            The {@link ArmorMaterial} of the new armor
-	 */
-	public static Item[] generateArmor(Class<? extends ItemArmorExtension> clazz, String baseName, ArmorMaterial mat) {
-		final String[] ARMORNAMES = { "helmet", "chestplate", "leggings", "boots" };
-		ItemArmorExtension[] armor = new ItemArmorExtension[ARMORNAMES.length];
-		for (int i = 0; i < ARMORNAMES.length; i++) {
-			try {
-				armor[i] = clazz.getConstructor(String.class, ArmorMaterial.class, int.class)
-						.newInstance(baseName + "_" + ARMORNAMES[i], mat, i);
-				armor[i] = (ItemArmorExtension) armor[i].registerItem();
-			} catch (Exception ex) {
-				HTTYMDMod.getLogger().fatal(ex);
-			}
-		}
-		return armor;
-	}
-
-	/**
-	 * Creates and retrieves a new {@link Item.ToolMaterial}
-	 * 
-	 * @param craftingMaterial
-	 *            The material that can be used to repair tools that use this
-	 *            enum
-	 */
-	public static Item.ToolMaterial addToolMaterial(String name, int harvestLevel, int maxUses, float efficiency,
-			float damage, int enchantability, Item craftingMaterial) {
-		Item.ToolMaterial mat = EnumHelper.addToolMaterial(name, harvestLevel, maxUses, efficiency, damage,
-				enchantability);
-		mat.customCraftingMaterial = craftingMaterial;
-		return mat;
-	}
-
-	/**
-	 * Creates and retrieves a new {@link ItemArmor.ArmorMaterial}
-	 * 
-	 * @param craftingMaterial
-	 *            The material that can be used to repair armors that use this
-	 *            enum
-	 */
-	public static ItemArmor.ArmorMaterial addArmorMaterial(String name, int durability, int[] reductionAmounts,
-			int enchantability, Item craftingMaterial) {
-		ItemArmor.ArmorMaterial mat = EnumHelper.addArmorMaterial(name, durability, reductionAmounts, enchantability);
-		mat.customCraftingMaterial = craftingMaterial;
-		return mat;
 	}
 }

@@ -25,7 +25,7 @@ public class EntityNightFury extends EntityDragon {
 
 	public EntityNightFury(World world) {
 		super(world);
-		setSize(2, 2.25F);
+		this.setSize(2, 2.25F);
 		this.stepHeight = 1;
 		this.getNavigator().setAvoidsWater(true);
 		// Since ground and flight AI can't possibly run concurrently (and they
@@ -51,16 +51,16 @@ public class EntityNightFury extends EntityDragon {
 	}
 
 	@Override
-	public double getMountedYOffset() {
-		return super.getMountedYOffset() * 1.25;
+	protected void applyEntityAttributes() {
+		super.applyEntityAttributes();
+		this.getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(0.8D);
+		this.getEntityAttribute(SharedMonsterAttributes.attackDamage).setBaseValue(2.0D);
+		this.getEntityAttribute(flyingSpeed).setBaseValue(2D);
 	}
 
 	@Override
-	protected void applyEntityAttributes() {
-		super.applyEntityAttributes();
-		getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(0.8D);
-		getEntityAttribute(SharedMonsterAttributes.attackDamage).setBaseValue(2.0D);
-		getEntityAttribute(flyingSpeed).setBaseValue(2D);
+	public double getMountedYOffset() {
+		return super.getMountedYOffset() * 1.25;
 	}
 
 	@Override

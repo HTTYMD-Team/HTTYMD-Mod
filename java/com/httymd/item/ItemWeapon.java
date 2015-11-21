@@ -1,6 +1,5 @@
 package com.httymd.item;
 
-import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import com.httymd.item.registry.IRegisterable;
 import com.httymd.item.registry.ItemRegistry;
@@ -35,21 +34,14 @@ public class ItemWeapon extends ItemSword implements IRegisterable {
 		this.setTextureName(ItemUtils.findTextureName(this.getUnlocalizedName()));
 	}
 
-	public String getRegistryName() {
-		return ItemUtils.findRegistryName(this.getUnlocalizedName());
-	}
-
-	public ItemSword registerItem() {
-		ItemRegistry.registerItem(this, this.getRegistryName());
-		return this;
-	}
-
-	public float MaterialAttackDamage() {
-		return this.func_150931_i();
-	}
-
-	public float MineSpeed(ItemStack item, Block block) {
-		return this.func_150893_a(item, block);
+	@Override
+	public Multimap<String, AttributeModifier> getAttributeModifiers(ItemStack stack) {
+		@SuppressWarnings("unchecked")
+		Multimap<String, AttributeModifier> multimap = super.getAttributeModifiers(stack);
+		multimap.put(SharedMonsterAttributes.attackDamage.getAttributeUnlocalizedName(),
+				new AttributeModifier(field_111210_e, "Weapon Modifier", this.attackDamage, 0)); 
+		//1.8: field_111210_e to itemModifierUUID
+		return multimap;
 	}
 
 	@Override
@@ -57,11 +49,20 @@ public class ItemWeapon extends ItemSword implements IRegisterable {
 		return 72000;
 	}
 
-	@Override
-	public Multimap<String, AttributeModifier> getItemAttributeModifiers() {
-		Multimap<String, AttributeModifier> multimap = HashMultimap.create();
-		multimap.put(SharedMonsterAttributes.attackDamage.getAttributeUnlocalizedName(),
-				new AttributeModifier(field_111210_e, "Weapon Modifier", (double) this.attackDamage, 0));
-		return multimap;
+	public String getRegistryName() {
+		return ItemUtils.findRegistryName(this.getUnlocalizedName());
+	}
+
+	public float MaterialAttackDamage() {
+		return this.func_150931_i(); //getDamageVsEntity in 1.8
+	}
+
+	public float MineSpeed(ItemStack item, Block block) {
+		return this.func_150893_a(item, block); //getStrVsBlock in 1.8
+	}
+
+	public ItemSword registerItem() {
+		ItemRegistry.registerItem(this, this.getRegistryName());
+		return this;
 	}
 }

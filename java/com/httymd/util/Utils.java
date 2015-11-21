@@ -20,32 +20,28 @@ public class Utils {
 	public static final double GRAVITY_FORCE = 0.6d;
 
 	/**
-	 * Retrieves the statistic value for a StatBase field
+	 * Adds a value to a statistic field
+	 *
+	 * @return whether execution succeeded
 	 */
-	public static int getPlayerStat(EntityPlayerMP player, StatBase stat) {
-		if (player == null || stat == null)
-			return 0;
-		return player.func_147099_x().writeStat(stat);
+	public static boolean addStat(Entity entity, StatBase stat, int value) {
+		if (!(entity instanceof EntityPlayerMP))
+			return false;
+		((EntityPlayerMP) entity).addStat(stat, value);
+		return true;
 	}
 
 	/**
-	 * Determines whether the player has retrieved a certain value or more in
-	 * specific StatBase field
+	 * Removes (consumes) an Item inside an entity's inventory (provides
+	 * consistency for entities, currently only for players).
+	 *
+	 * @return whether removal was possible
 	 */
-	public static boolean hasPlayerGained(EntityPlayerMP player, StatBase stat, int amount) {
-		return getPlayerStat(player, stat) >= amount;
-	}
+	public static boolean consumeItem(EntityLivingBase entity, Item item) {
+		if (entity instanceof EntityPlayer)
+			return ((EntityPlayer) entity).inventory.consumeInventoryItem(item);
 
-	/**
-	 * Retrieves a localized string (using HTTYMDMod.ID) from an unlocalized
-	 * string
-	 */
-	public static String getLocalString(String unlocalized) {
-		return StatCollector.translateToLocal(getModString(unlocalized));
-	}
-
-	public static String getModString(String str) {
-		return HTTYMDMod.ID + ":" + str;
+		return false;
 	}
 
 	public static ItemStack getArmor(EntityLivingBase entity, int slot) {
@@ -57,42 +53,6 @@ public class Utils {
 			return living.getEquipmentInSlot(slot + 1);
 		}
 		return null;
-	}
-
-	/**
-	 * Inserts an ItemStack into an entity's inventory (provides consistency for
-	 * entities, currently only for players)
-	 */
-	public static void insertItem(EntityLivingBase entity, ItemStack stack) {
-		if (entity instanceof EntityPlayer) {
-			((EntityPlayer) entity).inventory.addItemStackToInventory(stack);
-		}
-	}
-
-	/**
-	 * Removes (consumes) an Item inside an entity's inventory (provides
-	 * consistency for entities, currently only for players).
-	 * 
-	 * @return whether removal was possible
-	 */
-	public static boolean consumeItem(EntityLivingBase entity, Item item) {
-		if (entity instanceof EntityPlayer) {
-			return ((EntityPlayer) entity).inventory.consumeInventoryItem(item);
-		}
-
-		return false;
-	}
-
-	/**
-	 * Retrieves whether a specific item exists in a entity's inventory
-	 * (provides consistency for entities, currently only for players).
-	 */
-	public static boolean hasItem(EntityLivingBase entity, Item item) {
-		if (entity instanceof EntityPlayer) {
-			return ((EntityPlayer) entity).inventory.hasItem(item);
-		}
-
-		return false;
 	}
 
 	/**
@@ -110,22 +70,59 @@ public class Utils {
 	}
 
 	/**
+	 * Retrieves a localized string (using HTTYMDMod.ID) from an unlocalized
+	 * string
+	 */
+	public static String getLocalString(String unlocalized) {
+		return StatCollector.translateToLocal(getModString(unlocalized));
+	}
+
+	public static String getModString(String str) {
+		return HTTYMDMod.ID + ":" + str;
+	}
+
+	/**
+	 * Retrieves the statistic value for a StatBase field
+	 */
+	public static int getPlayerStat(EntityPlayerMP player, StatBase stat) {
+		if (player == null || stat == null)
+			return 0;
+		return player.func_147099_x().writeStat(stat);
+	}
+
+	/**
+	 * Retrieves whether a specific item exists in a entity's inventory
+	 * (provides consistency for entities, currently only for players).
+	 */
+	public static boolean hasItem(EntityLivingBase entity, Item item) {
+		if (entity instanceof EntityPlayer)
+			return ((EntityPlayer) entity).inventory.hasItem(item);
+
+		return false;
+	}
+
+	/**
+	 * Determines whether the player has retrieved a certain value or more in
+	 * specific StatBase field
+	 */
+	public static boolean hasPlayerGained(EntityPlayerMP player, StatBase stat, int amount) {
+		return getPlayerStat(player, stat) >= amount;
+	}
+
+	/**
+	 * Inserts an ItemStack into an entity's inventory (provides consistency for
+	 * entities, currently only for players)
+	 */
+	public static void insertItem(EntityLivingBase entity, ItemStack stack) {
+		if (entity instanceof EntityPlayer)
+			((EntityPlayer) entity).inventory.addItemStackToInventory(stack);
+	}
+
+	/**
 	 * Determines whether it is possible to draw a straight line from rayStart
 	 * to rayEnd in world
 	 */
 	public static boolean isTraceOpen(World world, Vec3 rayStart, Vec3 rayEnd) {
 		return world.rayTraceBlocks(rayStart, rayEnd, true) == null;
-	}
-
-	/**
-	 * Adds a value to a statistic field
-	 * 
-	 * @return whether execution succeeded
-	 */
-	public static boolean addStat(Entity entity, StatBase stat, int value) {
-		if (!(entity instanceof EntityPlayerMP))
-			return false;
-		((EntityPlayerMP) entity).addStat(stat, value);
-		return true;
 	}
 }

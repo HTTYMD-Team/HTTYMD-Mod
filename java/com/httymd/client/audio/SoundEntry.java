@@ -8,8 +8,8 @@ public class SoundEntry {
 	public final boolean playNow;
 
 	public SoundEntry(ISound sound, boolean eventStart) {
-		entry = sound;
-		playNow = eventStart;
+		this.entry = sound;
+		this.playNow = eventStart;
 	}
 
 }

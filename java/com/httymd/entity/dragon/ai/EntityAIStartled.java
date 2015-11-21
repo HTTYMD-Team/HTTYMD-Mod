@@ -36,6 +36,11 @@ public class EntityAIStartled extends EntityAIBase {
 	}
 
 	@Override
+	public boolean continueExecuting() {
+		return this.dragon.isStartled() && !this.dragon.getNavigator().noPath();
+	}
+
+	@Override
 	public void resetTask() {
 		this.closestLiving = null;
 	}
@@ -46,21 +51,20 @@ public class EntityAIStartled extends EntityAIBase {
 			return false;
 
 		if (this.avoidClass == EntityPlayer.class && (this.closestLiving = this.dragon.worldObj
-				.getClosestPlayerToEntity(this.dragon, (double) this.reactDist)) == null)
+				.getClosestPlayerToEntity(this.dragon, this.reactDist)) == null)
 			return false;
 		else {
-			List<?> list = this.dragon.worldObj.selectEntitiesWithinAABB(this.avoidClass, this.dragon.boundingBox
-					.expand((double) this.reactDist, this.reactDist * 0.4, (double) this.reactDist),
+			List<?> list = this.dragon.worldObj.selectEntitiesWithinAABB(this.avoidClass,
+					this.dragon.boundingBox.expand(this.reactDist, this.reactDist * 0.4, this.reactDist),
 					new IEntitySelector() {
 						@Override
 						public boolean isEntityApplicable(Entity e) {
-							return e.isEntityAlive() && dragon.getEntitySenses().canSee(e);
+							return e.isEntityAlive() && EntityAIStartled.this.dragon.getEntitySenses().canSee(e);
 						}
 					});
 
-			if (list.isEmpty()) {
+			if (list.isEmpty())
 				return false;
-			}
 
 			this.closestLiving = (EntityLivingBase) list.get(0);
 		}
@@ -72,17 +76,12 @@ public class EntityAIStartled extends EntityAIBase {
 				this.closestLiving.getPosition(1));
 
 		if (vec3 == null || this.closestLiving.getDistanceSq(vec3.xCoord, vec3.yCoord, vec3.zCoord) < this.closestLiving
-				.getDistanceSqToEntity(this.dragon)) {
+				.getDistanceSqToEntity(this.dragon))
 			return false;
-		} else {
+		else {
 			this.entityPathEntity = this.dragon.getNavigator().getPathToXYZ(vec3.xCoord, vec3.yCoord, vec3.zCoord);
 			return this.entityPathEntity == null ? false : this.entityPathEntity.isDestinationSame(vec3);
 		}
-	}
-
-	@Override
-	public boolean continueExecuting() {
-		return this.dragon.isStartled() && !this.dragon.getNavigator().noPath();
 	}
 
 	@Override

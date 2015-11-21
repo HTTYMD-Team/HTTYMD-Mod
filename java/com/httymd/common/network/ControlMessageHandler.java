@@ -26,10 +26,8 @@ public class ControlMessageHandler implements IMessageHandler<ControlMessage, IM
 			return null;
 		}
 		EntityPlayerMP player = ctx.getServerHandler().playerEntity;
-		if (player.ridingEntity instanceof EntityTameableFlying) {
-			EntityTameableFlying dragon = (EntityTameableFlying) player.ridingEntity;
-			// dragon.setControlFlags(message.getFlags());
-		}
+		//if (player.ridingEntity instanceof EntityTameableFlying) EntityTameableFlying dragon = (EntityTameableFlying) player.ridingEntity;
+		// dragon.setControlFlags(message.getFlags());
 		// receive only
 		return null;
 	}

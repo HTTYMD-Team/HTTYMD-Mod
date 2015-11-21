@@ -1,7 +1,5 @@
 package com.httymd;
 
-import net.minecraft.entity.Entity;
-
 import java.util.ArrayList;
 
 import org.apache.logging.log4j.LogManager;
@@ -26,6 +24,7 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartedEvent;
 import cpw.mods.fml.common.event.FMLServerStoppedEvent;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import net.minecraft.entity.Entity;
 
 @Mod(modid = HTTYMDMod.ID, name = HTTYMDMod.NAME, guiFactory = HTTYMDMod.GUIFACORY)
 public class HTTYMDMod {
@@ -48,14 +47,12 @@ public class HTTYMDMod {
 	@SidedProxy(modId = ID, clientSide = CLIENT_PROXY, serverSide = COMMON_PROXY)
 	public static CommonProxy proxy;
 
-	private ModMetadata metadata;
-	private Config config;
-	private final Logger log = LogManager.getLogger(NAME);
+	public static Config getConfig() {
+		return INSTANCE.config;
+	}
 
-	private ArrayList<String> dragonNameList = new ArrayList<String>();
-
-	public static void registerDragonName(String name) {
-		INSTANCE.dragonNameList.add(name);
+	public static CreativeTab getCreativeTab() {
+		return CreativeTab.DRAGON_TAB;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -63,20 +60,16 @@ public class HTTYMDMod {
 		return (ArrayList<String>) INSTANCE.dragonNameList.clone();
 	}
 
-	public static ModMetadata getMetadata() {
-		return INSTANCE.metadata;
-	}
-
-	public static Config getConfig() {
-		return INSTANCE.config;
-	}
-
 	public static Logger getLogger() {
 		return INSTANCE.log;
 	}
 
-	public static CreativeTab getCreativeTab() {
-		return CreativeTab.DRAGON_TAB;
+	public static ModMetadata getMetadata() {
+		return INSTANCE.metadata;
+	}
+
+	public static void registerDragonName(String name) {
+		INSTANCE.dragonNameList.add(name);
 	}
 
 	public static void registerEntity(Class<? extends Entity> entityClass, String entityName, int solidColor,
@@ -84,14 +77,13 @@ public class HTTYMDMod {
 		EntityRegister.createEntity(entityClass, entityName, solidColor, spotColor);
 	}
 
-	@EventHandler
-	public void modPreInit(FMLPreInitializationEvent event) {
-		config = new Config(event);
-		metadata = event.getModMetadata();
-		proxy.onPreInit(event);
-		StatListMod.registerStats(); // Guarantees stats register with all
-										// information
-	}
+	private ModMetadata metadata;
+
+	private Config config;
+
+	private final Logger log = LogManager.getLogger(NAME);
+
+	private ArrayList<String> dragonNameList = new ArrayList<String>();
 
 	@EventHandler
 	public void modInit(FMLInitializationEvent event) {
@@ -106,6 +98,21 @@ public class HTTYMDMod {
 	}
 
 	@EventHandler
+	public void modPreInit(FMLPreInitializationEvent event) {
+		this.config = new Config(event);
+		this.metadata = event.getModMetadata();
+		proxy.onPreInit(event);
+		StatListMod.registerStats(); // Guarantees stats register with all
+										// information
+	}
+
+	@SubscribeEvent
+	public void onConfigChanged(OnConfigChangedEvent eventArgs) {
+		if (eventArgs.modID.equals(ID))
+			this.config.syncConfig();
+	}
+
+	@EventHandler
 	public void onServerStarted(FMLServerStartedEvent evt) {
 		proxy.onServerStarted(evt);
 	}
@@ -113,12 +120,5 @@ public class HTTYMDMod {
 	@EventHandler
 	public void onServerStopped(FMLServerStoppedEvent evt) {
 		proxy.onServerStopped(evt);
-	}
-
-	@SubscribeEvent
-	public void onConfigChanged(OnConfigChangedEvent eventArgs) {
-		if (eventArgs.modID.equals(ID)) {
-			config.syncConfig();
-		}
 	}
 }

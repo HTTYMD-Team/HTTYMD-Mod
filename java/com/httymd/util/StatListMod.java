@@ -19,12 +19,8 @@ public class StatListMod {
 	 */
 	public static HashMap<String, StatBase> dragonsRidden;
 	/** Records the distance traveled on tamed dragons */
-	public static StatBase distanceByDragon = (new StatBase(startSection + endSection[0],
-			new ChatComponentTranslation(startSection + endSection[0]))).initIndependentStat().registerStat();
-
-	public static void registerStats() {
-		registerDragonsRidden();
-	}
+	public static StatBase distanceByDragon = new StatBase(startSection + endSection[0],
+			new ChatComponentTranslation(startSection + endSection[0])).initIndependentStat().registerStat();
 
 	private static void registerDragonsRidden() {
 		Iterator<String> dragonIt = HTTYMDMod.getDragonList().iterator();
@@ -36,5 +32,9 @@ public class StatListMod {
 			dragonsRidden.put(dragonName.toLowerCase(),
 					new StatBase(name, new ChatComponentTranslation(name)).initIndependentStat().registerStat());
 		}
+	}
+
+	public static void registerStats() {
+		registerDragonsRidden();
 	}
 }

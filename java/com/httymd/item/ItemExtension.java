@@ -10,14 +10,14 @@ import net.minecraft.item.Item;
 
 public class ItemExtension extends Item implements IRegisterable {
 
+	public ItemExtension(String name) {
+		this(name, CreativeTab.DRAGON_TAB);
+	}
+
 	public ItemExtension(String name, CreativeTabs tab) {
 		this.setCreativeTab(tab);
 		this.setUnlocalizedName(ItemUtils.findUnlocName(name));
 		this.setTextureName(ItemUtils.findTextureName(this.getUnlocalizedName()));
-	}
-
-	public ItemExtension(String name) {
-		this(name, CreativeTab.DRAGON_TAB);
 	}
 
 	public String getRegistryName() {

@@ -2,6 +2,7 @@ package com.httymd.entity;
 
 //import com.httymd.inventory.InventoryViking;
 import java.util.ArrayList;
+
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.INpc;
@@ -26,18 +27,6 @@ public abstract class EntityVikingBase extends EntityAgeable implements INpc {
 		this.pets.add(entity);
 	}
 
-	public void removePet(EntityLivingBase entity) {
-		this.pets.remove(entity);
-	}
-
-	public void removePet(int i) {
-		this.pets.remove(i);
-	}
-
-	public void setDragon(EntityDragon dragon) {
-		this.mainDragon = dragon;
-	}
-
 	public EntityDragon getDragon() {
 		return this.mainDragon;
 	}
@@ -52,6 +41,18 @@ public abstract class EntityVikingBase extends EntityAgeable implements INpc {
 
 	public int petIndexOf(EntityLivingBase ent) {
 		return this.pets.indexOf(ent);
+	}
+
+	public void removePet(EntityLivingBase entity) {
+		this.pets.remove(entity);
+	}
+
+	public void removePet(int i) {
+		this.pets.remove(i);
+	}
+
+	public void setDragon(EntityDragon dragon) {
+		this.mainDragon = dragon;
 	}
 
 }

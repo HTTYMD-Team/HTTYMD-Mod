@@ -1,13 +1,12 @@
 package com.httymd.util;
 
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.item.Item;
-
 import com.httymd.HTTYMDMod;
 import com.httymd.item.ItemExtension;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.Item;
 
 public class CreativeTab extends CreativeTabs {
 
@@ -24,7 +23,7 @@ public class CreativeTab extends CreativeTabs {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public Item getTabIconItem() {
-		return icon;
+		return this.icon;
 	}
 
 }

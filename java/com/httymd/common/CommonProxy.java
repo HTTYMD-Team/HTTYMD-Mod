@@ -7,6 +7,7 @@ import com.httymd.entity.dragon.EntityTerribleTerror;
 import com.httymd.event.MobEventHandler;
 import com.httymd.item.registry.ItemRegistry;
 import com.httymd.item.registry.MaterialRegistry;
+import com.httymd.item.registry.WorldItemRegistry;
 
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
@@ -15,7 +16,6 @@ import cpw.mods.fml.common.event.FMLServerStartedEvent;
 import cpw.mods.fml.common.event.FMLServerStoppedEvent;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
-import net.minecraft.command.ServerCommandManager;
 import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.common.MinecraftForge;
 
@@ -24,19 +24,14 @@ public class CommonProxy {
 	private SimpleNetworkWrapper network;
 
 	public SimpleNetworkWrapper getNetwork() {
-		return network;
-	}
-
-	public void onPreInit(FMLPreInitializationEvent event) {
-		MaterialRegistry.init();
-		ItemRegistry.init();
+		return this.network;
 	}
 
 	public void onInit(FMLInitializationEvent evt) {
 		this.registerEntities();
 		this.registerHandlers();
 
-		network = NetworkRegistry.INSTANCE.newSimpleChannel("HTTYMDChannel");
+		this.network = NetworkRegistry.INSTANCE.newSimpleChannel("HTTYMDChannel");
 		// network.registerMessage(ControlMessageHandler.class,
 		// ControlMessage.class, 0, Side.SERVER);
 	}
@@ -44,21 +39,21 @@ public class CommonProxy {
 	public void onPostInit(FMLPostInitializationEvent event) {
 	}
 
+	public void onPreInit(FMLPreInitializationEvent event) {
+		MaterialRegistry.init();
+		ItemRegistry.init();
+		WorldItemRegistry.init();
+	}
+
 	// Server Functions
-	@SuppressWarnings("unused")
 	public void onServerStarted(FMLServerStartedEvent evt) {
 		MinecraftServer server = MinecraftServer.getServer();
-		ServerCommandManager cmdman = (ServerCommandManager) server.getCommandManager();
+		server.getCommandManager();
 	}
 
 	public void onServerStopped(FMLServerStoppedEvent evt) {
 	}
 	// End Server Functions
-
-	// Registries
-	private void registerHandlers() {
-		MinecraftForge.EVENT_BUS.register(new MobEventHandler());
-	}
 
 	private void registerEntities() {
 		HTTYMDMod.registerEntity(EntityTerribleTerror.class, "TerribleTerror", 0x00FF00, 0x44FF44);
@@ -66,4 +61,9 @@ public class CommonProxy {
 		HTTYMDMod.registerEntity(EntityNightFury.class, "NightFury", 0x000000, 0x222222);
 	}
 	// End Registries
+
+	// Registries
+	private void registerHandlers() {
+		MinecraftForge.EVENT_BUS.register(new MobEventHandler());
+	}
 }
