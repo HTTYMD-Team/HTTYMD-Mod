@@ -12,6 +12,8 @@ buildscript {
     }
     dependencies {
         classpath 'net.minecraftforge.gradle:ForgeGradle:1.2-SNAPSHOT'
+        
+        classpath fileTree(dir: 'libs', include: '*.jar')
     }
 }
 
@@ -23,14 +25,32 @@ idea {
 }
 
 apply plugin: 'forge'
+sourceCompatibility = 1.6
+targetCompatibility = 1.6
 
-version = "1.7.10-10.13.2.1230F-1.0.2R"
+ext.configFile = file "mod.prop"
+configFile.withReader {
+    // Load config. Can be referenced as config
+    def prop = new Properties()
+    prop.load(it)
+    ext.config = new ConfigSlurper().parse prop
+}
+
+version = config.mcversion+"-"+config.forgeversion+"F-"+config.modversion //"1.7.10-10.13.2.1230F-1.0.2R"
 group= "com.httymd" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "HTTYMD"
 
 minecraft {
-    version = "1.7.10-10.13.2.1230"
+    version = config.mcversion+"-"+config.forgeversion //"1.7.10-10.13.2.1230"
     runDir = "minecraft"
+}
+
+
+sourceSets {
+    main {
+        java { srcDir 'java' }
+        resources { srcDir 'resources' include('**') }
+    }
 }
 
 processResources
@@ -42,24 +62,10 @@ processResources
     // replace stuff in mcmod.info, nothing else
     from(sourceSets.main.resources.srcDirs) {
         include 'mcmod.info'
-                
         // replace version and mcversion
-        expand 'version':project.version, 'mcversion':project.minecraft.version
-    }
-        
-    // copy everything else, thats not the mcmod.info
-    from(sourceSets.main.resources.srcDirs) {
-        exclude 'mcmod.info'
+        expand 'version':config.modversion, 'mcversion':config.mcversion
     }
 }
-
-sourceSets {
-    main {
-        java { srcDir 'java' }
-        resources { srcDir 'resources' }
-    }
-}
-
 
 dependencies {
     // you may put jars on which you depend on in ./libs
@@ -75,6 +81,14 @@ dependencies {
     // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
 
+}
+
+jar {
+    //Place jar into distribution folder
+    destinationDir = file 'releases'
+    //Keep the jar as clean as possible
+    includeEmptyDirs = false
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
 
 

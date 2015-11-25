@@ -80,13 +80,17 @@ public class ItemUtils {
 
 	/**
 	 * Retrieves texture name from unlocalized name
+	 * 
+	 * <p>Will get rid of unlocazied prefix (for items, its 'item.') and retrieves texture name</p>
 	 */
-	public static String findTextureName(String unlocalizedName) {
+	public static String findTextureName(String unlocalizedName) { //TODO: Remember why the hell I made this
 		return unlocalizedName.substring(unlocalizedName.indexOf('.') + 1);
 	}
 
 	/**
 	 * Creates unlocalized name for standardization
+	 * 
+	 * <p>Syntax: "modid:&lt;lowercase name&gt;"</p>
 	 */
 	public static String findUnlocName(String name) {
 		return HTTYMDMod.ID + ":" + name.toLowerCase();

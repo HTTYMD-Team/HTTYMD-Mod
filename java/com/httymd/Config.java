@@ -13,6 +13,9 @@ public class Config {
 	private boolean canOwnMultipleDragons = true;
 	private boolean debugMode = false;
 	private boolean experimentalMode = false;
+	private boolean useBG2 = true;
+	private boolean useBg2Daggers = true;
+	private boolean useBg2ForWarhammer = true;
 
 	public Config(FMLPreInitializationEvent evt) {
 		this.config = new Configuration(evt.getSuggestedConfigurationFile());
@@ -43,6 +46,18 @@ public class Config {
 	public boolean isExperimental() {
 		return this.experimentalMode;
 	}
+	
+	public boolean canUseBg2() {
+		return this.useBG2;
+	}
+	
+	public boolean useBg2Daggers() {
+		return this.useBg2Daggers;
+	}
+	
+	public boolean useBg2ForWarhammer() {
+		return this.useBg2ForWarhammer;
+	}
 
 	public void syncConfig() {
 
@@ -56,7 +71,11 @@ public class Config {
 				"Enable debug mode, developers recommended", this.getLocalKey("debugMode"));
 		this.experimentalMode = this.config.getBoolean("ExperimentalMode", Configuration.CATEGORY_GENERAL, false,
 				"Enable an experimental version (warning: may be less stable)", this.getLocalKey("experimentalMode"));
-
+		
+		this.useBG2 = this.config.getBoolean("UseBG2", Configuration.CATEGORY_GENERAL, true, "Enables the use of BG2 (if installed)", this.getLocalKey("useBG2"));
+		this.useBg2Daggers = this.config.getBoolean("UseBG2Daggers", Configuration.CATEGORY_GENERAL, true, "Allows you to specifiy whether to use Battlegear 2 to replace HTTYMD dagger behavior with BG2 dagger behavior", this.getLocalKey("useBG2Daggers"));
+		this.useBg2ForWarhammer  = this.config.getBoolean("UseBG2ForWarhammer", Configuration.CATEGORY_GENERAL, true, "Allows you to specifiy whether to use Battlegear 2 for HTTYMD Warhammers", this.getLocalKey("useBG2ForWarhammer"));
+		
 		if (this.config.hasChanged())
 			this.config.save();
 	}

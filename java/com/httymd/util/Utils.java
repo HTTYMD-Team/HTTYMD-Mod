@@ -2,8 +2,10 @@ package com.httymd.util;
 
 import java.util.UUID;
 
+import com.httymd.Config;
 import com.httymd.HTTYMDMod;
 
+import cpw.mods.fml.common.Loader;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
@@ -18,7 +20,9 @@ import net.minecraft.world.World;
 
 public class Utils {
 	public static final double GRAVITY_FORCE = 0.6d;
-
+	private static Boolean isBG2Loaded = null;
+	public static final String bg2Id = "battlegear2";
+	
 	/**
 	 * Adds a value to a statistic field
 	 *
@@ -124,5 +128,33 @@ public class Utils {
 	 */
 	public static boolean isTraceOpen(World world, Vec3 rayStart, Vec3 rayEnd) {
 		return world.rayTraceBlocks(rayStart, rayEnd, true) == null;
+	}
+	
+	public static String getBg2Id() {
+		return bg2Id;
+	}
+	/**
+	 * Retrieves whether Battlegear 2 is installed (saves result at runtime for efficiency)
+	 */
+	public static boolean isBg2Installed() {
+		if(isBG2Loaded == null) {
+			isBG2Loaded = Loader.isModLoaded(getBg2Id());
+		}
+		return isBG2Loaded.booleanValue();
+	}
+	
+	/**
+	 * Determines whether Battlegear 2 should be used based on {@link #isBg2Installed()} and {@link Config#canUseBg2()}
+	 */
+	public static boolean shouldUseBg2() {
+		return HTTYMDMod.getConfig().canUseBg2() && isBg2Installed();
+	}
+	
+	public static boolean shouldForceBg2Daggers() {
+		return shouldUseBg2() && HTTYMDMod.getConfig().useBg2Daggers();
+	}
+	
+	public static boolean shouldForceBg2ForWarhammer() {
+		return shouldUseBg2() && HTTYMDMod.getConfig().useBg2ForWarhammer();
 	}
 }

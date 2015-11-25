@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import com.httymd.item.IDrop;
-import com.httymd.item.IShield;
 
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
@@ -13,13 +12,13 @@ import net.minecraft.util.DamageSource;
 public class EventRegistry {
 	private static ArrayList<IDrop> drops = new ArrayList<IDrop>();
 
-	public static IShield getActiveShieldFor(EntityLivingBase entity) {
+	/*public static IShield getActiveShieldFor(EntityLivingBase entity) {
 		ItemStack is = entity.getHeldItem();
 		if (is != null && is.getItem() instanceof IShield && ((IShield) is.getItem()).isBeingUsed(entity, is))
 			return (IShield) is.getItem();
 
 		return null;
-	}
+	}*/
 
 	public static ArrayList<IDrop> getDropsFor(EntityLivingBase entity) {
 		ArrayList<IDrop> dropList = new ArrayList<IDrop>();

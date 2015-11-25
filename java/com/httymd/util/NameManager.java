@@ -70,12 +70,11 @@ public class NameManager {
 				if (Utils.hasPlayerGained(ply, StatListMod.distanceByDragon, 3000))
 					return "rider";
 
-				if (Utils.hasPlayerGained(ply, StatList.playerKillsStat, 100))
+				if (Utils.hasPlayerGained(ply, StatList.playerKillsStat, 100) 
+						|| Utils.hasPlayerGained(ply, StatList.damageTakenStat, 9000000))
 					return "relentless";
 				else if (Utils.hasPlayerGained(ply, StatList.deathsStat, 100))
 					return "slayed";
-				else if (Utils.hasPlayerGained(ply, StatList.damageTakenStat, 5000))
-					return "relentless";
 				else if (Utils.hasPlayerGained(ply, StatList.jumpStat, 5000))
 					return "excited";
 				else if (Utils.hasPlayerGained(ply, StatList.mobKillsStat, 400))

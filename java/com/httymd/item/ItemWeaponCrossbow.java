@@ -195,14 +195,9 @@ public class ItemWeaponCrossbow extends ItemExtension {
 					this.insertToInventory(entity, new ItemStack(Items.arrow));
 					return;
 				}
-
-				if (arrowPower > MAX_POWER)
-					arrowPower = MAX_POWER;
-
+				if (arrowPower > MAX_POWER) arrowPower = MAX_POWER;
 				this.setBowPower(item, arrowPower);
-				world.playSoundAtEntity(entity, "mob.sheep.shear", 2.0F, 0.8F);// Best
-																				// loading
-																				// sound
+				world.playSoundAtEntity(entity, "mob.sheep.shear", 2.0F, 0.8F);// Best loading sound
 			}
 		}
 	}

@@ -10,6 +10,7 @@ import com.httymd.entity.EntityRegister;
 import com.httymd.item.recipe.RecipeRegistry;
 import com.httymd.util.CreativeTab;
 import com.httymd.util.StatListMod;
+import com.httymd.util.Utils;
 
 import cpw.mods.fml.client.event.ConfigChangedEvent.OnConfigChangedEvent;
 import cpw.mods.fml.common.FMLCommonHandler;
@@ -26,7 +27,7 @@ import cpw.mods.fml.common.event.FMLServerStoppedEvent;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.entity.Entity;
 
-@Mod(modid = HTTYMDMod.ID, name = HTTYMDMod.NAME, guiFactory = HTTYMDMod.GUIFACORY)
+@Mod(modid = HTTYMDMod.ID, name = HTTYMDMod.NAME, guiFactory = HTTYMDMod.GUIFACORY, dependencies = "after:"+Utils.bg2Id)
 public class HTTYMDMod {
 
 	//////////////////////////////////////////////////////

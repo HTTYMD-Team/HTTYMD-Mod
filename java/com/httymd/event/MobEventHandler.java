@@ -1,6 +1,5 @@
 package com.httymd.event;
 
-import com.httymd.item.IShield;
 import com.httymd.util.EventRegistry;
 import com.httymd.util.NameManager;
 
@@ -24,13 +23,13 @@ public class MobEventHandler {
 
 	@SubscribeEvent
 	public void onEvent(LivingHurtEvent event) {
-		IShield s = EventRegistry.getActiveShieldFor(event.entityLiving);
+		/*IShield s = EventRegistry.getActiveShieldFor(event.entityLiving);
 		ItemStack stack = event.entityLiving.getHeldItem();
 		if (s != null && stack != null) {
 			float newDamage = s.getShieldRatio(stack, event.source) * event.ammount;
 			s.onStruck(event.entityLiving, stack, event.ammount, newDamage, event.source);
 			event.ammount = newDamage;
-		}
+		}*/
 	}
 
 	@SubscribeEvent(priority = EventPriority.NORMAL, receiveCanceled = true)
