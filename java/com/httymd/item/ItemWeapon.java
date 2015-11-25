@@ -10,6 +10,8 @@ import com.httymd.item.util.EnumWeaponType;
 import com.httymd.item.util.ItemUtils;
 import com.httymd.util.CreativeTab;
 
+import cpw.mods.fml.common.IFuelHandler;
+import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
@@ -19,7 +21,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
 
-public class ItemWeapon extends ItemSword implements IRegisterable {
+public class ItemWeapon extends ItemSword implements IRegisterable, IFuelHandler {
 	
 	protected float attackDamage;
 	protected EnumWeaponType type;
@@ -27,6 +29,7 @@ public class ItemWeapon extends ItemSword implements IRegisterable {
 	public ItemWeapon(Item.ToolMaterial mat, EnumWeaponType wepType) {
 		this(mat, wepType.getName(), wepType.getDamage());
 		this.type = wepType;
+		if(this.type != null && this.type.getFuelTime() > 0) GameRegistry.registerFuelHandler(this);
 	}
 	
 	public ItemWeapon(Item.ToolMaterial toolMaterial, String weaponName, float weaponDamage) {
@@ -89,5 +92,13 @@ public class ItemWeapon extends ItemSword implements IRegisterable {
 			f += ((AttributeModifier) itr.next()).getAmount();
 		}
 		return f;
+	}
+
+	public int getBurnTime(ItemStack fuel) {
+		if (fuel.getItem() == this) {
+			return this.getToolMaterialName().equals(ToolMaterial.WOOD.toString()) ? 
+					this.type.getFuelTime() + 100 : this.type.getFuelTime();
+		}
+		return 0;
 	}
 }

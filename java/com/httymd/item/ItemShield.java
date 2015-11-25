@@ -5,6 +5,7 @@ import com.httymd.util.Utils;
 
 import cpw.mods.fml.common.IFuelHandler;
 import cpw.mods.fml.common.Optional;
+import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -48,6 +49,7 @@ public class ItemShield extends ItemExtension
 		this.setHasSubtypes(false);
 		this.natDecay = decay;
 		this.damDecay = damDecay;
+		GameRegistry.registerFuelHandler(this);
 	}
 
 	public ItemShield(String suffix, Item.ToolMaterial material) {
@@ -159,8 +161,7 @@ public class ItemShield extends ItemExtension
 
 	public int getBurnTime(ItemStack fuel) {
 		if (fuel.getItem() == this) {
-			if (this.material.equals(ToolMaterial.WOOD)) return 400;
-			return 300;
+			return this.material.equals(ToolMaterial.WOOD) ? 300 : 200;
 		}
 		return 0;
 	}

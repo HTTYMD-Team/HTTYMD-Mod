@@ -9,7 +9,9 @@ import com.httymd.item.registry.ItemRegistry;
 import com.httymd.item.util.EnumToolType;
 import com.httymd.item.util.ItemUtils;
 
+import cpw.mods.fml.common.IFuelHandler;
 import cpw.mods.fml.common.eventhandler.Event.Result;
+import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
@@ -29,7 +31,7 @@ import net.minecraftforge.event.entity.player.UseHoeEvent;
  * @author George Albany
  *
  */
-public class ItemToolExtension extends ItemTool implements IRegisterable {
+public class ItemToolExtension extends ItemTool implements IRegisterable, IFuelHandler {
 
 	protected final Collection<EnumToolType> toolTypes;
 
@@ -42,6 +44,7 @@ public class ItemToolExtension extends ItemTool implements IRegisterable {
 		this.toolTypes = types;
 		this.setUnlocalizedName(ItemUtils.findUnlocName(prefix + "_" + material.toString()));
 		this.setTextureName(ItemUtils.findTextureName(this.getUnlocalizedName()));
+		if(EnumToolType.getAverageFuelTime(this.toolTypes) > 0) GameRegistry.registerFuelHandler(this);
 	}
 
 	//getStrVsBlock in 1.8
@@ -144,5 +147,15 @@ public class ItemToolExtension extends ItemTool implements IRegisterable {
 	public Item registerItem() {
 		ItemRegistry.registerItem(this, this.getRegistryName());
 		return this;
+	}
+
+	@Override
+	public int getBurnTime(ItemStack fuel) {
+		if(fuel.getItem() == this) {
+			return this.toolMaterial == ToolMaterial.WOOD ? 
+					EnumToolType.getAverageFuelTime(this.getToolTypes()) 
+					: EnumToolType.getAverageFuelTime(this.getToolTypes()) - 50; 
+		}
+		return 0;
 	}
 }

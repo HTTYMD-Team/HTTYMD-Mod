@@ -117,9 +117,12 @@ public class RecipeRegistry {
 		GameRegistry.addRecipe(new ItemStack(ItemRegistry.flameSword), "S", "#", 'S', Items.iron_sword, '#',
 				Items.coal);
 
+		GameRegistry.addRecipe(new ItemStack(ItemRegistry.gronkleIronBlock), "III", "III", "III", 'I', ItemRegistry.gronkleIronIngot);
+		GameRegistry.addShapelessRecipe(new ItemStack(ItemRegistry.gronkleIronIngot, 9), ItemRegistry.gronkleIronBlock);
+		
 		Item[] muttonArr = ItemRegistry.foods.get(EnumFoodType.MUTTON).toArray(new Item[10]);
 		GameRegistry.addSmelting(muttonArr[0], new ItemStack(muttonArr[1]), 1.0F);
-
+		
 		/*
 		 * ItemStack stack = new ItemStack(ItemRegistry.zippleGasContainer);
 		 * ItemContainer.setProduceHeld(stack, 15.0F);

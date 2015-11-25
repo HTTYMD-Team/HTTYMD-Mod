@@ -14,7 +14,10 @@ import net.minecraft.block.Block;
  */
 public enum EnumToolType {
 
-	PICKAXE(2.0F), AXE(3.0F), SHOVEL(1.0F), HOE(0.0F);
+	PICKAXE(2.0F),
+	AXE(3.0F),
+	SHOVEL(1.0F),
+	HOE(0.0F);
 
 	public static Set<Block> getAllEffectiveBlocksOf(Collection<EnumToolType> types) {
 		Set<Block> result = new HashSet<Block>();
@@ -36,25 +39,43 @@ public enum EnumToolType {
 			result = Math.max(result, t.getAttackDamage());
 		return result;
 	}
+	
+	public static int getAverageFuelTime(Collection<EnumToolType> types) {
+		int sum = 0;
+		for(EnumToolType t : types)
+			sum += t.getFuelTime();
+		return sum/types.size();
+	}
 
 	private String toolName;
 	private float naturalDamage;
 	private Set<Block> effectiveBlocks;
+	private int fuelTime = 200;
 
 	private EnumToolType(float damage) {
 		this.toolName = this.toString().toLowerCase();
 		this.naturalDamage = damage;
 		this.effectiveBlocks = null;
 	}
+	
+	private EnumToolType(float damage, Integer fuelTime) {
+		this(damage);
+		this.fuelTime = fuelTime;
+	}
 
-	private EnumToolType(String name, float damage, Set<Block> effectiveBlocks) {
+	private EnumToolType(String name, float damage, int fuelTime, Set<Block> effectiveBlocks) {
 		this.toolName = name.toLowerCase();
 		this.naturalDamage = damage;
+		this.fuelTime = fuelTime;
 		this.effectiveBlocks = effectiveBlocks;
 	}
 
 	public float getAttackDamage() {
 		return this.naturalDamage;
+	}
+	
+	public int getFuelTime() {
+		return this.fuelTime;
 	}
 
 	public Set<Block> getEffectiveBlocks() {
