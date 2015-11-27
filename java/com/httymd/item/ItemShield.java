@@ -4,7 +4,8 @@ import com.httymd.item.util.ItemUtils;
 import com.httymd.util.Utils;
 
 import cpw.mods.fml.common.IFuelHandler;
-import cpw.mods.fml.common.Optional;
+import cpw.mods.fml.common.Optional.Interface;
+import cpw.mods.fml.common.Optional.InterfaceList;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -18,14 +19,22 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.IIcon;;
+import net.minecraft.util.IIcon;
 
-@Optional.InterfaceList(value = {
-		@Optional.Interface(iface = "mods.battlegear2.api.shield.IShield", modid = Utils.bg2Id, striprefs = true),
-		@Optional.Interface(iface = "mods.battlegear2.api.shield.IArrowCatcher", modid = Utils.bg2Id, striprefs = true),
-		@Optional.Interface(iface = "mods.battlegear2.api.shield.IArrowDisplay", modid = Utils.bg2Id, striprefs = true),
-		@Optional.Interface(iface = "mods.battlegear2.api.IEnchantable", modid = Utils.bg2Id, striprefs = true),
-		@Optional.Interface(iface = "mods.battlegear2.api.ISheathed", modid = Utils.bg2Id, striprefs = true) 
+
+/**
+ * A Shield item class, that heavily manipulates Battlegear 2 (only class to be left in com.httymd.item 
+ * package that heavily manipulates Battlegear 2)
+ * 
+ * @author George Albany
+ *
+ */
+@InterfaceList(value = {
+		@Interface(iface = "mods.battlegear2.api.shield.IShield", modid = Utils.bg2Id, striprefs = true),
+		@Interface(iface = "mods.battlegear2.api.shield.IArrowCatcher", modid = Utils.bg2Id, striprefs = true),
+		@Interface(iface = "mods.battlegear2.api.shield.IArrowDisplay", modid = Utils.bg2Id, striprefs = true),
+		@Interface(iface = "mods.battlegear2.api.IEnchantable", modid = Utils.bg2Id, striprefs = true),
+		@Interface(iface = "mods.battlegear2.api.ISheathed", modid = Utils.bg2Id, striprefs = true) 
 })
 public class ItemShield extends ItemExtension
 		implements IFuelHandler, mods.battlegear2.api.shield.IShield, mods.battlegear2.api.shield.IArrowCatcher,

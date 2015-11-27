@@ -9,6 +9,12 @@ import com.httymd.util.CreativeTab;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemFood;
 
+/**
+ * An {@link IRegisterable} of {@link ItemFood}
+ * 
+ * @author George Albany
+ *
+ */
 public class ItemFoodExtension extends ItemFood implements IRegisterable {
 
 	public ItemFoodExtension(String name, int heal, float satu, boolean wolf) {

@@ -8,11 +8,20 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.passive.EntitySheep;
 import net.minecraft.item.Item;
 
+/**
+ * An enum designated to hold types of food for easier registry management
+ *
+ * @author George Albany
+ *
+ */
 public enum EnumFoodType {
 	MUTTON(true, 8, 0.8F, true, EntitySheep.class),
 
-	CRAB(false, 6, 0.6F, false), HCOMB(false, 3, 0.3F, false), FWEED(false, 5, 0.5F, false), SFLOWER(false, 1, 0.1F,
-			false), DNIP(false, 2, 0.5F, false);
+	CRAB(false, 6, 0.6F, false), 
+	HCOMB(false, 3, 0.3F, false), 
+	FWEED(false, 5, 0.5F, false), 
+	SFLOWER(false, 1, 0.1F, false), 
+	DNIP(false, 2, 0.5F, false);
 
 	/**
 	 * Generates and returns a registered MultiMap for current food
@@ -22,10 +31,10 @@ public enum EnumFoodType {
 		for (EnumFoodType food : EnumFoodType.values()) {
 
 			if (food.isMeat())
-				foods.put(food, new ItemFoodDrop(food.toString() + "_raw", food.getHeal() / 2, food.getSatuartion() / 2,
+				foods.put(food, new ItemFoodDrop(food.toString() + "_raw", food.getHeal() / 2, food.getSaturation() / 2,
 						food.getForWolfs(), food.getDropFor()).registerItem());
 
-			foods.put(food, new ItemFoodDrop(food.toString(), food.getHeal(), food.getSatuartion(), food.getForWolfs(),
+			foods.put(food, new ItemFoodDrop(food.toString(), food.getHeal(), food.getSaturation(), food.getForWolfs(),
 					food.getDropFor(), food.isMeat()) {
 
 				public boolean isForEntity(EntityLivingBase entity) {
@@ -56,23 +65,49 @@ public enum EnumFoodType {
 		this.wolfMeat = wolf;
 		this.dropsFor = dropsFor;
 	}
-
+	
+	/**
+	 * Retrieves the Entity class this food type will drop for (or null for none)
+	 */
 	public Class<? extends EntityLivingBase> getDropFor() {
 		return this.dropsFor;
 	}
 
+	/**
+	 * Whether a wolf can use this food type for healing
+	 */
 	public boolean getForWolfs() {
 		return this.wolfMeat;
 	}
 
+	/**
+	 * The amount of hunger restored by this food type (or amount healed for wolves)
+	 * 
+	 * <p>(its called heal in minecraft, keeping consistent)</p>
+	 */
 	public int getHeal() {
 		return this.heal;
 	}
 
+	/**
+	 * The saturation level for food type
+	 * 
+	 * @deprecated for incorrect spelling, removal in 2.0.0 (following http://semver.org guidelines)
+	 */
 	public float getSatuartion() {
 		return this.satu;
 	}
+	
+	/**
+	 * The saturation level for food type
+	 */
+	public float getSaturation() {
+		return this.satu;
+	}
 
+	/**
+	 * Determines whether food is considered cookable or not
+	 */
 	public boolean isMeat() {
 		return this.isMeat;
 	}

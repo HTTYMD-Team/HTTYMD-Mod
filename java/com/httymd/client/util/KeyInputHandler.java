@@ -21,7 +21,6 @@ public class KeyInputHandler {
 		// ClientRegistry.registerKeyBinding(KEY_DRA_UP);
 	}
 
-	@SuppressWarnings("unused")
 	@SubscribeEvent
 	public void onTick(ClientTickEvent evt) {
 		this.cm.getFlags();

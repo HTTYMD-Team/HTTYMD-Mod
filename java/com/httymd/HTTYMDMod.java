@@ -48,23 +48,38 @@ public class HTTYMDMod {
 	@SidedProxy(modId = ID, clientSide = CLIENT_PROXY, serverSide = COMMON_PROXY)
 	public static CommonProxy proxy;
 
+	/**
+	 * Retrieves the config for the mod
+	 */
 	public static Config getConfig() {
 		return INSTANCE.config;
 	}
 
+	/**
+	 * Retrieves the mod Creative Tab instance
+	 */
 	public static CreativeTab getCreativeTab() {
 		return CreativeTab.DRAGON_TAB;
 	}
 
+	/**
+	 * Retrieves a clone list of the current list of registered dragon names
+	 */
 	@SuppressWarnings("unchecked")
 	public static ArrayList<String> getDragonList() {
 		return (ArrayList<String>) INSTANCE.dragonNameList.clone();
 	}
 
+	/**
+	 * Retrieves the mod's logger
+	 */
 	public static Logger getLogger() {
 		return INSTANCE.log;
 	}
 
+	/**
+	 * Retrieves the mod's metadata object
+	 */
 	public static ModMetadata getMetadata() {
 		return INSTANCE.metadata;
 	}
@@ -103,8 +118,7 @@ public class HTTYMDMod {
 		this.config = new Config(event);
 		this.metadata = event.getModMetadata();
 		proxy.onPreInit(event);
-		StatListMod.registerStats(); // Guarantees stats register with all
-										// information
+		StatListMod.registerStats(); // Guarantees stats register with all information (not used yet)
 	}
 
 	@SubscribeEvent

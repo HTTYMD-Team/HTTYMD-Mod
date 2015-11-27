@@ -17,6 +17,12 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EntityDamageSource;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 
+/**
+ * A Battlegear 2 manipulator extension of {@link ItemWeapon} for daggers
+ * 
+ * @author George Albany
+ *
+ */
 @InterfaceList(value={
 		@Interface(iface = "mods.battlegear2.api.weapons.IBattlegearWeapon", modid = Utils.bg2Id, striprefs = true),
 		@Interface(iface = "mods.battlegear2.api.weapons.IBackStabbable", modid = Utils.bg2Id, striprefs = true),

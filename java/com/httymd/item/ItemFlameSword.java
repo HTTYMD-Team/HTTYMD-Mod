@@ -16,6 +16,12 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 
+/**
+ * Base Item class for Hiccup's Inferno
+ * 
+ * @author George Albany
+ *
+ */
 public class ItemFlameSword extends ItemWeapon {
 
 	public static final String DISABLED_SUFFIX = "_disabled";
@@ -32,7 +38,10 @@ public class ItemFlameSword extends ItemWeapon {
 		super(name, toolMaterial, defAttackDamage, CreativeTab.DRAGON_TAB);
 		this.defaultDamage = this.attackDamage;
 	}
-
+	
+	/**
+	 * Creates an explosion usable by this item
+	 */
 	private void explode(World world, Entity entity, float explosionSize) {
 		world.createExplosion(entity, entity.posX, entity.posY, entity.posZ, explosionSize, false);
 	}
@@ -65,6 +74,9 @@ public class ItemFlameSword extends ItemWeapon {
 		}
 	}
 
+	/**
+	 * Determines if ItemStack is toggled based on NBT
+	 */
 	public boolean isToggled(ItemStack stack) {
 		if (stack.getItem() instanceof ItemFlameSword && stack.hasTagCompound())
 			return stack.getTagCompound().getBoolean(NBT_ISON);
@@ -83,11 +95,13 @@ public class ItemFlameSword extends ItemWeapon {
 
 	@Override
 	public boolean onLeftClickEntity(ItemStack stack, EntityPlayer player, Entity entity) {
-		if (this.isToggled(stack))
-			entity.setFire(60);
+		if (this.isToggled(stack)) entity.setFire(60);
 		return super.onLeftClickEntity(stack, player, entity);
 	}
 
+	/**
+	 * Sets toggle for ItemStack
+	 */
 	public void onToggle(ItemStack stack, boolean toggle) {
 		if (!(stack.getItem() instanceof ItemFlameSword))
 			return;

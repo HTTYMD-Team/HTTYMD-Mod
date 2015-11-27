@@ -31,6 +31,12 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 
+/**
+ * Creates a custom spawn egg which well handles custom entities
+ * 
+ * @author George Albany (using Jabelar's Spawn Egg class)
+ *
+ */
 public class ItemSpawnEgg extends ItemMonsterPlacer implements IRegisterable {
 
 	public static Logger L = HTTYMDMod.getLogger();

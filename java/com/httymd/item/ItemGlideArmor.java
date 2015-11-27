@@ -19,6 +19,12 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ISpecialArmor;
 
+/**
+ * Base Item class for Hiccup's Glider Suit, using {@link ISpecialArmor}
+ * 
+ * @author George Albany
+ *
+ */
 public class ItemGlideArmor extends ItemArmorExtension implements ISpecialArmor {
 
 	public static final String NBT_FLYING = "IsGliding";

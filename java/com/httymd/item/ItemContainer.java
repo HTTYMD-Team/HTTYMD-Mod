@@ -15,6 +15,13 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.MathHelper;
 
+/**
+ * May eventually be container for dragon byproducts
+ * 
+ * @author George Albany
+ * 
+ * @deprecated Currently useless
+ */
 public class ItemContainer extends ItemExtension {
 
 	public static float getMaxHoldable(ItemStack stack) {

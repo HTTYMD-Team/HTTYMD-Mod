@@ -3,7 +3,6 @@ package com.httymd.item.registry;
 import java.util.HashMap;
 
 import com.google.common.collect.Multimap;
-import com.httymd.HTTYMDMod;
 import com.httymd.bg2.item.ItemDaggerBg2;
 import com.httymd.bg2.item.ItemWarhammerBg2;
 import com.httymd.item.ItemContainer;
@@ -22,14 +21,12 @@ import com.httymd.item.util.ItemUtils;
 import com.httymd.util.Utils;
 
 import cpw.mods.fml.common.registry.GameRegistry;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockCompressed;
-import net.minecraft.block.material.MapColor;
 import net.minecraft.item.Item;
 import net.minecraft.item.Item.ToolMaterial;
 import net.minecraft.item.ItemArmor.ArmorMaterial;
 import net.minecraft.item.ItemStack;
 
+@SuppressWarnings("deprecation")
 public class ItemRegistry {
 
 	private final static String swordN = "sword";
@@ -96,8 +93,6 @@ public class ItemRegistry {
 
 	public static ItemContainer zippleGasContainer;
 	public static ItemContainer nightmareSalivaContainer;
-	
-	public static Block gronkleIronBlock;
 
 	public static void init() {
 
@@ -169,17 +164,12 @@ public class ItemRegistry {
 		foods = EnumFoodType.generateFood();
 
 		ItemUtils.addFish(new ItemStack(foods.get(EnumFoodType.CRAB).iterator().next(), 1), 50);
-		
-		// Unless more blocks are required, I can live with this
-		final String giBlockName = "giron_block";
-		gronkleIronBlock = GameRegistry.registerBlock(new BlockCompressed(MapColor.silverColor)
-				.setCreativeTab(HTTYMDMod.getCreativeTab()).setBlockTextureName(HTTYMDMod.ID + ":" + giBlockName)
-				.setBlockName(HTTYMDMod.ID + ":" + giBlockName), giBlockName);
 	}
 
 	/**
-	 * Only use is for items that don't use meta, or don't do special
-	 * texture/model junk
+	 * Registers item using a string name (for consistency with 1.8)
+	 * @param item Item to register
+	 * @param regName Name to register item (mustn't have a colon)
 	 */
 	public static void registerItem(Item item, String regName) {
 		GameRegistry.registerItem(item, regName);

@@ -25,6 +25,12 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.ArrowLooseEvent;
 import net.minecraftforge.event.entity.player.ArrowNockEvent;
 
+/**
+ * A crossbow item which is able to hold a charge a later fire (aka: charge and forget)
+ * 
+ * @author George Albany
+ *
+ */
 public class ItemWeaponCrossbow extends ItemExtension {
 
 	public static final String NBT_POWER = "BowStoredPower";

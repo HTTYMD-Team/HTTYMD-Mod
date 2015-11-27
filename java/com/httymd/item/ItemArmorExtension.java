@@ -13,6 +13,12 @@ import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 
+/**
+ * Am {@link IRegisterable} of {@link ItemArmor}, with some ease of use methods
+ * 
+ * @author George Albany
+ * 
+ */
 public class ItemArmorExtension extends ItemArmor implements IRegisterable {
 
 	public ItemArmorExtension(String name, ArmorMaterial mat, int type) {
@@ -26,6 +32,11 @@ public class ItemArmorExtension extends ItemArmor implements IRegisterable {
 		this.setCreativeTab(tab);
 	}
 
+	/**
+	 * Retrieves armor texture based on name 
+	 * 
+	 * <p>Directory in &lt;modid&gt;:textures/armor/name_<1 or 2>.png</p>
+	 */
 	@Override
 	@SideOnly(Side.CLIENT)
 	public String getArmorTexture(ItemStack stack, Entity entity, int slot, String type) {

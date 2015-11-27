@@ -130,6 +130,9 @@ public class Utils {
 		return world.rayTraceBlocks(rayStart, rayEnd, true) == null;
 	}
 	
+	/**
+	 * Retrieves Battlegear 2's id
+	 */
 	public static String getBg2Id() {
 		return bg2Id;
 	}
@@ -145,15 +148,30 @@ public class Utils {
 	
 	/**
 	 * Determines whether Battlegear 2 should be used based on {@link #isBg2Installed()} and {@link Config#canUseBg2()}
+	 * 
+	 * @see #isBg2Installed()
+	 * @see Config#canUseBg2()
 	 */
 	public static boolean shouldUseBg2() {
 		return HTTYMDMod.getConfig().canUseBg2() && isBg2Installed();
 	}
 	
+	/**
+	 * Determines whether use of Battlegear 2 daggers is required
+	 * 
+	 * @see #shouldUseBg2()
+	 * @see Config#useBg2Daggers()
+	 */
 	public static boolean shouldForceBg2Daggers() {
 		return shouldUseBg2() && HTTYMDMod.getConfig().useBg2Daggers();
 	}
 	
+	/**
+	 * Determines whether use of Battlegear 2 for Warhammers is required
+	 * 
+	 * @see #shouldUseBg2()
+	 * @see Config#useBg2ForWarhammer()
+	 */
 	public static boolean shouldForceBg2ForWarhammer() {
 		return shouldUseBg2() && HTTYMDMod.getConfig().useBg2ForWarhammer();
 	}

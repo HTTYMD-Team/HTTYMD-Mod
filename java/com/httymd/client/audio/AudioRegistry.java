@@ -9,6 +9,13 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.util.ResourceLocation;
 
+/**
+ * Suppose to be registry for sound
+ * 
+ * @author George Albany
+ *
+ * @deprecated Not Usable
+ */
 public class AudioRegistry {
 
 	private static final List<SoundEntry> music = new ArrayList<SoundEntry>();

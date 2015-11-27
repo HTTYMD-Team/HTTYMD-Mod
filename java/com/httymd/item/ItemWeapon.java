@@ -21,10 +21,16 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
 
+/**
+ * A generic ItemWeapon class for ease of weapon creation, and handles fuel for fuel items
+ * 
+ * @author George Albany
+ *
+ */
 public class ItemWeapon extends ItemSword implements IRegisterable, IFuelHandler {
 	
 	protected float attackDamage;
-	protected EnumWeaponType type;
+	protected EnumWeaponType type = null;
 
 	public ItemWeapon(Item.ToolMaterial mat, EnumWeaponType wepType) {
 		this(mat, wepType.getName(), wepType.getDamage());
@@ -66,10 +72,16 @@ public class ItemWeapon extends ItemSword implements IRegisterable, IFuelHandler
 		return ItemUtils.findRegistryName(this.getUnlocalizedName());
 	}
 
+	/**
+	 * Retrieves the weapon's material's base entity attack damage (for 1.8 consistency)
+	 */
 	public float MaterialAttackDamage() {
 		return this.func_150931_i(); //getDamageVsEntity in 1.8
 	}
 
+	/**
+	 * Retrieves the mining speed for the weapon (for 1.8 consistency)
+	 */
 	public float MineSpeed(ItemStack item, Block block) {
 		return this.func_150893_a(item, block); //getStrVsBlock in 1.8
 	}
@@ -79,10 +91,18 @@ public class ItemWeapon extends ItemSword implements IRegisterable, IFuelHandler
 		return this;
 	}
 	
+	/**
+	 * Whether item is effective against block
+	 */
 	public boolean func_150897_b(Block block) {
 		return this.type == EnumWeaponType.WARAXE && block.getMaterial() == Material.wood;
 	}
 	
+	/**
+	 * Retrieves the total modifier amount on an item stack using a modifier name
+	 * 
+	 * <p>See Battlegear 2's ItemWeapon class for original implementation</p>
+	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public float getModifiedAmount(ItemStack stack, String modifierName) {
 		if(modifierName.equals("")) return 0; 
@@ -94,6 +114,9 @@ public class ItemWeapon extends ItemSword implements IRegisterable, IFuelHandler
 		return f;
 	}
 
+	/**
+	 * Retrieves the amount of time able to spend on burning an item
+	 */
 	public int getBurnTime(ItemStack fuel) {
 		if (fuel.getItem() == this) {
 			return this.getToolMaterialName().equals(ToolMaterial.WOOD.toString()) ? 

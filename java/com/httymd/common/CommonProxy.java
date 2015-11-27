@@ -1,6 +1,7 @@
 package com.httymd.common;
 
 import com.httymd.HTTYMDMod;
+import com.httymd.block.registry.BlockRegistry;
 import com.httymd.entity.dragon.EntityNightFury;
 import com.httymd.entity.dragon.EntitySkrill;
 import com.httymd.entity.dragon.EntityTerribleTerror;
@@ -23,6 +24,9 @@ public class CommonProxy {
 
 	private SimpleNetworkWrapper network;
 
+	/**
+	 * Retrieves {@link SimpleNetworkWrapper} of this proxy
+	 */
 	public SimpleNetworkWrapper getNetwork() {
 		return this.network;
 	}
@@ -42,10 +46,13 @@ public class CommonProxy {
 	public void onPreInit(FMLPreInitializationEvent event) {
 		MaterialRegistry.init();
 		ItemRegistry.init();
+		BlockRegistry.init();
 		WorldItemRegistry.init();
 	}
 
+	///////////////////////////////////////
 	// Server Functions
+	///////////////////////////////////////
 	public void onServerStarted(FMLServerStartedEvent evt) {
 		MinecraftServer server = MinecraftServer.getServer();
 		server.getCommandManager();
@@ -53,16 +60,16 @@ public class CommonProxy {
 
 	public void onServerStopped(FMLServerStoppedEvent evt) {
 	}
+	///////////////////////////////////////
 	// End Server Functions
-
+	///////////////////////////////////////
+	
 	private void registerEntities() {
 		HTTYMDMod.registerEntity(EntityTerribleTerror.class, "TerribleTerror", 0x00FF00, 0x44FF44);
 		HTTYMDMod.registerEntity(EntitySkrill.class, "Skrill", 0xFF0000, 0xFF4444);
 		HTTYMDMod.registerEntity(EntityNightFury.class, "NightFury", 0x000000, 0x222222);
 	}
-	// End Registries
-
-	// Registries
+	
 	private void registerHandlers() {
 		MinecraftForge.EVENT_BUS.register(new MobEventHandler());
 	}

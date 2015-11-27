@@ -73,6 +73,8 @@ public class ItemUtils {
 
 	/**
 	 * Retrieves registry name from unlocalized name
+	 * 
+	 * <p>Terminates modid section</p>
 	 */
 	public static String findRegistryName(String unlocalizedName) {
 		return unlocalizedName.substring(unlocalizedName.lastIndexOf(':') + 1);
@@ -83,7 +85,7 @@ public class ItemUtils {
 	 * 
 	 * <p>Will get rid of unlocazied prefix (for items, its 'item.') and retrieves texture name</p>
 	 */
-	public static String findTextureName(String unlocalizedName) { //TODO: Remember why the hell I made this
+	public static String findTextureName(String unlocalizedName) {
 		return unlocalizedName.substring(unlocalizedName.indexOf('.') + 1);
 	}
 

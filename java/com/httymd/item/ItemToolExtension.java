@@ -47,7 +47,11 @@ public class ItemToolExtension extends ItemTool implements IRegisterable, IFuelH
 		if(EnumToolType.getAverageFuelTime(this.toolTypes) > 0) GameRegistry.registerFuelHandler(this);
 	}
 
-	//getStrVsBlock in 1.8
+	/**
+	 * Gets strength versus a specific block
+	 * 
+	 * <p>Becomes getStrVsBlock(ItemStack, Block) in 1.8</p>
+	 */
 	public float func_150893_a(ItemStack stack, Block hitBlock) {
 		if (this.isToolType(EnumToolType.PICKAXE))
 			return hitBlock.getMaterial() != Material.iron && hitBlock.getMaterial() != Material.anvil
@@ -60,7 +64,11 @@ public class ItemToolExtension extends ItemTool implements IRegisterable, IFuelH
 		return super.func_150893_a(stack, hitBlock);
 	}
 
-	//canHarvestBlock in 1.8
+	/**
+	 * Determines whether block can be harvested
+	 * 
+	 * <p>Becomes canHavestBlock(Block) in 1.8</p>
+	 */
 	public boolean func_150897_b(Block hitBlock) {
 		if (this.isToolType(EnumToolType.PICKAXE))
 			return hitBlock == Blocks.obsidian ? this.toolMaterial.getHarvestLevel() == 3

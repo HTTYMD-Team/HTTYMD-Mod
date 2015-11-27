@@ -47,8 +47,16 @@ public class WorldItemRegistry {
 		});
 	}
 	
+	/**
+	 * Adds an itemstack to a specific loot generator
+	 * @param hook The hook to add possible loot to
+	 * @param i The item to insert
+	 * @param damage The damage value of the item
+	 * @param minSize The minimum possible size if ItemStack is generated
+	 * @param maxSize The maximum posible size if ItemStack is generated
+	 * @param weight The chance the item stack will be generated (higher = more likely)
+	 */
 	public static void addGeneratedItem(ChestGenHooks hook, Item i, int damage, int minSize, int maxSize, int weight) {
 		hook.addItem(new WeightedRandomChestContent(i, damage, minSize, maxSize, weight));
 	}
-	
 }

@@ -8,6 +8,12 @@ import com.httymd.util.CreativeTab;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 
+/**
+ * An {@link IRegisterable} of {@link Item}
+ * 
+ * @author George Albany
+ *
+ */
 public class ItemExtension extends Item implements IRegisterable {
 
 	public ItemExtension(String name) {

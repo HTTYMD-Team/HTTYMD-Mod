@@ -7,6 +7,12 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
 
+/**
+ * A dropable food class based on {@link ItemFoodExtension} and {@link IDrop}
+ * 
+ * @author George Albany
+ *
+ */
 public class ItemFoodDrop extends ItemFoodExtension implements IDrop {
 
 	protected final Class<? extends EntityLivingBase> entityToDropFor;

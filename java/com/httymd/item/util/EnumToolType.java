@@ -19,6 +19,9 @@ public enum EnumToolType {
 	SHOVEL(1.0F),
 	HOE(0.0F);
 
+	/**
+	 * Retrieves all blocks a collection of {@link EnumToolType EnumToolTypes} is effective against
+	 */
 	public static Set<Block> getAllEffectiveBlocksOf(Collection<EnumToolType> types) {
 		Set<Block> result = new HashSet<Block>();
 		for (EnumToolType t : types)
@@ -26,6 +29,9 @@ public enum EnumToolType {
 		return result;
 	}
 
+	/**
+	 * Retrieves all names of a collection of {@link EnumToolType EnumToolTypes} into a set
+	 */
 	public static Set<String> getAllNames(Collection<EnumToolType> types) {
 		Set<String> result = new HashSet<String>();
 		for (EnumToolType t : types)
@@ -33,6 +39,9 @@ public enum EnumToolType {
 		return result;
 	}
 
+	/**
+	 * Retrieves the max possible damage a collection of {@link EnumToolType EnumToolTypes} can cause to entities
+	 */
 	public static float getResultDamageOf(Collection<EnumToolType> types) {
 		float result = 0;
 		for (EnumToolType t : types)
@@ -40,6 +49,9 @@ public enum EnumToolType {
 		return result;
 	}
 	
+	/**
+	 * Retrieves an average of fuel time for a collection of {@link EnumToolType EnumToolTypes}
+	 */
 	public static int getAverageFuelTime(Collection<EnumToolType> types) {
 		int sum = 0;
 		for(EnumToolType t : types)
@@ -70,20 +82,38 @@ public enum EnumToolType {
 		this.effectiveBlocks = effectiveBlocks;
 	}
 
+	/**
+	 * Gets a tool type's base damage
+	 */
 	public float getAttackDamage() {
 		return this.naturalDamage;
 	}
 	
+	/**
+	 * Retrieves a fuel time for this tool type
+	 * 
+	 * <p>Shall be ignored for fuel registry if value is less then 1</p>
+	 */
 	public int getFuelTime() {
 		return this.fuelTime;
 	}
 
+	/**
+	 * Retrieves all effective blocks for a tool
+	 * 
+	 * <p>Normal tool types use {@link ItemUtils#getEffectiveForToolType(EnumToolType)}</p>
+	 */
 	public Set<Block> getEffectiveBlocks() {
 		if (this.effectiveBlocks == null)
 			this.effectiveBlocks = ItemUtils.getEffectiveForToolType(this);
 		return this.effectiveBlocks;
 	}
 
+	/**
+	 * Retrieves the lowercased name for the tool
+	 * 
+	 * <p>For use with {@link net.minecraft.item.ItemTool#getToolClasses(net.minecraft.item.ItemStack) ItemTool.getToolClasses(ItemStack)}</p>
+	 */
 	public String getName() {
 		return this.toolName;
 	}
