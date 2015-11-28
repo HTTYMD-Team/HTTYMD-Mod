@@ -1,5 +1,6 @@
 package com.httymd.item;
 
+import java.util.HashMap;
 import java.util.Iterator;
 
 import com.google.common.collect.HashMultimap;
@@ -29,6 +30,8 @@ import net.minecraft.item.ItemSword;
  */
 public class ItemWeapon extends ItemSword implements IRegisterable, IFuelHandler {
 	
+	private static final HashMap<ToolMaterial, HashMap<EnumWeaponType, ItemWeapon>> weaponMap = new HashMap<ToolMaterial, HashMap<EnumWeaponType, ItemWeapon>>();
+	
 	protected float attackDamage;
 	protected EnumWeaponType type = null;
 
@@ -36,6 +39,7 @@ public class ItemWeapon extends ItemSword implements IRegisterable, IFuelHandler
 		this(mat, wepType.getName(), wepType.getDamage());
 		this.type = wepType;
 		if(this.type != null && this.type.getFuelTime() > 0) GameRegistry.registerFuelHandler(this);
+		registerWeapon(mat, this.type, this);
 	}
 	
 	public ItemWeapon(Item.ToolMaterial toolMaterial, String weaponName, float weaponDamage) {
@@ -123,5 +127,22 @@ public class ItemWeapon extends ItemSword implements IRegisterable, IFuelHandler
 					this.type.getFuelTime() + 100 : this.type.getFuelTime();
 		}
 		return 0;
+	}
+	
+	public static HashMap<EnumWeaponType, ItemWeapon> getWeaponMap(ToolMaterial mat) {
+		return weaponMap.get(mat);
+	}
+	
+	public static ItemWeapon getWeaponFor(ToolMaterial mat, EnumWeaponType type) {
+		return getWeaponMap(mat).get(type);
+	}
+	
+	private static void registerWeapon(ToolMaterial mat, EnumWeaponType type, ItemWeapon wep) {
+		if(mat != null && type != null) {
+			if(!weaponMap.containsKey(mat)) {
+				weaponMap.put(mat, new HashMap<EnumWeaponType, ItemWeapon>());
+			}
+			weaponMap.get(mat).put(type, wep);
+		}
 	}
 }

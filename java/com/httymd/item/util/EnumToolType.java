@@ -62,7 +62,7 @@ public enum EnumToolType {
 	private String toolName;
 	private float naturalDamage;
 	private Set<Block> effectiveBlocks;
-	private int fuelTime = 200;
+	private int fuelTime = 150;
 
 	private EnumToolType(float damage) {
 		this.toolName = this.toString().toLowerCase();
@@ -70,7 +70,7 @@ public enum EnumToolType {
 		this.effectiveBlocks = null;
 	}
 	
-	private EnumToolType(float damage, Integer fuelTime) {
+	private EnumToolType(float damage, int fuelTime) {
 		this(damage);
 		this.fuelTime = fuelTime;
 	}

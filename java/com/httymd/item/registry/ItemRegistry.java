@@ -5,7 +5,6 @@ import java.util.HashMap;
 import com.google.common.collect.Multimap;
 import com.httymd.bg2.item.ItemDaggerBg2;
 import com.httymd.bg2.item.ItemWarhammerBg2;
-import com.httymd.item.ItemContainer;
 import com.httymd.item.ItemExtension;
 import com.httymd.item.ItemFlameSword;
 import com.httymd.item.ItemGlideArmor;
@@ -26,7 +25,6 @@ import net.minecraft.item.Item.ToolMaterial;
 import net.minecraft.item.ItemArmor.ArmorMaterial;
 import net.minecraft.item.ItemStack;
 
-@SuppressWarnings("deprecation")
 public class ItemRegistry {
 
 	private final static String swordN = "sword";
@@ -91,8 +89,8 @@ public class ItemRegistry {
 	public static Item wing;
 	public static Item flameSword;
 
-	public static ItemContainer zippleGasContainer;
-	public static ItemContainer nightmareSalivaContainer;
+	//public static ItemContainer zippleGasContainer;
+	//public static ItemContainer nightmareSalivaContainer;
 
 	public static void init() {
 

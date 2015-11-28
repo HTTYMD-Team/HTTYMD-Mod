@@ -1,12 +1,17 @@
 package com.httymd.item.registry;
 
+import java.util.HashMap;
 import java.util.Random;
+
+import com.httymd.item.ItemWeapon;
+import com.httymd.item.util.EnumWeaponType;
 
 import cpw.mods.fml.common.registry.VillagerRegistry;
 import cpw.mods.fml.common.registry.VillagerRegistry.IVillageTradeHandler;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
+import net.minecraft.item.Item.ToolMaterial;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.WeightedRandomChestContent;
 import net.minecraft.village.MerchantRecipe;
@@ -25,15 +30,26 @@ public class WorldItemRegistry {
 		addGeneratedItem(hook, ItemRegistry.shieldDiam, 0, 1, 1, 1);
 		addGeneratedItem(hook, ItemRegistry.shieldIron, 0, 1, 1, 2);
 		addGeneratedItem(hook, ItemRegistry.shieldWood, 0, 1, 1, 6);
+		addGeneratedWeapons(hook, ToolMaterial.WOOD, 2);
+		addGeneratedWeapons(hook, ToolMaterial.STONE, 2);
+		addGeneratedWeapons(hook, ToolMaterial.IRON, 1);
 		
 		// Dungeon Chests
-		hook = ChestGenHooks.getInfo(ChestGenHooks.DUNGEON_CHEST); // Doesn't make sense to waste resources with more then stored instance
+		hook = ChestGenHooks.getInfo(ChestGenHooks.DUNGEON_CHEST); // Doesn't make sense to waste resources with more then one stored instance
 		addGeneratedItem(hook, ItemRegistry.gronkleIronIngot, 0, 1, 5, 3);
 		
 		// Mineshaft Chests
 		hook = ChestGenHooks.getInfo(ChestGenHooks.MINESHAFT_CORRIDOR);
-		addGeneratedItem(hook, ItemRegistry.pickaxeGron, 0, 1, 1, 7);
-		addGeneratedItem(hook, ItemRegistry.waraxeStone, 0, 1, 1, 2);
+		addGeneratedItem(hook, ItemRegistry.pickaxeGron, 0, 1, 1, 1);
+		addGeneratedItem(hook, ItemRegistry.waraxeStone, 0, 1, 1, 1);
+		
+		// Jungle Pyramid Chests
+		hook = ChestGenHooks.getInfo(ChestGenHooks.PYRAMID_JUNGLE_CHEST);
+		addGeneratedItem(hook, ItemRegistry.gronkleIronIngot, 0, 1, 1, 1);
+		
+		// Desert Pyramid Chests
+		hook = ChestGenHooks.getInfo(ChestGenHooks.PYRAMID_DESERT_CHEST);
+		addGeneratedItem(hook, ItemRegistry.gronkleIronIngot, 0, 1, 1, 1);
 		
 		VillagerRegistry vreg = VillagerRegistry.instance();
 		final int blacksmithId = 3;
@@ -58,5 +74,12 @@ public class WorldItemRegistry {
 	 */
 	public static void addGeneratedItem(ChestGenHooks hook, Item i, int damage, int minSize, int maxSize, int weight) {
 		hook.addItem(new WeightedRandomChestContent(i, damage, minSize, maxSize, weight));
+	}
+	
+	private static void addGeneratedWeapons(ChestGenHooks hook, ToolMaterial material, int weight) {
+		HashMap<EnumWeaponType, ItemWeapon> map = ItemWeapon.getWeaponMap(material);
+		for(ItemWeapon w : map.values()) {
+			addGeneratedItem(hook, w, 0, 1, 1, weight);
+		}
 	}
 }

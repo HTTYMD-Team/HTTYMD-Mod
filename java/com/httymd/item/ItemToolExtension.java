@@ -161,8 +161,8 @@ public class ItemToolExtension extends ItemTool implements IRegisterable, IFuelH
 	public int getBurnTime(ItemStack fuel) {
 		if(fuel.getItem() == this) {
 			return this.toolMaterial == ToolMaterial.WOOD ? 
-					EnumToolType.getAverageFuelTime(this.getToolTypes()) 
-					: EnumToolType.getAverageFuelTime(this.getToolTypes()) - 50; 
+					EnumToolType.getAverageFuelTime(this.getToolTypes()) + 50 
+					: EnumToolType.getAverageFuelTime(this.getToolTypes()); 
 		}
 		return 0;
 	}
