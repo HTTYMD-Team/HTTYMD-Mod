@@ -1,13 +1,19 @@
 package com.httymd.client.render;
 
-import org.lwjgl.opengl.GL11;
+import net.minecraft.client.Minecraft;
 
 import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.model.ModelBiped;
+import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.entity.RenderPlayer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
+import org.lwjgl.opengl.GL11;
+
+@SideOnly(Side.CLIENT)
 public class RenderGlide extends RenderPlayer {
 
 	public static class ModelGlide extends ModelBiped {
@@ -34,19 +40,22 @@ public class RenderGlide extends RenderPlayer {
 	}
 
 	public RenderGlide() {
-		super();
+		this(Minecraft.getMinecraft().getRenderManager());
+	}
+
+	public RenderGlide(RenderManager rm) {
+		super(rm);
 		if (this.mainModel instanceof ModelBiped) {
 			this.mainModel = new ModelGlide((ModelBiped) this.mainModel);
-			this.modelArmor = new ModelGlide(this.modelArmor);
+			/*this.modelArmor = new ModelGlide(this.modelArmor);
 			this.modelArmorChestplate = new ModelGlide(this.modelArmorChestplate);
 			this.modelArmor.bipedRightArm.mirror = true;
 			this.modelArmor.bipedRightLeg.mirror = true;
 			this.modelArmorChestplate.bipedRightArm.mirror = true;
-			this.modelArmorChestplate.bipedRightLeg.mirror = true;
+			this.modelArmorChestplate.bipedRightLeg.mirror = true;*/
 		}
 	}
 
-	@Override
 	public void doRender(AbstractClientPlayer player, double p_76986_2, double p_76986_4, double p_76986_6,
 			float p_76986_8, float p_76986_9_) {
 		float angle = -100;

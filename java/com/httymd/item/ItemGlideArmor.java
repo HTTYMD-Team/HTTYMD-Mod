@@ -4,8 +4,6 @@ import java.util.List;
 
 import com.httymd.client.model.ModelGlideSuit;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.creativetab.CreativeTabs;
@@ -18,6 +16,8 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ISpecialArmor;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * Base Item class for Hiccup's Glider Suit, using {@link ISpecialArmor}
@@ -92,8 +92,8 @@ public class ItemGlideArmor extends ItemArmorExtension implements ISpecialArmor 
 	}
 
 	public boolean isFlyable(EntityLivingBase entity) {
-		boolean flag = entity != null && !entity.onGround && !entity.isInWater()
-				&& !entity.isInsideOfMaterial(Material.lava);
+		boolean flag = entity != null
+				&& (!entity.onGround && !entity.isInWater() && !entity.isInsideOfMaterial(Material.lava));
 
 		if (entity instanceof EntityPlayer)
 			flag = flag && !((EntityPlayer) entity).capabilities.isFlying;

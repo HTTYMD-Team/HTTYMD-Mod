@@ -14,13 +14,16 @@ import net.minecraft.entity.ai.EntityAIWander;
 import net.minecraft.entity.ai.EntityAIWatchClosest;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
+import net.minecraft.pathfinding.PathNavigateGround;
 import net.minecraft.world.World;
 
 public class EntityNadder extends EntityDragon {
 
 	public EntityNadder(World world) {
 		super(world);
-		this.getNavigator().setAvoidsWater(true);
+		((PathNavigateGround) this.getNavigator()).func_179690_a(true);// Apparently
+																		// avoids
+																		// water
 		this.tasks.addTask(1, new EntityAISwimming(this));
 		this.tasks.addTask(2, new EntityAIAttackOnCollide(this, 0.9D, false));
 		this.tasks.addTask(3, new EntityAIFollowOwner(this, 1.5D, 20F, 50F));

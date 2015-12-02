@@ -6,6 +6,7 @@ import com.httymd.HTTYMDMod;
 import com.httymd.item.registry.ItemRegistry;
 import com.httymd.util.Utils;
 
+import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.EntityLivingBase;
@@ -15,7 +16,7 @@ import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.pathfinding.PathEntity;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
@@ -26,11 +27,11 @@ public abstract class EntityTameableFlying extends EntityTameable implements ITa
 	private static final String NBT_IS_FLYING = "Flying";
 	///////////////////////////////////////////////////////////////////////////
 	// Entity Attributes
-	public static final IAttribute flyingSpeed = new RangedAttribute(Utils.getModString("flyingSpeed"), 1D, 0.0D,
+	public static final IAttribute flyingSpeed = new RangedAttribute(null, Utils.getModString("flyingSpeed"), 1D, 0.0D,
 			Double.MAX_VALUE).setDescription("Flying Speed").setShouldWatch(true);
-	public static final IAttribute flyingYaw = new RangedAttribute(Utils.getModString("flyingYaw"), 25D, 0.0D,
+	public static final IAttribute flyingYaw = new RangedAttribute(null, Utils.getModString("flyingYaw"), 25D, 0.0D,
 			Double.MAX_VALUE).setDescription("Flying Yaw Speed").setShouldWatch(true);
-	public static final IAttribute flyingPitch = new RangedAttribute(Utils.getModString("flyingPitch"), 20D, 0.0D,
+	public static final IAttribute flyingPitch = new RangedAttribute(null, Utils.getModString("flyingPitch"), 20D, 0.0D,
 			Double.MAX_VALUE).setDescription("Flying Pitch Speed").setShouldWatch(true);
 	///////////////////////////////////////////////////////////////////////////
 	// Datawatcher
@@ -89,7 +90,7 @@ public abstract class EntityTameableFlying extends EntityTameable implements ITa
 	public EntityLivingBase getOwner() {
 		if (this.isTamed() == false)
 			return null;
-		EntityLivingBase result = super.getOwner();
+		EntityLivingBase result = super.getOwner() instanceof EntityLivingBase ? (EntityLivingBase) super.getOwner() : null;
 		if (result == null)
 			result = this.owner;
 		if (result == null) {
@@ -127,7 +128,7 @@ public abstract class EntityTameableFlying extends EntityTameable implements ITa
 			if (!this.worldObj.isRemote)
 				if (this.rand.nextInt(3) == 0) {
 					this.setTamed(true);
-					this.setPathToEntity((PathEntity) null);
+					//this.setPathToEntity((PathEntity) null);
 					this.setAttackTarget((EntityLivingBase) null);
 					this.setHealth(20.0F);
 					this.setOwnerString(player.getUniqueID().toString());
@@ -159,8 +160,8 @@ public abstract class EntityTameableFlying extends EntityTameable implements ITa
 	 */
 	protected boolean isAirBelow(int range) {
 		for (int curBlock = 1; curBlock <= range; curBlock++)
-			if (!this.worldObj.isAirBlock(MathHelper.floor_double(this.posX),
-					MathHelper.floor_double(this.boundingBox.minY) - curBlock, MathHelper.floor_double(this.posZ)))
+			if (!this.worldObj.isAirBlock(new BlockPos(MathHelper.floor_double(this.posX),
+					MathHelper.floor_double(this.getEntityBoundingBox().minY) - curBlock, MathHelper.floor_double(this.posZ))))
 				return false;
 		return true;
 	}
@@ -260,14 +261,17 @@ public abstract class EntityTameableFlying extends EntityTameable implements ITa
 	}
 
 	@Override
-	protected void updateFallState(double p_70064_1_, boolean p_70064_3_) {
-		if (this.isFlying()) {
-			if (this.fallDistance > 3) {
+	protected void func_180433_a(double fallDistSinceCall, boolean onGround, Block blockBelowBB,
+			BlockPos posOfBlockBelowBB) {
+		if (this.isFlying())
+			this.fallDistance = 0;
+		else {
+			if (this.fallDistance > 3.2F) {
 				this.setFlying(true);
-				this.fallDistance = 0;
-			}
-		} else
-			super.updateFallState(p_70064_1_, p_70064_3_);
+				this.func_180433_a(fallDistSinceCall, onGround, blockBelowBB, posOfBlockBelowBB);
+			} else
+				super.func_180433_a(fallDistSinceCall, onGround, blockBelowBB, posOfBlockBelowBB);
+		}
 	}
 
 	@Override

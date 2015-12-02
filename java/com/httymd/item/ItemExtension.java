@@ -23,7 +23,7 @@ public class ItemExtension extends Item implements IRegisterable {
 	public ItemExtension(String name, CreativeTabs tab) {
 		this.setCreativeTab(tab);
 		this.setUnlocalizedName(ItemUtils.findUnlocName(name));
-		this.setTextureName(ItemUtils.findTextureName(this.getUnlocalizedName()));
+		// this.setTextureName(ItemUtils.findTextureName(this.getUnlocalizedName()));
 	}
 
 	public String getRegistryName() {

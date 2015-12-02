@@ -10,9 +10,8 @@ import com.httymd.item.registry.ItemRegistry;
 import com.httymd.item.util.EnumWeaponType;
 import com.httymd.item.util.ItemUtils;
 import com.httymd.util.CreativeTab;
+import com.httymd.util.Utils;
 
-import cpw.mods.fml.common.IFuelHandler;
-import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
@@ -21,6 +20,9 @@ import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
+import net.minecraftforge.fml.common.IFuelHandler;
+import net.minecraftforge.fml.common.Optional.Interface;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 
 /**
  * A generic ItemWeapon class for ease of weapon creation, and handles fuel for fuel items
@@ -28,7 +30,8 @@ import net.minecraft.item.ItemSword;
  * @author George Albany
  *
  */
-public class ItemWeapon extends ItemSword implements IRegisterable, IFuelHandler {
+@Interface(iface = "mods.battlegear2.api.weapons.Attributes", modid = Utils.bg2Id, striprefs = true)
+public class ItemWeapon extends ItemSword implements IRegisterable, IFuelHandler, mods.battlegear2.api.weapons.Attributes {
 	
 	private static final HashMap<ToolMaterial, HashMap<EnumWeaponType, ItemWeapon>> weaponMap = new HashMap<ToolMaterial, HashMap<EnumWeaponType, ItemWeapon>>();
 	
@@ -55,15 +58,14 @@ public class ItemWeapon extends ItemSword implements IRegisterable, IFuelHandler
 		this.setCreativeTab(tab);
 		this.attackDamage = weaponDam + weaponMat.getDamageVsEntity();
 		this.setUnlocalizedName(ItemUtils.findUnlocName(name));
-		this.setTextureName(ItemUtils.findTextureName(this.getUnlocalizedName()));
+		// this.setTextureName(ItemUtils.findTextureName(this.getUnlocalizedName()));
 	}
 
 	@Override
 	public Multimap<String, AttributeModifier> getAttributeModifiers(ItemStack stack) {
 		Multimap<String, AttributeModifier> multimap = HashMultimap.create();
 		multimap.put(SharedMonsterAttributes.attackDamage.getAttributeUnlocalizedName(),
-				new AttributeModifier(field_111210_e, "Weapon Modifier", this.attackDamage, 0)); 
-		//1.8: field_111210_e to itemModifierUUID
+				new AttributeModifier(itemModifierUUID, "Weapon Modifier", this.attackDamage, 0));
 		return multimap;
 	}
 
@@ -80,14 +82,14 @@ public class ItemWeapon extends ItemSword implements IRegisterable, IFuelHandler
 	 * Retrieves the weapon's material's base entity attack damage (for 1.8 consistency)
 	 */
 	public float MaterialAttackDamage() {
-		return this.func_150931_i(); //getDamageVsEntity in 1.8
+		return this.func_150931_i();
 	}
 
 	/**
 	 * Retrieves the mining speed for the weapon (for 1.8 consistency)
 	 */
 	public float MineSpeed(ItemStack item, Block block) {
-		return this.func_150893_a(item, block); //getStrVsBlock in 1.8
+		return this.getStrVsBlock(item, block);
 	}
 
 	public ItemSword registerItem() {

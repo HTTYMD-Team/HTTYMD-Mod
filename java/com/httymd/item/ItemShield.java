@@ -1,15 +1,7 @@
 package com.httymd.item;
 
-import com.httymd.item.util.ItemUtils;
 import com.httymd.util.Utils;
 
-import cpw.mods.fml.common.IFuelHandler;
-import cpw.mods.fml.common.Optional.Interface;
-import cpw.mods.fml.common.Optional.InterfaceList;
-import cpw.mods.fml.common.registry.GameRegistry;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnumEnchantmentType;
 import net.minecraft.entity.IProjectile;
@@ -19,7 +11,10 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.IIcon;
+import net.minecraftforge.fml.common.IFuelHandler;
+import net.minecraftforge.fml.common.Optional.Interface;
+import net.minecraftforge.fml.common.Optional.InterfaceList;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 
 
 /**
@@ -42,8 +37,8 @@ public class ItemShield extends ItemExtension
 
 	private static final String NBT_ARROW_COUNT = "ArrowCount";
 
-	private IIcon backIcon;
-	private IIcon trimIcon;
+	//private IIcon backIcon;
+	//private IIcon trimIcon;
 
 	protected final float damDecay;
 	protected final float natDecay;
@@ -71,7 +66,7 @@ public class ItemShield extends ItemExtension
 		this("", material);
 	}
 
-	@SideOnly(Side.CLIENT)
+	/*@SideOnly(Side.CLIENT)
 	public void registerIcons(IIconRegister par1IconRegister) {
 		super.registerIcons(par1IconRegister);
 		backIcon = par1IconRegister.registerIcon(ItemUtils.findTextureName(this.getUnlocalizedName()) + "_back");
@@ -84,7 +79,7 @@ public class ItemShield extends ItemExtension
 
 	public IIcon getTrimIcon() {
 		return this.trimIcon;
-	}
+	}*/
 
 	public Item.ToolMaterial getMaterial() {
 		return this.material;
@@ -180,13 +175,14 @@ public class ItemShield extends ItemExtension
 	}
 
 	public boolean isEnchantable(Enchantment ench, ItemStack shield) {
-		return ench.type == EnumEnchantmentType.all;
+		return ench.type == EnumEnchantmentType.ALL;
 	}
 
 	public int getItemEnchantability(ItemStack shield) {
 		return this.hasMaterial() ? this.getMaterial().getEnchantability() : 1;
 	}
 
+	@SuppressWarnings("deprecation")
 	public boolean getIsRepairable(ItemStack itemStack, ItemStack repair) {
 		return this.material.customCraftingMaterial == repair.getItem();
 	}

@@ -24,8 +24,8 @@ public class BlockExtension extends Block implements IRegisterable {
 	public BlockExtension(String name, CreativeTabs tab, Material mat) {
 		super(mat);
 		this.setCreativeTab(tab);
-		this.setBlockName(ItemUtils.findUnlocName(name));
-		this.setBlockTextureName(ItemUtils.findTextureName(this.getUnlocalizedName()));
+		this.setUnlocalizedName(ItemUtils.findUnlocName(name));
+		//this.setBlockTextureName(ItemUtils.findTextureName(this.getUnlocalizedName()));
 	}
 
 	@Override

@@ -6,12 +6,12 @@ import com.httymd.item.registry.ItemRegistry;
 import com.httymd.item.util.ItemUtils;
 import com.httymd.util.CreativeTab;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * Am {@link IRegisterable} of {@link ItemArmor}, with some ease of use methods
@@ -28,7 +28,7 @@ public class ItemArmorExtension extends ItemArmor implements IRegisterable {
 	public ItemArmorExtension(String name, ArmorMaterial mat, int type, CreativeTabs tab) {
 		super(mat, 2, type);
 		this.setUnlocalizedName(ItemUtils.findUnlocName(name));
-		this.setTextureName(ItemUtils.findTextureName(this.getUnlocalizedName()));
+		// this.setTextureName(ItemUtils.findTextureName(this.getUnlocalizedName()));
 		this.setCreativeTab(tab);
 	}
 

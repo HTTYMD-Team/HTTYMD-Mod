@@ -2,12 +2,12 @@ package com.httymd.item;
 
 import java.util.List;
 
+import com.httymd.item.util.ItemUtils;
 import com.httymd.util.CreativeTab;
 import com.httymd.util.Utils;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.client.resources.model.ModelResourceLocation;
+//import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -19,11 +19,12 @@ import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.ArrowLooseEvent;
 import net.minecraftforge.event.entity.player.ArrowNockEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * A crossbow item which is able to hold a charge a later fire (aka: charge and forget)
@@ -39,11 +40,14 @@ public class ItemWeaponCrossbow extends ItemExtension {
 	public static final float MAX_POWER = 1.7F;
 
 	public final String[] iconList;
+	
+	//private String lastIconName;
 
-	@SideOnly(Side.CLIENT)
-	private IIcon[] iconArray;
-	@SideOnly(Side.CLIENT)
-	private IIcon lastIcon;
+	/*
+	 * @SideOnly(Side.CLIENT) private IIcon[] iconArray;
+	 * 
+	 * @SideOnly(Side.CLIENT) private IIcon lastIcon;
+	 */
 
 	public ItemWeaponCrossbow(String name, int numberOfActions) {
 		this(name, numberOfActions, CreativeTab.DRAGON_TAB);
@@ -66,7 +70,7 @@ public class ItemWeaponCrossbow extends ItemExtension {
 		return stack.getTagCompound().getFloat(NBT_POWER);
 	}
 
-	@Override
+	/*@Override
 	@SideOnly(Side.CLIENT)
 	public IIcon getIcon(ItemStack stack, int renderPass, EntityPlayer player, ItemStack usingItem, int useRemaining) {
 		if (usingItem == null)
@@ -88,7 +92,7 @@ public class ItemWeaponCrossbow extends ItemExtension {
 			return this.iconArray[this.iconArray.length - 1];
 		else
 			return this.itemIcon;
-	}
+	}*/
 
 	@Override
 	public int getItemEnchantability() {
@@ -97,12 +101,7 @@ public class ItemWeaponCrossbow extends ItemExtension {
 
 	@Override
 	public EnumAction getItemUseAction(ItemStack item) {
-		return EnumAction.bow;//1.8: EnumAction.bow to EnumAction.BOW
-	}
-
-	@Override
-	public int getMaxItemUseDuration(ItemStack item) {
-		return 72000;
+		return EnumAction.BOW;//1.8: EnumAction.bow to EnumAction.BOW
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
@@ -119,12 +118,7 @@ public class ItemWeaponCrossbow extends ItemExtension {
 	public boolean isBowDrawn(ItemStack stack) {
 		return this.getBowPower(stack) > RESET_POWER;
 	}
-
-	@Override
-	public ItemStack onItemRightClick(ItemStack item, World world, EntityPlayer player) {
-		return this.onStartUsing(item, world, player);
-	}
-
+	
 	@Override
 	public void onPlayerStoppedUsing(ItemStack item, World world, EntityPlayer player, int dur) {
 		this.onStopUsing(item, world, player, dur);
@@ -208,23 +202,27 @@ public class ItemWeaponCrossbow extends ItemExtension {
 		}
 	}
 
+
+	public ItemStack onEaten(ItemStack item, World world, EntityPlayer player) {
+		return item;
+	}
+
+	@Override
+	public int getMaxItemUseDuration(ItemStack item) {
+		return 72000;
+	}
+
+	@Override
+	public ItemStack onItemRightClick(ItemStack item, World world, EntityPlayer player) {
+		return onStartUsing(item, world, player);
+	}
+	
 	private boolean pullInventory(EntityLivingBase entity, ItemStack itemStack, Item item) {
 		if (entity instanceof EntityPlayer && ((EntityPlayer) entity).capabilities.isCreativeMode
 				|| EnchantmentHelper.getEnchantmentLevel(Enchantment.infinity.effectId, itemStack) > 0)
 			return true;
 
 		return Utils.consumeItem(entity, item);
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void registerIcons(IIconRegister registry) {
-		super.registerIcons(registry);
-		this.iconArray = new IIcon[this.iconList.length + 1];
-
-		this.iconArray[0] = this.itemIcon;
-		for (int i = 1; i < this.iconArray.length; ++i)
-			this.iconArray[i] = registry.registerIcon(this.getIconString() + "_" + this.iconList[i-1]);
 	}
 
 	public void resetBow(ItemStack stack) {
@@ -235,5 +233,20 @@ public class ItemWeaponCrossbow extends ItemExtension {
 		if (!stack.hasTagCompound())
 			stack.setTagCompound(new NBTTagCompound());
 		stack.getTagCompound().setFloat(NBT_POWER, power);
+	}
+	
+	@SideOnly(Side.CLIENT)
+    public ModelResourceLocation getModel(ItemStack stack, EntityPlayer player, int useRemaining) {
+		int deltaDuration = this.getMaxItemUseDuration(stack) - useRemaining;
+		String result = "";
+		if (this.isBowDrawn(stack))
+			result = this.iconList[this.iconList.length - 1];
+		if (this.iconList.length <= deltaDuration)
+			deltaDuration = this.iconList.length - 1;
+		//else
+			//this.lastIconName = this.iconList[deltaDuration];
+		if(result.isEmpty()) result = this.iconList[deltaDuration];
+		if(useRemaining <= 0) return null;
+		return new ModelResourceLocation(ItemUtils.findTextureName(this.getUnlocalizedName())+"_"+result, "inventory");
 	}
 }

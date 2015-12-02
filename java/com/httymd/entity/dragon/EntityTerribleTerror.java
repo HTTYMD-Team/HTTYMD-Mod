@@ -1,5 +1,6 @@
 package com.httymd.entity.dragon;
 
+import com.google.common.base.Predicate;
 import com.httymd.entity.EntityDragon;
 import com.httymd.entity.EntityVikingBase;
 
@@ -18,17 +19,19 @@ import net.minecraft.entity.ai.EntityAITargetNonTamed;
 import net.minecraft.entity.ai.EntityAITempt;
 import net.minecraft.entity.ai.EntityAIWander;
 import net.minecraft.entity.ai.EntityAIWatchClosest;
+import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.passive.EntitySheep;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+import net.minecraft.pathfinding.PathNavigateGround;
 import net.minecraft.world.World;
 
 public class EntityTerribleTerror extends EntityDragon {
 
 	public EntityTerribleTerror(World world) {
 		super(world);
-		this.getNavigator().setAvoidsWater(true);
+		((PathNavigateGround) this.getNavigator()).func_179690_a(true);// Apparently avoids water
 		this.tasks.addTask(1, new EntityAISwimming(this));
 		this.tasks.addTask(2, new EntityAILeapAtTarget(this, 0.4F));
 		this.tasks.addTask(3, new EntityAIAttackOnCollide(this, 0.8D, false));
@@ -42,7 +45,11 @@ public class EntityTerribleTerror extends EntityDragon {
 		this.targetTasks.addTask(1, new EntityAIOwnerHurtByTarget(this));
 		this.targetTasks.addTask(2, new EntityAIOwnerHurtTarget(this));
 		this.targetTasks.addTask(3, new EntityAIHurtByTarget(this, true));
-		this.targetTasks.addTask(4, new EntityAITargetNonTamed(this, EntitySheep.class, 50, false));
+		this.targetTasks.addTask(4, new EntityAITargetNonTamed(this, EntityAnimal.class, false, new Predicate() {
+			public boolean apply(Object o) {
+				return o instanceof EntitySheep;
+			}
+		}));
 		this.setSize(0.7F, 0.7F);
 		this.setTamed(false);
 	}

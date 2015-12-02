@@ -12,7 +12,7 @@ public class DragonDamageSource {
 	public static EntityDamageSource getAbilityDamage(Entity attacker, Entity source) {
 		return getAbilityDamage(attacker, source, "");
 	}
-
+	
 	public static EntityDamageSource getAbilityDamage(Entity attacker, Entity source, String add) {
 		return attacker == null ? new EntityDamageSource(Utils.getModString("dragon.ability") + add, source)
 				: new EntityDamageSourceIndirect(Utils.getModString("dragon.ability") + add, source, attacker);
@@ -38,5 +38,4 @@ public class DragonDamageSource {
 		ds.setFireDamage();
 		return ds;
 	}
-
 }

@@ -5,7 +5,6 @@ import java.util.UUID;
 import com.httymd.Config;
 import com.httymd.HTTYMDMod;
 
-import cpw.mods.fml.common.Loader;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
@@ -17,6 +16,7 @@ import net.minecraft.stats.StatBase;
 import net.minecraft.util.StatCollector;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.Loader;
 
 public class Utils {
 	public static final double GRAVITY_FORCE = 0.6d;
@@ -24,6 +24,8 @@ public class Utils {
 	public static final String bg2Id = "battlegear2";
 	
 	/**
+	 * Determines whether the player has retrieved a certain value or more in
+	 * specific StatBase field
 	 * Adds a value to a statistic field
 	 *
 	 * @return whether execution succeeded
@@ -91,7 +93,7 @@ public class Utils {
 	public static int getPlayerStat(EntityPlayerMP player, StatBase stat) {
 		if (player == null || stat == null)
 			return 0;
-		return player.func_147099_x().writeStat(stat);
+		return player.getStatFile().writeStat(stat);
 	}
 
 	/**

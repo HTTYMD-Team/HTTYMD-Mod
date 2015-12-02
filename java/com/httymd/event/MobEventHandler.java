@@ -1,22 +1,23 @@
 package com.httymd.event;
 
+
 import com.httymd.util.EventRegistry;
 import com.httymd.util.NameManager;
 
-import cpw.mods.fml.common.eventhandler.EventPriority;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent.NameFormat;
+import net.minecraftforge.fml.common.eventhandler.EventPriority;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 public class MobEventHandler {
 
 	@SubscribeEvent(priority = EventPriority.NORMAL, receiveCanceled = true)
 	public void onEvent(LivingDropsEvent event) {
 		for (ItemStack stack : EventRegistry.handleDropStacks(event.entityLiving, event.source, event.lootingLevel,
-				event.recentlyHit, event.specialDropValue))
+				event.recentlyHit, 1/* for backwards compatibility */))
 			event.drops.add(new EntityItem(event.entity.worldObj, event.entity.posX, event.entity.posY,
 					event.entity.posZ, stack));
 	}

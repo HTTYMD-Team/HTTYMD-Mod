@@ -9,9 +9,7 @@ import com.httymd.item.registry.ItemRegistry;
 import com.httymd.item.util.EnumToolType;
 import com.httymd.item.util.ItemUtils;
 
-import cpw.mods.fml.common.IFuelHandler;
-import cpw.mods.fml.common.eventhandler.Event.Result;
-import cpw.mods.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.common.IFuelHandler;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
@@ -19,9 +17,13 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemTool;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.UseHoeEvent;
+import net.minecraftforge.fml.common.eventhandler.Event.Result;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 
 /**
  * Reproduces All vanilla tool behaviors (including a hoe, even if it isn't
@@ -35,41 +37,22 @@ public class ItemToolExtension extends ItemTool implements IRegisterable, IFuelH
 
 	protected final Collection<EnumToolType> toolTypes;
 
-	public ItemToolExtension(Item.ToolMaterial material, EnumToolType type) {
-		this(type.getName(), material, Collections.singleton(type));
-	}
-
 	public ItemToolExtension(String prefix, Item.ToolMaterial material, Collection<EnumToolType> types) {
 		super(EnumToolType.getResultDamageOf(types), material, EnumToolType.getAllEffectiveBlocksOf(types));
 		this.toolTypes = types;
 		this.setUnlocalizedName(ItemUtils.findUnlocName(prefix + "_" + material.toString()));
-		this.setTextureName(ItemUtils.findTextureName(this.getUnlocalizedName()));
+		//this.setTextureName(ItemUtils.findTextureName(this.getUnlocalizedName()));
 		if(EnumToolType.getAverageFuelTime(this.toolTypes) > 0) GameRegistry.registerFuelHandler(this);
 	}
-
-	/**
-	 * Gets strength versus a specific block
-	 * 
-	 * <p>Becomes getStrVsBlock(ItemStack, Block) in 1.8</p>
-	 */
-	public float func_150893_a(ItemStack stack, Block hitBlock) {
-		if (this.isToolType(EnumToolType.PICKAXE))
-			return hitBlock.getMaterial() != Material.iron && hitBlock.getMaterial() != Material.anvil
-					&& hitBlock.getMaterial() != Material.rock ? super.func_150893_a(stack, hitBlock)
-							: this.efficiencyOnProperMaterial;
-		if (this.isToolType(EnumToolType.AXE))
-			return hitBlock.getMaterial() != Material.wood && hitBlock.getMaterial() != Material.plants
-					&& hitBlock.getMaterial() != Material.vine ? super.func_150893_a(stack, hitBlock)
-							: this.efficiencyOnProperMaterial;
-		return super.func_150893_a(stack, hitBlock);
+	
+	public ItemToolExtension(Item.ToolMaterial material, EnumToolType type) {
+		this(type.getName(), material, Collections.singleton(type));
 	}
 
 	/**
 	 * Determines whether block can be harvested
-	 * 
-	 * <p>Becomes canHavestBlock(Block) in 1.8</p>
 	 */
-	public boolean func_150897_b(Block hitBlock) {
+	public boolean canHarvestBlock(Block hitBlock) {
 		if (this.isToolType(EnumToolType.PICKAXE))
 			return hitBlock == Blocks.obsidian ? this.toolMaterial.getHarvestLevel() == 3
 					: hitBlock != Blocks.diamond_block && hitBlock != Blocks.diamond_ore
@@ -93,9 +76,24 @@ public class ItemToolExtension extends ItemTool implements IRegisterable, IFuelH
 							: this.toolMaterial.getHarvestLevel() >= 2;
 		if (this.isToolType(EnumToolType.SHOVEL))
 			return hitBlock == Blocks.snow_layer ? true : hitBlock == Blocks.snow;
-		return super.func_150897_b(hitBlock);
+		return super.canHarvestBlock(hitBlock);
 	}
 
+	/**
+	 * Gets strength versus a specific block
+	 */
+	public float getStrVsBlock(ItemStack stack, Block hitBlock) {
+		if (this.isToolType(EnumToolType.PICKAXE))
+			return hitBlock.getMaterial() != Material.iron && hitBlock.getMaterial() != Material.anvil
+					&& hitBlock.getMaterial() != Material.rock ? super.getStrVsBlock(stack, hitBlock)
+							: this.efficiencyOnProperMaterial;
+		if (this.isToolType(EnumToolType.AXE))
+			return hitBlock.getMaterial() != Material.wood && hitBlock.getMaterial() != Material.plants
+					&& hitBlock.getMaterial() != Material.vine ? super.getStrVsBlock(stack, hitBlock)
+							: this.efficiencyOnProperMaterial;
+		return super.getStrVsBlock(stack, hitBlock);
+	}
+	
 	public String getRegistryName() {
 		return ItemUtils.findRegistryName(this.getUnlocalizedName());
 	}
@@ -114,36 +112,34 @@ public class ItemToolExtension extends ItemTool implements IRegisterable, IFuelH
 	public boolean isToolType(EnumToolType type) {
 		return this.getToolTypes().contains(type);
 	}
-
-	public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side,
+	
+	public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos p, EnumFacing f,
 			float hitX, float hitY, float hitZ) {
 		if (!this.isToolType(EnumToolType.HOE))
-			return super.onItemUse(stack, player, world, x, y, z, side, hitX, hitY, hitZ);
+			return super.onItemUse(stack, player, world, p, f, hitX, hitY, hitZ);
 
-		if (!player.canPlayerEdit(x, y, z, side, stack))
+		if (!player.func_175151_a(p, this.getMovingObjectPositionFromPlayer(world, player, true).field_178784_b, stack))
 			return false;
 		else {
-			UseHoeEvent event = new UseHoeEvent(player, stack, world, x, y, z);
+			UseHoeEvent event = new UseHoeEvent(player, stack, world, p);
 			if (MinecraftForge.EVENT_BUS.post(event))
-				return false;
+					return false;
 
 			if (event.getResult() == Result.ALLOW) {
 				stack.damageItem(1, player);
 				return true;
 			}
-
-			Block block = world.getBlock(x, y, z);
-
-			if (side != 0 && world.getBlock(x, y + 1, z).isAir(world, x, y + 1, z)
-					&& (block == Blocks.grass || block == Blocks.dirt)) {
+			
+			Block block = world.getBlockState(p).getBlock();
+			
+			if (f != EnumFacing.DOWN && world.getBlockState(p.add(0, 1, 0)).getBlock().isAir(world, p.add(0, 1, 0)) && (block == Blocks.grass || block == Blocks.dirt)) {
 				Block block1 = Blocks.farmland;
-				world.playSoundEffect(x + 0.5D, y + 0.5D, z + 0.5D, block1.stepSound.getStepResourcePath(),
-						(block1.stepSound.getVolume() + 1.0F) / 2.0F, block1.stepSound.getPitch() * 0.8F);
-
-				if (world.isRemote)
-					return true;
+				world.playSoundEffect((double) ((float) p.getX() + 0.5F), (double) ((float) p.getY() + 0.5F),
+						(double) ((float) p.getZ() + 0.5F), block1.stepSound.getStepSound(),
+						(block1.stepSound.getVolume() + 1.0F) / 2.0F, block1.stepSound.getFrequency() * 0.8F);
+				if (world.isRemote) return true;
 				else {
-					world.setBlock(x, y, z, block1);
+					world.setBlockState(p, block1.getDefaultState());
 					stack.damageItem(1, player);
 					return true;
 				}

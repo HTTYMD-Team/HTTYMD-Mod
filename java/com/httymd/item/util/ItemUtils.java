@@ -29,7 +29,7 @@ public class ItemUtils {
 	 */
 	public static ItemArmor.ArmorMaterial addArmorMaterial(String name, int durability, int[] reductionAmounts,
 			int enchantability, Item craftingMaterial) {
-		ItemArmor.ArmorMaterial mat = EnumHelper.addArmorMaterial(name, durability, reductionAmounts, enchantability);
+		ItemArmor.ArmorMaterial mat = EnumHelper.addArmorMaterial(name, name, durability, reductionAmounts, enchantability);
 		mat.customCraftingMaterial = craftingMaterial;
 		return mat;
 	}
@@ -63,6 +63,7 @@ public class ItemUtils {
 	 *            The material that can be used to repair tools that use this
 	 *            enum
 	 */
+	@SuppressWarnings("deprecation")
 	public static Item.ToolMaterial addToolMaterial(String name, int harvestLevel, int maxUses, float efficiency,
 			float damage, int enchantability, Item craftingMaterial) {
 		Item.ToolMaterial mat = EnumHelper.addToolMaterial(name, harvestLevel, maxUses, efficiency, damage,

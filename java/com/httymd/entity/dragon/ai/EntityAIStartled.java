@@ -2,9 +2,9 @@ package com.httymd.entity.dragon.ai;
 
 import java.util.List;
 
+import com.google.common.base.Predicate;
 import com.httymd.entity.EntityDragon;
 
-import net.minecraft.command.IEntitySelector;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAIBase;
@@ -45,6 +45,7 @@ public class EntityAIStartled extends EntityAIBase {
 		this.closestLiving = null;
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public boolean shouldExecute() {
 		if (!this.dragon.isStartled() || this.dragon.isTamed())
@@ -54,12 +55,14 @@ public class EntityAIStartled extends EntityAIBase {
 				.getClosestPlayerToEntity(this.dragon, this.reactDist)) == null)
 			return false;
 		else {
-			List<?> list = this.dragon.worldObj.selectEntitiesWithinAABB(this.avoidClass,
-					this.dragon.boundingBox.expand(this.reactDist, this.reactDist * 0.4, this.reactDist),
-					new IEntitySelector() {
+			List<?> list = this.dragon.worldObj.func_175647_a(this.avoidClass,
+					this.dragon.getEntityBoundingBox().expand((double) this.reactDist, this.reactDist * 0.4,
+							(double) this.reactDist),
+					new Predicate() {
 						@Override
-						public boolean isEntityApplicable(Entity e) {
-							return e.isEntityAlive() && EntityAIStartled.this.dragon.getEntitySenses().canSee(e);
+						public boolean apply(Object e) {
+							return ((EntityLivingBase) e).isEntityAlive()
+									&& dragon.getEntitySenses().canSee((Entity) e);
 						}
 					});
 
@@ -73,7 +76,7 @@ public class EntityAIStartled extends EntityAIBase {
 			return true;
 
 		Vec3 vec3 = RandomPositionGenerator.findRandomTargetBlockAwayFrom(this.dragon, 16, 7,
-				this.closestLiving.getPosition(1));
+				this.closestLiving.getPositionVector());
 
 		if (vec3 == null || this.closestLiving.getDistanceSq(vec3.xCoord, vec3.yCoord, vec3.zCoord) < this.closestLiving
 				.getDistanceSqToEntity(this.dragon))

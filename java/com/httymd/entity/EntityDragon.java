@@ -34,11 +34,6 @@ public class EntityDragon extends EntityTameableFlying {
 
 		int knockback = 0;
 
-		if (target instanceof EntityLivingBase) {
-			damage += EnchantmentHelper.getEnchantmentModifierLiving(this, (EntityLivingBase) target);
-			knockback += EnchantmentHelper.getKnockbackModifier(this, (EntityLivingBase) target);
-		}
-
 		if (target.attackEntityFrom(DragonDamageSource.getDirectDamage(this), (float) damage)) {
 			if (knockback > 0) {
 				target.addVelocity(-MathHelper.sin(this.rotationYaw * (float) Math.PI / 180.0F) * knockback * 0.5F,
@@ -60,11 +55,6 @@ public class EntityDragon extends EntityTameableFlying {
 			return true;
 		}
 		return false;
-	}
-
-	@Override
-	protected boolean isAIEnabled() {
-		return true;
 	}
 
 	public boolean isAngry() {

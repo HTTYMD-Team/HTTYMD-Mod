@@ -24,7 +24,7 @@ public class ItemFoodExtension extends ItemFood implements IRegisterable {
 	public ItemFoodExtension(String name, int heal, float satu, boolean wolf, CreativeTabs tab) {
 		super(heal, satu, wolf);
 		this.setUnlocalizedName(HTTYMDMod.ID + ":" + name.toLowerCase());
-		this.setTextureName(ItemUtils.findTextureName(this.getUnlocalizedName()));
+		// this.setTextureName(ItemUtils.findTextureName(this.getUnlocalizedName()));
 		this.setCreativeTab(tab);
 	}
 

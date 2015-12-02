@@ -21,8 +21,8 @@ public class AudioRegistry {
 	private static final List<SoundEntry> music = new ArrayList<SoundEntry>();
 
 	public static void addMusic(String soundNames, boolean whenStart) {
-		music.add(new SoundEntry(
-				PositionedSoundRecord.func_147673_a(new ResourceLocation(HTTYMDMod.ID + ":" + soundNames)), whenStart));
+		music.add(new SoundEntry(PositionedSoundRecord.create(new ResourceLocation(HTTYMDMod.ID + ":" + soundNames)),
+				whenStart));
 	}
 
 	public static void update() {

@@ -42,8 +42,8 @@ public class ModelDragonEEgg extends ModelBiped {
 		this.bipedLeftArm.isHidden = true;
 		this.bipedRightLeg.isHidden = true;
 		this.bipedLeftLeg.isHidden = true;
-		this.bipedEars.isHidden = true;
-		this.bipedCloak.isHidden = true;
+		// this.bipedEars.isHidden = true;
+		// this.bipedCloak.isHidden = true;
 
 		this.textureWidth = 256;
 		this.textureHeight = 128;

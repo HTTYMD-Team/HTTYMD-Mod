@@ -4,9 +4,9 @@ import com.httymd.HTTYMDMod;
 import com.httymd.item.ItemSpawnEgg;
 import com.httymd.item.registry.ItemRegistry;
 
-import cpw.mods.fml.common.registry.EntityRegistry;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
+import net.minecraftforge.fml.common.registry.EntityRegistry;
 
 public class EntityRegister {
 

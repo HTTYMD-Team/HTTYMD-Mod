@@ -12,6 +12,7 @@ import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.ai.EntityAIWander;
 import net.minecraft.entity.ai.EntityAIWatchClosest;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.pathfinding.PathNavigateGround;
 import net.minecraft.world.World;
 
 public class EntitySkrill extends EntityDragon {
@@ -20,7 +21,9 @@ public class EntitySkrill extends EntityDragon {
 		super(world);
 		this.setSize(2, 2F);
 		this.stepHeight = 1;
-		this.getNavigator().setAvoidsWater(true);
+		((PathNavigateGround) this.getNavigator()).func_179690_a(true);// Apparently
+																		// avoids
+																		// water
 		// Since ground and flight AI can't possibly run concurrently (and they
 		// shouldn't), why separate the tasks
 		// Also for flight to work, it should probably run first, though it

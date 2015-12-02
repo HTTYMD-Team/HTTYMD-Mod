@@ -2,9 +2,9 @@ package com.httymd.client;
 
 import java.util.Set;
 
-import cpw.mods.fml.client.IModGuiFactory;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraftforge.fml.client.IModGuiFactory;
 
 public class GuiFactoryDragons implements IModGuiFactory {
 

@@ -1,25 +1,19 @@
 package com.httymd.item.registry;
 
 import java.util.HashMap;
-import java.util.Random;
 
 import com.httymd.item.ItemWeapon;
 import com.httymd.item.util.EnumWeaponType;
 
-import cpw.mods.fml.common.registry.VillagerRegistry;
-import cpw.mods.fml.common.registry.VillagerRegistry.IVillageTradeHandler;
-import net.minecraft.entity.passive.EntityVillager;
-import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.Item.ToolMaterial;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.WeightedRandomChestContent;
-import net.minecraft.village.MerchantRecipe;
-import net.minecraft.village.MerchantRecipeList;
 import net.minecraftforge.common.ChestGenHooks;
+import net.minecraftforge.fml.common.registry.VillagerRegistry;
 
 public class WorldItemRegistry {
 
+	@SuppressWarnings("unused")
 	public static void init() {
 		// Village Blacksmith Chests
 		ChestGenHooks hook = ChestGenHooks.getInfo(ChestGenHooks.VILLAGE_BLACKSMITH);
@@ -53,14 +47,15 @@ public class WorldItemRegistry {
 		
 		VillagerRegistry vreg = VillagerRegistry.instance();
 		final int blacksmithId = 3;
-		vreg.registerVillageTradeHandler(blacksmithId, new IVillageTradeHandler() {
+		/*vreg.registerVillageTradeHandler(blacksmithId, new IVillageTradeHandler() {
 			@SuppressWarnings("unchecked")
 			@Override
 			public void manipulateTradesForVillager(EntityVillager villager, MerchantRecipeList recipeList, Random random) {
 				recipeList.add(new MerchantRecipe(new ItemStack(Items.emerald, random.nextInt(10)+5), ItemRegistry.crossbow));
 				recipeList.add(new MerchantRecipe(new ItemStack(ItemRegistry.crossbow), new ItemStack(Items.emerald, random.nextInt(5)+1)));
 			}			
-		});
+		});*/
+		//TODO: Fix when Forge accepts Villager Trading, waiting for https://github.com/MinecraftForge/MinecraftForge/issues/1687 resoultion
 	}
 	
 	/**

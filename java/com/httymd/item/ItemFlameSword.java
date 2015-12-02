@@ -2,19 +2,19 @@ package com.httymd.item;
 
 import java.util.List;
 
+import com.httymd.item.util.ItemUtils;
 import com.httymd.util.CreativeTab;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * Base Item class for Hiccup's Inferno
@@ -29,10 +29,11 @@ public class ItemFlameSword extends ItemWeapon {
 
 	protected float defaultDamage;
 
-	@SideOnly(Side.CLIENT)
-	private IIcon disabledIcon;
-	@SideOnly(Side.CLIENT)
-	private IIcon defaultIcon;
+	/*
+	 * @SideOnly(Side.CLIENT) private IIcon disabledIcon;
+	 * 
+	 * @SideOnly(Side.CLIENT) private IIcon defaultIcon;
+	 */
 
 	public ItemFlameSword(Item.ToolMaterial toolMaterial, String name, float defAttackDamage) {
 		super(name, toolMaterial, defAttackDamage, CreativeTab.DRAGON_TAB);
@@ -46,7 +47,7 @@ public class ItemFlameSword extends ItemWeapon {
 		world.createExplosion(entity, entity.posX, entity.posY, entity.posZ, explosionSize, false);
 	}
 
-	@Override
+	/*@Override
 	@SideOnly(Side.CLIENT)
 	public IIcon getIcon(ItemStack stack, int pass) {
 		if (this.isToggled(stack))
@@ -62,8 +63,10 @@ public class ItemFlameSword extends ItemWeapon {
 			return this.defaultIcon;
 		else
 			return this.disabledIcon;
-	}
+	}*/
 
+	
+	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	public void getSubItems(Item item, CreativeTabs tab, List list) {
@@ -110,12 +113,18 @@ public class ItemFlameSword extends ItemWeapon {
 		stack.getTagCompound().setBoolean(NBT_ISON, toggle);
 		this.attackDamage = toggle ? this.defaultDamage : 1;
 	}
+	
+	@SideOnly(Side.CLIENT)
+    public ModelResourceLocation getModel(ItemStack stack, EntityPlayer player, int useRemaining) {
+		if(this.isToggled(stack)) return null;
+		else return new ModelResourceLocation(ItemUtils.findTextureName(this.getUnlocalizedName())+DISABLED_SUFFIX, "inventory");
+	}
 
-	@Override
+	/*@Override
 	@SideOnly(Side.CLIENT)
 	public void registerIcons(IIconRegister registry) {
 		super.registerIcons(registry);
 		this.defaultIcon = this.itemIcon;
 		this.disabledIcon = registry.registerIcon(this.getIconString() + DISABLED_SUFFIX);
-	}
+	}*/
 }
