@@ -118,7 +118,7 @@ public class ItemToolExtension extends ItemTool implements IRegisterable, IFuelH
 		if (!this.isToolType(EnumToolType.HOE))
 			return super.onItemUse(stack, player, world, p, f, hitX, hitY, hitZ);
 
-		if (!player.func_175151_a(p, this.getMovingObjectPositionFromPlayer(world, player, true).field_178784_b, stack))
+		if (!player.canPlayerEdit(p, this.getMovingObjectPositionFromPlayer(world, player, true).sideHit, stack))
 			return false;
 		else {
 			UseHoeEvent event = new UseHoeEvent(player, stack, world, p);

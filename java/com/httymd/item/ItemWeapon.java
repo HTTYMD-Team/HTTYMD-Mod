@@ -82,7 +82,7 @@ public class ItemWeapon extends ItemSword implements IRegisterable, IFuelHandler
 	 * Retrieves the weapon's material's base entity attack damage (for 1.8 consistency)
 	 */
 	public float MaterialAttackDamage() {
-		return this.func_150931_i();
+		return this.getDamageVsEntity();
 	}
 
 	/**

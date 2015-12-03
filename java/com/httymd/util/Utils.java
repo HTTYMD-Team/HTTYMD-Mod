@@ -93,7 +93,7 @@ public class Utils {
 	public static int getPlayerStat(EntityPlayerMP player, StatBase stat) {
 		if (player == null || stat == null)
 			return 0;
-		return player.getStatFile().writeStat(stat);
+		return player.getStatFile().readStat(stat);
 	}
 
 	/**

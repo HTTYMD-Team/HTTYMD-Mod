@@ -55,7 +55,7 @@ public class EntityAIStartled extends EntityAIBase {
 				.getClosestPlayerToEntity(this.dragon, this.reactDist)) == null)
 			return false;
 		else {
-			List<?> list = this.dragon.worldObj.func_175647_a(this.avoidClass,
+			List<?> list = this.dragon.worldObj.getEntitiesWithinAABB(this.avoidClass,
 					this.dragon.getEntityBoundingBox().expand((double) this.reactDist, this.reactDist * 0.4,
 							(double) this.reactDist),
 					new Predicate() {

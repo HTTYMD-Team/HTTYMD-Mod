@@ -87,10 +87,10 @@ public abstract class EntityTameableFlying extends EntityTameable implements ITa
 		return this.getEntityAttribute(flyingYaw).getAttributeValue();
 	}
 
-	public EntityLivingBase getOwner() {
+	public EntityLivingBase getOwnerEntity() {
 		if (this.isTamed() == false)
 			return null;
-		EntityLivingBase result = super.getOwner() instanceof EntityLivingBase ? (EntityLivingBase) super.getOwner() : null;
+		EntityLivingBase result = super.getOwnerEntity() instanceof EntityLivingBase ? (EntityLivingBase) super.getOwnerEntity() : null;
 		if (result == null)
 			result = this.owner;
 		if (result == null) {
@@ -110,7 +110,7 @@ public abstract class EntityTameableFlying extends EntityTameable implements ITa
 	}
 
 	public String getOwnerString() {
-		return this.func_152113_b();
+		return this.getOwnerId();
 	}
 
 	public boolean interact(EntityPlayer player) {
@@ -184,7 +184,7 @@ public abstract class EntityTameableFlying extends EntityTameable implements ITa
 	}
 
 	public boolean isOwner(EntityLivingBase e) {
-		return this.func_152114_e(e);
+		return super.isOwner(e);
 	}
 
 	@Override
@@ -249,7 +249,7 @@ public abstract class EntityTameableFlying extends EntityTameable implements ITa
 	}
 
 	public void setOwnerString(String s) {
-		this.func_152115_b(s);
+		this.setOwnerId(s);
 	}
 
 	/**
@@ -261,16 +261,16 @@ public abstract class EntityTameableFlying extends EntityTameable implements ITa
 	}
 
 	@Override
-	protected void func_180433_a(double fallDistSinceCall, boolean onGround, Block blockBelowBB,
+	protected void updateFallState(double y, boolean onGround, Block blockBelowBB,
 			BlockPos posOfBlockBelowBB) {
 		if (this.isFlying())
 			this.fallDistance = 0;
 		else {
 			if (this.fallDistance > 3.2F) {
 				this.setFlying(true);
-				this.func_180433_a(fallDistSinceCall, onGround, blockBelowBB, posOfBlockBelowBB);
+				this.updateFallState(y, onGround, blockBelowBB, posOfBlockBelowBB);
 			} else
-				super.func_180433_a(fallDistSinceCall, onGround, blockBelowBB, posOfBlockBelowBB);
+				super.updateFallState(y, onGround, blockBelowBB, posOfBlockBelowBB);
 		}
 	}
 

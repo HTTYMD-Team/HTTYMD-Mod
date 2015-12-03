@@ -28,9 +28,7 @@ public class EntityNightFury extends EntityDragon {
 		super(world);
 		this.setSize(2, 2.25F);
 		this.stepHeight = 1;
-		((PathNavigateGround) this.getNavigator()).func_179690_a(true);// Apparently
-																		// avoids
-																		// water
+		((PathNavigateGround) this.getNavigator()).setAvoidsWater(true);
 		// Since ground and flight AI can't possibly run concurrently (and they
 		// shouldn't), why separate the tasks
 		// Also for flight to work, it should probably run first, though it

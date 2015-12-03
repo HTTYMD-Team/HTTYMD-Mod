@@ -9,7 +9,7 @@ public class Config {
 
 	private static final String STRING_PREFIX = "config.";
 	private final Configuration config;
-	private int startEntityID = -1;
+	//private int startEntityID = -1;
 	private boolean canOwnMultipleDragons = true;
 	private boolean debugMode = false;
 	private boolean experimentalMode = false;
@@ -36,7 +36,7 @@ public class Config {
 	}
 
 	public int getStartEntityID() {
-		return this.startEntityID;
+		return -1;
 	}
 
 	public boolean isDebugMode() {
@@ -61,10 +61,10 @@ public class Config {
 
 	public void syncConfig() {
 
-		this.startEntityID = this.config.getInt("DragonEntityID", Configuration.CATEGORY_GENERAL, this.startEntityID,
+		/*this.startEntityID = this.config.getInt("DragonEntityID", Configuration.CATEGORY_GENERAL, this.startEntityID,
 				-1, 255,
 				"Overrides the entity ID for dragons to fix problems with manual IDs from other mods.\nSet to -1 for automatic assignment (recommended).\nWarning: wrong values may cause crashes and loss of data! Must restart Minecraft to take effect",
-				this.getLocalKey("startEntityID"));
+				this.getLocalKey("startEntityID"));*/
 		this.canOwnMultipleDragons = this.config.getBoolean("MultiDragonOwnership", Configuration.CATEGORY_GENERAL,
 				true, "Provides ability to own multiple dragons", this.getLocalKey("multiDragonOwnership"));
 		this.debugMode = this.config.getBoolean("DebugMode", Configuration.CATEGORY_GENERAL, false,

@@ -4,6 +4,7 @@ import com.google.common.base.Predicate;
 import com.httymd.entity.EntityDragon;
 import com.httymd.entity.EntityVikingBase;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIAttackOnCollide;
@@ -31,7 +32,7 @@ public class EntityTerribleTerror extends EntityDragon {
 
 	public EntityTerribleTerror(World world) {
 		super(world);
-		((PathNavigateGround) this.getNavigator()).func_179690_a(true);// Apparently avoids water
+		((PathNavigateGround) this.getNavigator()).setAvoidsWater(true);
 		this.tasks.addTask(1, new EntityAISwimming(this));
 		this.tasks.addTask(2, new EntityAILeapAtTarget(this, 0.4F));
 		this.tasks.addTask(3, new EntityAIAttackOnCollide(this, 0.8D, false));
@@ -45,8 +46,8 @@ public class EntityTerribleTerror extends EntityDragon {
 		this.targetTasks.addTask(1, new EntityAIOwnerHurtByTarget(this));
 		this.targetTasks.addTask(2, new EntityAIOwnerHurtTarget(this));
 		this.targetTasks.addTask(3, new EntityAIHurtByTarget(this, true));
-		this.targetTasks.addTask(4, new EntityAITargetNonTamed(this, EntityAnimal.class, false, new Predicate() {
-			public boolean apply(Object o) {
+		this.targetTasks.addTask(4, new EntityAITargetNonTamed(this, EntityAnimal.class, false, new Predicate<Entity>() {
+			public boolean apply(Entity o) {
 				return o instanceof EntitySheep;
 			}
 		}));

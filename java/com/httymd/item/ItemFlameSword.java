@@ -91,8 +91,10 @@ public class ItemFlameSword extends ItemWeapon {
 		if (player.isSneaking()) {
 			if (!world.isRemote)
 				this.explode(world, player, 2F);
-		} else
+		} else {
+			world.playSoundAtEntity(player, "mob.sheep.shear", 2.0F, 1F);
 			this.onToggle(stack, !this.isToggled(stack));
+		}
 		return super.onItemRightClick(stack, world, player);
 	}
 

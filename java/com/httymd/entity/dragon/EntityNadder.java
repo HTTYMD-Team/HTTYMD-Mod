@@ -21,9 +21,7 @@ public class EntityNadder extends EntityDragon {
 
 	public EntityNadder(World world) {
 		super(world);
-		((PathNavigateGround) this.getNavigator()).func_179690_a(true);// Apparently
-																		// avoids
-																		// water
+		((PathNavigateGround) this.getNavigator()).setAvoidsWater(true);
 		this.tasks.addTask(1, new EntityAISwimming(this));
 		this.tasks.addTask(2, new EntityAIAttackOnCollide(this, 0.9D, false));
 		this.tasks.addTask(3, new EntityAIFollowOwner(this, 1.5D, 20F, 50F));

@@ -1,7 +1,7 @@
 {
 	"parent": "builtin/generated",
 	"textures": {
-		"layer0": "httymd:items/club_iron"
+		"layer0": "httymd:items/hoe_gronkle"
 	},
 	"display": {
         "thirdperson": {

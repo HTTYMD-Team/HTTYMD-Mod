@@ -11,6 +11,7 @@ import com.httymd.item.util.ItemUtils;
 import net.minecraft.block.BlockFence;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
@@ -115,6 +116,10 @@ public class ItemSpawnEgg extends ItemMonsterPlacer implements IRegisterable {
 	public void getSubItems(Item parItem, CreativeTabs parTab, List parList) {
 		parList.add(new ItemStack(parItem, 1, 0));
 	}
+	
+	public ModelResourceLocation getModel(ItemStack stack, EntityPlayer player, int useRemaining) {
+		return new ModelResourceLocation(HTTYMDMod.ID + ":" + "spawn_egg", "inventory");
+	}
 
 	/**
 	 * Called whenever this item is equipped and the right mouse button is
@@ -131,10 +136,10 @@ public class ItemSpawnEgg extends ItemMonsterPlacer implements IRegisterable {
 				return par1ItemStack;
 			else {
 				if (movingobjectposition.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK) {
-					BlockPos pos = movingobjectposition.func_178782_a();
+					BlockPos pos = movingobjectposition.getBlockPos();
 
 					if (!par2World.isBlockModifiable(playerIn, pos) || 
-							!playerIn.func_175151_a(pos, movingobjectposition.field_178784_b, par1ItemStack))
+							!playerIn.canPlayerEdit(pos, movingobjectposition.sideHit, par1ItemStack))
 						return par1ItemStack;
 
 					if (par2World.getBlockState(pos) instanceof BlockLiquid) {
