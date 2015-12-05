@@ -1,8 +1,9 @@
 package com.httymd.common.network;
 
+import java.util.BitSet;
+
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import io.netty.buffer.ByteBuf;
-import java.util.BitSet;
 
 public class ControlMessage implements IMessage {
 
@@ -10,47 +11,45 @@ public class ControlMessage implements IMessage {
 	private int previous;
 
 	public ControlMessage() {
-		bits = new BitSet(Byte.SIZE);
-	}
-
-	public BitSet getFlags() {
-		return bits;
+		this.bits = new BitSet(Byte.SIZE);
 	}
 
 	@Override
 	public void fromBytes(ByteBuf buf) {
-		fromInteger(buf.readUnsignedByte());
-	}
-
-	@Override
-	public void toBytes(ByteBuf buf) {
-		buf.writeByte(toInteger());
+		this.fromInteger(buf.readUnsignedByte());
 	}
 
 	public void fromInteger(int value) {
 		int index = 0;
 		while (value != 0) {
-			if (value % 2 != 0) {
-				bits.set(index);
-			}
+			if (value % 2 != 0)
+				this.bits.set(index);
 			index++;
 			value >>>= 1;
 		}
 	}
 
-	public int toInteger() {
-		int value = 0;
-		for (int i = 0; i < bits.length(); i++) {
-			value += bits.get(i) ? (1 << i) : 0;
-		}
-		return value;
+	public BitSet getFlags() {
+		return this.bits;
 	}
 
 	public boolean hasChanged() {
-		int current = toInteger();
-		boolean changed = previous != current;
-		previous = current;
+		int current = this.toInteger();
+		boolean changed = this.previous != current;
+		this.previous = current;
 		return changed;
+	}
+
+	@Override
+	public void toBytes(ByteBuf buf) {
+		buf.writeByte(this.toInteger());
+	}
+
+	public int toInteger() {
+		int value = 0;
+		for (int i = 0; i < this.bits.length(); i++)
+			value += this.bits.get(i) ? 1 << i : 0;
+		return value;
 	}
 
 }

@@ -1,12 +1,21 @@
 package com.httymd.client.audio;
 
-import com.httymd.HTTYMDMod;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.httymd.HTTYMDMod;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.util.ResourceLocation;
 
+/**
+ * Suppose to be registry for sound
+ * 
+ * @author George Albany
+ *
+ * @deprecated Not Usable
+ */
 public class AudioRegistry {
 
 	private static final List<SoundEntry> music = new ArrayList<SoundEntry>();
@@ -17,11 +26,9 @@ public class AudioRegistry {
 	}
 
 	public static void update() {
-		for (SoundEntry e : music) {
-			if (e.playNow) {
+		for (SoundEntry e : music)
+			if (e.playNow)
 				Minecraft.getMinecraft().getSoundHandler().playSound(e.entry);
-			}
-		}
 	}
 
 }

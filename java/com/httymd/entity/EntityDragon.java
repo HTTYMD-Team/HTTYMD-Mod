@@ -29,52 +29,8 @@ public class EntityDragon extends EntityTameableFlying {
 		this.getAttributeMap().registerAttribute(SharedMonsterAttributes.attackDamage);
 	}
 
-	@Override
-	protected boolean isAIEnabled() {
-		return true;
-	}
-
-	public boolean isTameable(EntityLivingBase tamer) {
-		return !this.isAngry();
-	}
-
-	public boolean isStartled() {
-		return this.isStartled;
-	}
-
 	public boolean isRideableBy(Entity rider) {
 		return this.riddenByEntity == null || rider == this.riddenByEntity;
-	}
-
-	public void setStartled(boolean startled) {
-		this.isStartled = startled;
-	}
-
-	public void setAttackTarget(EntityLivingBase p_70624_1_) {
-		super.setAttackTarget(p_70624_1_);
-
-		if (p_70624_1_ == null) {
-			this.setAngry(false);
-		} else if (!this.isTamed()) {
-			this.setAngry(true);
-		}
-	}
-
-	public boolean isAngry() {
-		return (this.dataWatcher.getWatchableObjectByte(BOOL_WATCHER) & BOOL_IS_ANGRY) != 0;
-	}
-
-	/**
-	 * Sets whether this dragon is angry or not.
-	 */
-	public void setAngry(boolean p_70916_1_) {
-		byte b0 = this.dataWatcher.getWatchableObjectByte(BOOL_WATCHER);
-
-		if (p_70916_1_) {
-			this.dataWatcher.updateObject(16, Byte.valueOf((byte) (b0 | BOOL_IS_ANGRY)));
-		} else {
-			this.dataWatcher.updateObject(16, Byte.valueOf((byte) (b0 & -(BOOL_IS_ANGRY + 1))));
-		}
 	}
 
 	private void onMount(Entity mounter) {
@@ -107,24 +63,19 @@ public class EntityDragon extends EntityTameableFlying {
 
 		if (target.attackEntityFrom(DragonDamageSource.getDirectDamage(this), (float) damage)) {
 			if (knockback > 0) {
-				target.addVelocity(
-						(double) (-MathHelper.sin(this.rotationYaw * (float) Math.PI / 180.0F) * (float) knockback
-								* 0.5F),
-						0.1D, (double) (MathHelper.cos(this.rotationYaw * (float) Math.PI / 180.0F) * (float) knockback
-								* 0.5F));
+				target.addVelocity(-MathHelper.sin(this.rotationYaw * (float) Math.PI / 180.0F) * knockback * 0.5F,
+						0.1D, MathHelper.cos(this.rotationYaw * (float) Math.PI / 180.0F) * knockback * 0.5F);
 				this.motionX *= 0.6D;
 				this.motionZ *= 0.6D;
 			}
 
 			int fire = EnchantmentHelper.getFireAspectModifier(this);
 
-			if (fire > 0) {
+			if (fire > 0)
 				target.setFire(fire * 4);
-			}
 
-			if (target instanceof EntityLivingBase) {
+			if (target instanceof EntityLivingBase)
 				EnchantmentHelper.func_151384_a((EntityLivingBase) target, this);
-			}
 
 			EnchantmentHelper.func_151385_b(this, target);
 
@@ -134,14 +85,56 @@ public class EntityDragon extends EntityTameableFlying {
 	}
 
 	@Override
-	public void writeEntityToNBT(NBTTagCompound tag) {
-		super.writeEntityToNBT(tag);
-		tag.setBoolean(NBT_IS_STARTLED, this.isStartled());
+	protected boolean isAIEnabled() {
+		return true;
+	}
+
+	public boolean isAngry() {
+		return (this.dataWatcher.getWatchableObjectByte(BOOL_WATCHER) & BOOL_IS_ANGRY) != 0;
+	}
+
+	public boolean isStartled() {
+		return this.isStartled;
+	}
+
+	public boolean isTameable(EntityLivingBase tamer) {
+		return !this.isAngry();
 	}
 
 	@Override
 	public void readEntityFromNBT(NBTTagCompound tag) {
 		super.readEntityFromNBT(tag);
 		this.setStartled(tag.getBoolean(NBT_IS_STARTLED));
+	}
+
+	/**
+	 * Sets whether this dragon is angry or not.
+	 */
+	public void setAngry(boolean p_70916_1_) {
+		byte b0 = this.dataWatcher.getWatchableObjectByte(BOOL_WATCHER);
+
+		if (p_70916_1_)
+			this.dataWatcher.updateObject(16, Byte.valueOf((byte) (b0 | BOOL_IS_ANGRY)));
+		else
+			this.dataWatcher.updateObject(16, Byte.valueOf((byte) (b0 & -(BOOL_IS_ANGRY + 1))));
+	}
+
+	public void setAttackTarget(EntityLivingBase p_70624_1_) {
+		super.setAttackTarget(p_70624_1_);
+
+		if (p_70624_1_ == null)
+			this.setAngry(false);
+		else if (!this.isTamed())
+			this.setAngry(true);
+	}
+
+	public void setStartled(boolean startled) {
+		this.isStartled = startled;
+	}
+
+	@Override
+	public void writeEntityToNBT(NBTTagCompound tag) {
+		super.writeEntityToNBT(tag);
+		tag.setBoolean(NBT_IS_STARTLED, this.isStartled());
 	}
 }

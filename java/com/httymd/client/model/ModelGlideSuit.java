@@ -34,10 +34,10 @@ public class ModelGlideSuit extends RenderGlide.ModelGlide {
 	@Override
 	public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {
 		super.render(entity, f, f1, f2, f3, f4, f5);
-		setRotationAngles(f, f1, f2, f3, f4, f5, entity);
+		this.setRotationAngles(f, f1, f2, f3, f4, f5, entity);
 
-		LeftWing.render(f5);
-		RightWing.render(f5);
+		this.LeftWing.render(f5);
+		this.RightWing.render(f5);
 		// BackFin.render(f5);
 	}
 

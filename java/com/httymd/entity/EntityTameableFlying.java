@@ -27,12 +27,12 @@ public abstract class EntityTameableFlying extends EntityTameable implements ITa
 	private static final String NBT_IS_FLYING = "Flying";
 	///////////////////////////////////////////////////////////////////////////
 	// Entity Attributes
-	public static final IAttribute flyingSpeed = (new RangedAttribute(Utils.getModString("flyingSpeed"), 1D, 0.0D,
-			Double.MAX_VALUE)).setDescription("Flying Speed").setShouldWatch(true);
-	public static final IAttribute flyingYaw = (new RangedAttribute(Utils.getModString("flyingYaw"), 25D, 0.0D,
-			Double.MAX_VALUE)).setDescription("Flying Yaw Speed").setShouldWatch(true);
-	public static final IAttribute flyingPitch = (new RangedAttribute(Utils.getModString("flyingPitch"), 20D, 0.0D,
-			Double.MAX_VALUE)).setDescription("Flying Pitch Speed").setShouldWatch(true);
+	public static final IAttribute flyingSpeed = new RangedAttribute(Utils.getModString("flyingSpeed"), 1D, 0.0D,
+			Double.MAX_VALUE).setDescription("Flying Speed").setShouldWatch(true);
+	public static final IAttribute flyingYaw = new RangedAttribute(Utils.getModString("flyingYaw"), 25D, 0.0D,
+			Double.MAX_VALUE).setDescription("Flying Yaw Speed").setShouldWatch(true);
+	public static final IAttribute flyingPitch = new RangedAttribute(Utils.getModString("flyingPitch"), 20D, 0.0D,
+			Double.MAX_VALUE).setDescription("Flying Pitch Speed").setShouldWatch(true);
 	///////////////////////////////////////////////////////////////////////////
 	// Datawatcher
 	public static final int BOOL_WATCHER = 16;
@@ -51,27 +51,15 @@ public abstract class EntityTameableFlying extends EntityTameable implements ITa
 		this.getAttributeMap().registerAttribute(flyingPitch);
 	}
 
-	@Override
-	public boolean isTameItem(ItemStack item) {
-		return false;
+	protected boolean canDespawn() {
+		return !this.isTamed() && this.ticksExisted > 2400;
 	}
 
-	@Override
-	public boolean isTameable(EntityLivingBase tamer) {
-		return false;
-	}
-
-	@Override
-	public boolean isFlying() {
-		if (!isFlyable()) {
-			setFlying(false);
-			return false;
-		}
-		return (dataWatcher.getWatchableObjectByte(BOOL_WATCHER) & 32) != 0;
-	}
-
-	public boolean isFlyable() {
-		return true;
+	/**
+	 * Retrieves the Flight Pitch Delta Speed
+	 */
+	public double getFlyPitch() {
+		return this.getEntityAttribute(flyingPitch).getAttributeValue();
 	}
 
 	public double getFlySpeed() {
@@ -84,33 +72,9 @@ public abstract class EntityTameableFlying extends EntityTameable implements ITa
 	public double getFlyYaw() {
 		return this.getEntityAttribute(flyingYaw).getAttributeValue();
 	}
-
-	/**
-	 * Retrieves the Flight Pitch Delta Speed
-	 */
-	public double getFlyPitch() {
-		return this.getEntityAttribute(flyingPitch).getAttributeValue();
-	}
-
-	@Override
-	public void setFlying(boolean flying) {
-		byte b0 = dataWatcher.getWatchableObjectByte(BOOL_WATCHER);
-
-		if (flying && isFlyable()) {
-			dataWatcher.updateObject(BOOL_WATCHER, Byte.valueOf((byte) (b0 | 32)));
-		} else {
-			dataWatcher.updateObject(BOOL_WATCHER, Byte.valueOf((byte) (b0 & -33)));
-		}
-	}
-
-	public void onTakeoff() {
-		if (!this.isFlying() && this.onGround) {
-			this.jump();
-			this.motionY += this.getFlySpeed();
-		} else {
-			this.motionY += this.getFlySpeed() * 0.25;
-		}
-		this.setFlying(true);
+	
+	public String getOwnerString() {
+		return this.func_152113_b();
 	}
 
 	/**
@@ -118,11 +82,10 @@ public abstract class EntityTameableFlying extends EntityTameable implements ITa
 	 * position based on range, semi-accurate boolean
 	 */
 	protected boolean isAirBelow(int range) {
-		for (int curBlock = 1; curBlock <= range; curBlock++) {
+		for (int curBlock = 1; curBlock <= range; curBlock++)
 			if (!this.worldObj.isAirBlock(MathHelper.floor_double(this.posX),
 					MathHelper.floor_double(this.boundingBox.minY) - curBlock, MathHelper.floor_double(this.posZ)))
 				return false;
-		}
 		return true;
 	}
 
@@ -136,6 +99,33 @@ public abstract class EntityTameableFlying extends EntityTameable implements ITa
 				MathHelper.floor_double(this.posZ)).getMaterial().isLiquid();
 	}
 
+	public boolean isFlyable() {
+		return true;
+	}
+
+	@Override
+	public boolean isFlying() {
+		if (!this.isFlyable()) {
+			this.setFlying(false);
+			return false;
+		}
+		return (this.dataWatcher.getWatchableObjectByte(BOOL_WATCHER) & 32) != 0;
+	}
+
+	public boolean isOwner(EntityLivingBase e) {
+		return this.func_152114_e(e);
+	}
+
+	@Override
+	public boolean isTameable(EntityLivingBase tamer) {
+		return false;
+	}
+
+	@Override
+	public boolean isTameItem(ItemStack item) {
+		return false;
+	}
+
 	@Override
 	public void moveEntityWithHeading(float strafe, float forward) {
 		if (this.isFlying()) {
@@ -145,12 +135,10 @@ public abstract class EntityTameableFlying extends EntityTameable implements ITa
 				this.moveEntityWithHeading(strafe, forward);
 				return;
 			}
-			if (this.motionY < 0) {
+			if (this.motionY < 0)
 				this.motionY *= 0.8;
-			}
-			if (forward < 0) {
+			if (forward < 0)
 				forward *= 0.15;
-			}
 
 			final float timeSpeedMultipler = 0.91F;
 
@@ -160,23 +148,29 @@ public abstract class EntityTameableFlying extends EntityTameable implements ITa
 
 			this.moveFlying(strafe, forward, (float) this.getFlySpeed());
 			this.moveEntity(this.motionX, this.motionY, this.motionZ);
-		} else {
+		} else
 			super.moveEntityWithHeading(strafe, forward);
-		}
 	}
 
-	public String getOwnerString() {
-		return this.func_152113_b();
+	public void onTakeoff() {
+		if (!this.isFlying() && this.onGround) {
+			this.jump();
+			this.motionY += this.getFlySpeed();
+		} else
+			this.motionY += this.getFlySpeed() * 0.25;
+		this.setFlying(true);
 	}
 
-	public void setOwnerString(String s) {
-		this.func_152115_b(s);
-	}
+	@Override
+	public void setFlying(boolean flying) {
+		byte b0 = this.dataWatcher.getWatchableObjectByte(BOOL_WATCHER);
 
-	public boolean isOwner(EntityLivingBase e) {
-		return this.func_152114_e(e);
+		if (flying && this.isFlyable())
+			this.dataWatcher.updateObject(BOOL_WATCHER, Byte.valueOf((byte) (b0 | 32)));
+		else
+			this.dataWatcher.updateObject(BOOL_WATCHER, Byte.valueOf((byte) (b0 & -33)));
 	}
-
+	
 	public EntityLivingBase getOwner() {
 		EntityLivingBase result = this.owner != null ? this.owner : super.getOwner();
 		if (result == null) {
@@ -197,8 +191,8 @@ public abstract class EntityTameableFlying extends EntityTameable implements ITa
 		return result;
 	}
 
-	protected boolean canDespawn() {
-		return !this.isTamed() && this.ticksExisted > 2400;
+	public void setOwnerString(String s) {
+		this.func_152115_b(s);
 	}
 
 	/**
@@ -218,7 +212,6 @@ public abstract class EntityTameableFlying extends EntityTameable implements ITa
 				this.setFlying(true);
 				this.updateFallState(p_70064_1_, p_70064_3_);
 			}
-			super.updateFallState(p_70064_1_, p_70064_3_);
 		}
 	}
 

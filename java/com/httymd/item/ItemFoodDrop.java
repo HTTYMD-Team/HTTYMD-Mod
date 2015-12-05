@@ -7,23 +7,28 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
 
+/**
+ * A dropable food class based on {@link ItemFoodExtension} and {@link IDrop}
+ * 
+ * @author George Albany
+ *
+ */
 public class ItemFoodDrop extends ItemFoodExtension implements IDrop {
 
 	protected final Class<? extends EntityLivingBase> entityToDropFor;
 	protected final boolean isCooked;
+
+	public ItemFoodDrop(String name, int heal, float satu, boolean wolf, Class<? extends EntityLivingBase> dropFrom) {
+		this(name, heal, satu, wolf, dropFrom, false);
+	}
 
 	public ItemFoodDrop(String name, int heal, float satu, boolean wolf, Class<? extends EntityLivingBase> dropFrom,
 			boolean isCooked) {
 		super(name, heal, satu, wolf);
 		this.entityToDropFor = dropFrom;
 		this.isCooked = isCooked;
-		if (this.entityToDropFor != null) {
+		if (this.entityToDropFor != null)
 			EventRegistry.registerDrop(this);
-		}
-	}
-
-	public ItemFoodDrop(String name, int heal, float satu, boolean wolf, Class<? extends EntityLivingBase> dropFrom) {
-		this(name, heal, satu, wolf, dropFrom, false);
 	}
 
 	public ItemStack getDrop(EntityLivingBase entity, DamageSource source, int lootLevel, boolean recentHit,
@@ -37,7 +42,7 @@ public class ItemFoodDrop extends ItemFoodExtension implements IDrop {
 
 	@Override
 	public boolean isForEntity(EntityLivingBase entity) {
-		return entity.getClass().equals(entityToDropFor);
+		return entity.getClass().equals(this.entityToDropFor);
 	}
 
 }

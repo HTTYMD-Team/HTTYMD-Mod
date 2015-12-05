@@ -1,9 +1,9 @@
 [{
     "modid": "httymd",
 	"name": "How to Train Your Minecraft Dragon",
-	"description": "The Mod based on How to Train your Dragon (movie) which adds everything from the franchise. From small daggers to Boss Dragons and everything in betweens. Try out Hiccups Glide Suit or the Crossbow, or you could fly your very own, loyal dragon named what you want them to.",
-	"version": "1.0.2-A1",
-	"mcversion": "${mcversion}",
+	"description": "The Mod based on How to Train your Dragon (movie) which adds everything from the franchise. From small daggers to Boss Dragons and everything in between. Try out Hiccups Glide Suit or the Crossbow, or you could fly your very own, loyal dragon named what you want them to.",
+	"version": "$version",
+	"mcversion": "$mcversion",
 	"url": "",
 	"updateUrl": "",
 	"authorList": ["The HTTYMD Team", "Too Many People"],

@@ -1,9 +1,15 @@
 package com.httymd.item;
 
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Set;
+
 import com.httymd.item.registry.IRegisterable;
+import com.httymd.item.registry.ItemRegistry;
 import com.httymd.item.util.EnumToolType;
 import com.httymd.item.util.ItemUtils;
 
+import cpw.mods.fml.common.IFuelHandler;
 import cpw.mods.fml.common.eventhandler.Event.Result;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.block.Block;
@@ -20,117 +26,144 @@ import net.minecraftforge.event.entity.player.UseHoeEvent;
 /**
  * Reproduces All vanilla tool behaviors (including a hoe, even if it isn't
  * technically a tool) without extending original tools. To detect type of tool
- * item, please use {@link EnumToolType} instead of instanceof
- * 
+ * item, please use {@link #isToolType(EnumToolType)} instead of instanceof
+ *
  * @author George Albany
  *
  */
-public class ItemToolExtension extends ItemTool implements IRegisterable {
+public class ItemToolExtension extends ItemTool implements IRegisterable, IFuelHandler {
 
-	protected final EnumToolType toolType;
+	protected final Collection<EnumToolType> toolTypes;
 
 	public ItemToolExtension(Item.ToolMaterial material, EnumToolType type) {
-		super(type.getAttackDamage(), material, type.getEffectiveBlocks());
-		this.toolType = type;
-		this.setUnlocalizedName(ItemUtils.findUnlocName(type.toString() + "_" + material.toString()));
+		this(type.getName(), material, Collections.singleton(type));
+	}
+
+	public ItemToolExtension(String prefix, Item.ToolMaterial material, Collection<EnumToolType> types) {
+		super(EnumToolType.getResultDamageOf(types), material, EnumToolType.getAllEffectiveBlocksOf(types));
+		this.toolTypes = types;
+		this.setUnlocalizedName(ItemUtils.findUnlocName(prefix + "_" + material.toString()));
 		this.setTextureName(ItemUtils.findTextureName(this.getUnlocalizedName()));
+		if(EnumToolType.getAverageFuelTime(this.toolTypes) > 0) GameRegistry.registerFuelHandler(this);
 	}
 
-	public Item registerItem() {
-		GameRegistry.registerItem(this, this.getRegistryName());
-		return this;
-	}
-
-	public String getRegistryName() {
-		return ItemUtils.findRegistryName(this.getUnlocalizedName());
-	}
-
-	public boolean isToolType(EnumToolType type) {
-		return this.getToolType() == type;
-	}
-
-	public EnumToolType getToolType() {
-		return this.toolType;
-	}
-
-	public boolean func_150897_b(Block hitBlock) {
-		if (this.toolType == EnumToolType.PICKAXE)
-			return hitBlock == Blocks.obsidian ? this.toolMaterial.getHarvestLevel() == 3
-					: (hitBlock != Blocks.diamond_block && hitBlock != Blocks.diamond_ore
-							? (hitBlock != Blocks.emerald_ore && hitBlock != Blocks.emerald_block
-									? (hitBlock != Blocks.gold_block && hitBlock != Blocks.gold_ore
-											? (hitBlock != Blocks.iron_block && hitBlock != Blocks.iron_ore
-													? (hitBlock != Blocks.lapis_block && hitBlock != Blocks.lapis_ore
-															? (hitBlock != Blocks.redstone_ore
-																	&& hitBlock != Blocks.lit_redstone_ore
-																			? (hitBlock.getMaterial() == Material.rock
-																					? true
-																					: (hitBlock
-																							.getMaterial() == Material.iron
-																									? true
-																									: hitBlock
-																											.getMaterial() == Material.anvil))
-																			: this.toolMaterial.getHarvestLevel() >= 2)
-															: this.toolMaterial.getHarvestLevel() >= 1)
-													: this.toolMaterial.getHarvestLevel() >= 1)
-											: this.toolMaterial.getHarvestLevel() >= 2)
-									: this.toolMaterial.getHarvestLevel() >= 2)
-							: this.toolMaterial.getHarvestLevel() >= 2);
-		if (this.toolType == EnumToolType.SHOVEL)
-			return hitBlock == Blocks.snow_layer ? true : hitBlock == Blocks.snow;
-		return super.func_150897_b(hitBlock);
-	}
-
+	/**
+	 * Gets strength versus a specific block
+	 * 
+	 * <p>Becomes getStrVsBlock(ItemStack, Block) in 1.8</p>
+	 */
 	public float func_150893_a(ItemStack stack, Block hitBlock) {
-		if (this.toolType == EnumToolType.PICKAXE)
+		if (this.isToolType(EnumToolType.PICKAXE))
 			return hitBlock.getMaterial() != Material.iron && hitBlock.getMaterial() != Material.anvil
 					&& hitBlock.getMaterial() != Material.rock ? super.func_150893_a(stack, hitBlock)
 							: this.efficiencyOnProperMaterial;
-		if (this.toolType == EnumToolType.AXE)
+		if (this.isToolType(EnumToolType.AXE))
 			return hitBlock.getMaterial() != Material.wood && hitBlock.getMaterial() != Material.plants
 					&& hitBlock.getMaterial() != Material.vine ? super.func_150893_a(stack, hitBlock)
 							: this.efficiencyOnProperMaterial;
 		return super.func_150893_a(stack, hitBlock);
 	}
 
-	public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, int p_77648_4_, int p_77648_5_,
-			int p_77648_6_, int p_77648_7_, float p_77648_8_, float p_77648_9_, float p_77648_10_) {
-		if (this.toolType != EnumToolType.HOE)
-			return super.onItemUse(stack, player, world, p_77648_4_, p_77648_5_, p_77648_6_, p_77648_7_, p_77648_8_,
-					p_77648_9_, p_77648_10_);
+	/**
+	 * Determines whether block can be harvested
+	 * 
+	 * <p>Becomes canHavestBlock(Block) in 1.8</p>
+	 */
+	public boolean func_150897_b(Block hitBlock) {
+		if (this.isToolType(EnumToolType.PICKAXE))
+			return hitBlock == Blocks.obsidian ? this.toolMaterial.getHarvestLevel() == 3
+					: hitBlock != Blocks.diamond_block && hitBlock != Blocks.diamond_ore
+							? hitBlock != Blocks.emerald_ore && hitBlock != Blocks.emerald_block
+									? hitBlock != Blocks.gold_block && hitBlock != Blocks.gold_ore
+											? hitBlock != Blocks.iron_block && hitBlock != Blocks.iron_ore
+													? hitBlock != Blocks.lapis_block && hitBlock != Blocks.lapis_ore
+															? hitBlock != Blocks.redstone_ore
+																	&& hitBlock != Blocks.lit_redstone_ore
+																			? hitBlock.getMaterial() == Material.rock
+																					? true
+																					: hitBlock
+																							.getMaterial() == Material.iron
+																									? true
+																									: hitBlock.getMaterial() == Material.anvil
+																			: this.toolMaterial.getHarvestLevel() >= 2
+															: this.toolMaterial.getHarvestLevel() >= 1
+													: this.toolMaterial.getHarvestLevel() >= 1
+											: this.toolMaterial.getHarvestLevel() >= 2
+									: this.toolMaterial.getHarvestLevel() >= 2
+							: this.toolMaterial.getHarvestLevel() >= 2;
+		if (this.isToolType(EnumToolType.SHOVEL))
+			return hitBlock == Blocks.snow_layer ? true : hitBlock == Blocks.snow;
+		return super.func_150897_b(hitBlock);
+	}
 
-		if (!player.canPlayerEdit(p_77648_4_, p_77648_5_, p_77648_6_, p_77648_7_, stack)) {
+	public String getRegistryName() {
+		return ItemUtils.findRegistryName(this.getUnlocalizedName());
+	}
+
+	public Set<String> getToolClasses(ItemStack stack) {
+		return this.getToolTypes() != null ? EnumToolType.getAllNames(this.getToolTypes()) : super.getToolClasses(stack);
+	}
+
+	public Collection<EnumToolType> getToolTypes() {
+		return this.toolTypes;
+	}
+
+	/**
+	 * Determines whether this tool contains the same {@link EnumToolType} as type
+	 */
+	public boolean isToolType(EnumToolType type) {
+		return this.getToolTypes().contains(type);
+	}
+
+	public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side,
+			float hitX, float hitY, float hitZ) {
+		if (!this.isToolType(EnumToolType.HOE))
+			return super.onItemUse(stack, player, world, x, y, z, side, hitX, hitY, hitZ);
+
+		if (!player.canPlayerEdit(x, y, z, side, stack))
 			return false;
-		} else {
-			UseHoeEvent event = new UseHoeEvent(player, stack, world, p_77648_4_, p_77648_5_, p_77648_6_);
-			if (MinecraftForge.EVENT_BUS.post(event)) {
+		else {
+			UseHoeEvent event = new UseHoeEvent(player, stack, world, x, y, z);
+			if (MinecraftForge.EVENT_BUS.post(event))
 				return false;
-			}
 
 			if (event.getResult() == Result.ALLOW) {
 				stack.damageItem(1, player);
 				return true;
 			}
 
-			Block block = world.getBlock(p_77648_4_, p_77648_5_, p_77648_6_);
+			Block block = world.getBlock(x, y, z);
 
-			if (p_77648_7_ != 0 && world.getBlock(p_77648_4_, p_77648_5_ + 1, p_77648_6_).isAir(world, p_77648_4_,
-					p_77648_5_ + 1, p_77648_6_) && (block == Blocks.grass || block == Blocks.dirt)) {
+			if (side != 0 && world.getBlock(x, y + 1, z).isAir(world, x, y + 1, z)
+					&& (block == Blocks.grass || block == Blocks.dirt)) {
 				Block block1 = Blocks.farmland;
-				world.playSoundEffect((double) ((float) p_77648_4_ + 0.5F), (double) ((float) p_77648_5_ + 0.5F),
-						(double) ((float) p_77648_6_ + 0.5F), block1.stepSound.getStepResourcePath(),
+				world.playSoundEffect(x + 0.5D, y + 0.5D, z + 0.5D, block1.stepSound.getStepResourcePath(),
 						(block1.stepSound.getVolume() + 1.0F) / 2.0F, block1.stepSound.getPitch() * 0.8F);
 
-				if (world.isRemote) {
+				if (world.isRemote)
 					return true;
-				} else {
-					world.setBlock(p_77648_4_, p_77648_5_, p_77648_6_, block1);
+				else {
+					world.setBlock(x, y, z, block1);
 					stack.damageItem(1, player);
 					return true;
 				}
-			} else {
+			} else
 				return false;
-			}
 		}
+	}
+
+	public Item registerItem() {
+		ItemRegistry.registerItem(this, this.getRegistryName());
+		return this;
+	}
+
+	@Override
+	public int getBurnTime(ItemStack fuel) {
+		if(fuel.getItem() == this) {
+			return this.toolMaterial == ToolMaterial.WOOD ? 
+					EnumToolType.getAverageFuelTime(this.getToolTypes()) + 50 
+					: EnumToolType.getAverageFuelTime(this.getToolTypes()); 
+		}
+		return 0;
 	}
 }

@@ -74,6 +74,8 @@ item.httymd:wing_item.name=Wing
 
 item.httymd:egg_spawn.spawn.text=Spawn %s
 
+tile.httymd:giron_block.name=Gronkle Iron Block
+
 itemGroup.httymd:mcdTab=HTTYMD Tab
 
 death.attack.httymd:dragon.direct.1=%1$s was eaten by %2$s

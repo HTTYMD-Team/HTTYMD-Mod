@@ -1,5 +1,8 @@
 package com.httymd.entity.dragon;
 
+import com.httymd.entity.EntityDragon;
+import com.httymd.entity.EntityVikingBase;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -21,9 +24,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
-
-import com.httymd.entity.EntityDragon;
-import com.httymd.entity.EntityVikingBase;
 
 public class EntityTerribleTerror extends EntityDragon {
 
@@ -51,9 +51,9 @@ public class EntityTerribleTerror extends EntityDragon {
 	@Override
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
-		getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(10);
-		getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(0.7F);
-		getEntityAttribute(flyingSpeed).setBaseValue(0.4D);
+		this.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(10);
+		this.getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(0.7F);
+		this.getEntityAttribute(flyingSpeed).setBaseValue(0.4D);
 	}
 
 	@Override
