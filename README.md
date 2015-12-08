@@ -1,3 +1,4 @@
+[![Stories in Ready](https://badge.waffle.io/HTTYMD-Team/HTTYMD-Mod.png?label=ready&title=Ready)](https://waffle.io/HTTYMD-Team/HTTYMD-Mod)
 ![](resources/logo.gif?raw=true)
 ===============
 The Minecraft Mod that adds the (movie) HTTYD universe to Minecraft (and more)
