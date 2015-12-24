@@ -23,8 +23,7 @@ public class EntityRegister {
 			nextID += 1;
 		EntityRegistry.registerModEntity(entityClass, entityName, nextID, HTTYMDMod.INSTANCE, 50, 2, true);
 		HTTYMDMod.registerDragonName(entityName);
-		ItemSpawnEgg egg = (ItemSpawnEgg) new ItemSpawnEgg(entityName, solidColor, spotColor)
-				.setCreativeTab(currentTab);
+		ItemSpawnEgg egg = (ItemSpawnEgg) new ItemSpawnEgg(entityName, solidColor, spotColor).setCreativeTab(currentTab);
 		egg.registerItem();
 		ItemRegistry.spawnEggIDMapping.put(nextID, egg);
 	}

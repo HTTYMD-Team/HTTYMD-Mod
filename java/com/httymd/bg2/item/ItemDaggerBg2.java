@@ -27,11 +27,13 @@ import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 		@Interface(iface = "mods.battlegear2.api.weapons.IBattlegearWeapon", modid = Utils.bg2Id, striprefs = true),
 		@Interface(iface = "mods.battlegear2.api.weapons.IBackStabbable", modid = Utils.bg2Id, striprefs = true),
 		@Interface(iface = "mods.battlegear2.api.weapons.IHitTimeModifier", modid = Utils.bg2Id, striprefs = true),
-		@Interface(iface = "mods.battlegear2.api.weapons.IExtendedReachWeapon", modid = Utils.bg2Id, striprefs = true)
+		@Interface(iface = "mods.battlegear2.api.weapons.IExtendedReachWeapon", modid = Utils.bg2Id, striprefs = true),
+		@Interface(iface = "mods.battlegear2.api.weapons.Attributes", modid = Utils.bg2Id, striprefs = true)
 })
 public class ItemDaggerBg2 extends ItemWeapon 
 		implements mods.battlegear2.api.weapons.IBattlegearWeapon, mods.battlegear2.api.weapons.IBackStabbable, 
-		mods.battlegear2.api.weapons.IHitTimeModifier, mods.battlegear2.api.weapons.IExtendedReachWeapon {
+		mods.battlegear2.api.weapons.IHitTimeModifier, mods.battlegear2.api.weapons.IExtendedReachWeapon,
+		mods.battlegear2.api.weapons.Attributes {
 	
 	protected final float hitTime = 0.5F;
 	protected final float reach = -2;
@@ -54,25 +56,21 @@ public class ItemDaggerBg2 extends ItemWeapon
 	}
 
 	public float getReachModifierInBlocks(ItemStack stack) {
-		return getModifiedAmount(stack, Utils.shouldForceBg2Daggers() ? 
-				mods.battlegear2.items.ItemWeapon.extendedReach.getAttributeUnlocalizedName() : "");
+		return getModifiedAmount(stack, Utils.shouldForceBg2Daggers() ? extendedReach.getAttributeUnlocalizedName() : "");
 	}
 
 	public int getHitTime(ItemStack stack, EntityLivingBase arg1) {
-		return -(int)getModifiedAmount(stack, Utils.shouldForceBg2Daggers() ? 
-				mods.battlegear2.items.ItemWeapon.attackSpeed.getAttributeUnlocalizedName() : "");
+		return -(int)getModifiedAmount(stack, Utils.shouldForceBg2Daggers() ? attackSpeed.getAttributeUnlocalizedName() : "");
 	}
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public Multimap getAttributeModifiers(ItemStack stack) {
 		Multimap map = super.getAttributeModifiers(stack);
 		if(Utils.shouldForceBg2Daggers()) {
-			map.put(mods.battlegear2.items.ItemWeapon.extendedReach.getAttributeUnlocalizedName(), 
-					new AttributeModifier(mods.battlegear2.items.ItemWeapon.extendReachUUID, 
-					"Reach Modifier", this.reach, 0));
-			map.put(mods.battlegear2.items.ItemWeapon.attackSpeed.getAttributeUnlocalizedName(), 
-					new AttributeModifier(mods.battlegear2.items.ItemWeapon.attackSpeedUUID,
-					"Speed Modifier", this.hitTime, 1));
+			map.put(extendedReach.getAttributeUnlocalizedName(), 
+					new AttributeModifier(extendReachUUID, "Reach Modifier", this.reach, 0));
+			map.put(attackSpeed.getAttributeUnlocalizedName(), 
+					new AttributeModifier(attackSpeedUUID, "Speed Modifier", this.hitTime, 1));
 		}
 		return map;
 	}

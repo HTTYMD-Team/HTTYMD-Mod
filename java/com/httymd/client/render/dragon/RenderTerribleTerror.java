@@ -16,7 +16,7 @@ public class RenderTerribleTerror extends RenderDragon {
 			HTTYMDMod.ID + ":textures/entities/TerribleTerror" + ".png");
 
 	public RenderTerribleTerror(ModelBase p_i1253_1_, float p_i1253_2_) {
-		super(p_i1253_1_, p_i1253_2_);
+		super(p_i1253_1_, p_i1253_2_*0.5F);
 	}
 
 	@Override

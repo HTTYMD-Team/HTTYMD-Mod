@@ -9,14 +9,12 @@ import net.minecraftforge.common.config.ConfigElement;
 import net.minecraftforge.common.config.Configuration;
 
 public class GuiConfigDragons extends GuiConfig {
-
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public GuiConfigDragons(GuiScreen parentScreen) {
-		super(parentScreen,
-				new ConfigElement(HTTYMDMod.getConfig().getConfig().getCategory(Configuration.CATEGORY_GENERAL))
-						.getChildElements(),
+		super(parentScreen, new ConfigElement(HTTYMDMod.getConfig().getConfig().getCategory(Configuration.CATEGORY_GENERAL)).getChildElements(), 
 				HTTYMDMod.ID, true, false, "The HTTYMD Config");
-		this.titleLine2 = "cause the Ender Dragon wasn't fun enough";
+		this.titleLine2 = "cause the Ender Dragon wasn't fun enough\n";
 	}
 
 	@Override

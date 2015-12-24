@@ -92,8 +92,8 @@ public class ItemGlideArmor extends ItemArmorExtension implements ISpecialArmor 
 	}
 
 	public boolean isFlyable(EntityLivingBase entity) {
-		boolean flag = entity != null && !entity.onGround && !entity.isInWater()
-				&& !entity.isInsideOfMaterial(Material.lava);
+		boolean flag = entity != null
+				&& (!entity.onGround && !entity.isInWater() && !entity.isInsideOfMaterial(Material.lava));
 
 		if (entity instanceof EntityPlayer)
 			flag = flag && !((EntityPlayer) entity).capabilities.isFlying;

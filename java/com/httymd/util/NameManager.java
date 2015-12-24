@@ -66,6 +66,10 @@ public class NameManager {
 					return null;
 
 				EntityPlayerMP ply = (EntityPlayerMP) entity;
+				
+				if (Utils.hasPlayerGained(ply, StatList.damageDealtStat, 200000)) {
+					return "ataryn";
+				}
 
 				if (Utils.hasPlayerGained(ply, StatListMod.distanceByDragon, 3000))
 					return "rider";

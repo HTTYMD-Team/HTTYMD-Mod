@@ -3,7 +3,6 @@ package com.httymd.event;
 import com.httymd.util.EventRegistry;
 import com.httymd.util.NameManager;
 
-import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
@@ -11,9 +10,12 @@ import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent.NameFormat;
 
-public class MobEventHandler {
+public class ForgeEventHandler {
 
-	@SubscribeEvent(priority = EventPriority.NORMAL, receiveCanceled = true)
+	/**
+	 * Handles and manipulates registered drops according to current system
+	 */
+	@SubscribeEvent
 	public void onEvent(LivingDropsEvent event) {
 		for (ItemStack stack : EventRegistry.handleDropStacks(event.entityLiving, event.source, event.lootingLevel,
 				event.recentlyHit, event.specialDropValue))
@@ -21,6 +23,21 @@ public class MobEventHandler {
 					event.entity.posZ, stack));
 	}
 
+	/**
+	 * Currently enables dragons to jump if the rider tries to jump
+	 */
+	/*@SubscribeEvent
+	public void onEvent(LivingEvent.LivingJumpEvent event) {
+		if (event.entityLiving.ridingEntity instanceof EntityDragon) {
+			EntityDragon dragon = (EntityDragon) event.entityLiving.ridingEntity;
+			if (dragon.isRideableBy(event.entityLiving))
+				dragon.getJumpHelper().doJump();
+		}
+	}*/
+
+	/**
+	 * Handles shield system (not currently in use)
+	 */
 	@SubscribeEvent
 	public void onEvent(LivingHurtEvent event) {
 		/*IShield s = EventRegistry.getActiveShieldFor(event.entityLiving);
@@ -32,7 +49,10 @@ public class MobEventHandler {
 		}*/
 	}
 
-	@SubscribeEvent(priority = EventPriority.NORMAL, receiveCanceled = true)
+	/**
+	 * Reformats a player's name based on our current naming system
+	 */
+	@SubscribeEvent
 	public void onEvent(NameFormat event) {
 		event.displayname = NameManager.getInstance().getDisplayName(event.entityLiving, event.username);
 	}
