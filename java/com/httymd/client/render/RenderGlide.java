@@ -3,7 +3,6 @@ package com.httymd.client.render;
 import org.lwjgl.opengl.GL11;
 
 import com.httymd.client.model.ModelGlideSuit;
-import com.httymd.item.ItemGlideArmor;
 import com.httymd.item.util.ItemUtils.EnumArmorType;
 
 import net.minecraft.client.entity.AbstractClientPlayer;
@@ -14,7 +13,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.client.ForgeHooksClient;
 
 public class RenderGlide extends RenderPlayer {
 
@@ -33,7 +31,7 @@ public class RenderGlide extends RenderPlayer {
 
 	// TODO what does this method even do? is it exactly the same as
 	// super.shouldRenderPass()?
-	@Override
+	/*@Override
 	protected int shouldRenderPass(AbstractClientPlayer ply, int slot, float p_77032_3_) {
 		int result = super.shouldRenderPass(ply, slot, p_77032_3_);
 		ItemStack s = ply.getCurrentArmor(3 - slot);
@@ -80,7 +78,7 @@ public class RenderGlide extends RenderPlayer {
 			return 1;
 		}
 		return result;
-	}
+	}*/
 
 	@Override
 	public void doRender(AbstractClientPlayer player, double p_76986_2, double p_76986_4, double p_76986_6,
