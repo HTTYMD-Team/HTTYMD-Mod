@@ -14,6 +14,7 @@ import net.minecraft.entity.ai.attributes.IAttribute;
 import net.minecraft.entity.ai.attributes.RangedAttribute;
 import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.pathfinding.PathEntity;
@@ -79,9 +80,9 @@ public abstract class EntityTameableFlying extends EntityTameable implements ITa
 
 	/**
 	 * Detects if there are air blocks below the entities lowest bounding box
-	 * position based on range, semi-accurate boolean
+	 * position based on range, centered on entity's x/z axis
 	 */
-	protected boolean isAirBelow(int range) {
+	public boolean isAirBelow(int range) {
 		for (int curBlock = 1; curBlock <= range; curBlock++)
 			if (!this.worldObj.isAirBlock(MathHelper.floor_double(this.posX),
 					MathHelper.floor_double(this.boundingBox.minY) - curBlock, MathHelper.floor_double(this.posZ)))
@@ -94,7 +95,7 @@ public abstract class EntityTameableFlying extends EntityTameable implements ITa
 	 * cross-mod implementation then {@link Entity#isInsideOfMaterial(Material)}
 	 * )
 	 */
-	public boolean isInLiquid() {
+	private boolean isInLiquid() {
 		return this.worldObj.getBlock(MathHelper.floor_double(this.posX), MathHelper.floor_double(this.posY),
 				MathHelper.floor_double(this.posZ)).getMaterial().isLiquid();
 	}
@@ -115,22 +116,16 @@ public abstract class EntityTameableFlying extends EntityTameable implements ITa
 	public boolean isOwner(EntityLivingBase e) {
 		return this.func_152114_e(e);
 	}
-
+	
 	@Override
-	public boolean isTameable(EntityLivingBase tamer) {
-		return false;
-	}
-
-	@Override
-	public boolean isTameItem(ItemStack item) {
-		return false;
+	public boolean canTame(EntityLivingBase tamer, ItemStack item) {
+		return item.getItem() == Items.fish && HTTYMDMod.getConfig().isTameable(this);
 	}
 
 	@Override
 	public void moveEntityWithHeading(float strafe, float forward) {
 		if (this.isFlying()) {
 			if ((!this.isAirBelow(1) && this.motionY < -0.1) || this.isInLiquid()) {
-				// How could you fly in a liquid? :P
 				this.setFlying(false);
 				this.moveEntityWithHeading(strafe, forward);
 				return;
@@ -156,8 +151,8 @@ public abstract class EntityTameableFlying extends EntityTameable implements ITa
 		if (!this.isFlying() && this.onGround) {
 			this.jump();
 			this.motionY += this.getFlySpeed();
-		} else
-			this.motionY += this.getFlySpeed() * 0.25;
+		}// else
+			//this.motionY += this.getFlySpeed() * 0.25;
 		this.setFlying(true);
 	}
 
@@ -195,36 +190,27 @@ public abstract class EntityTameableFlying extends EntityTameable implements ITa
 		this.func_152115_b(s);
 	}
 
-	/**
-	 * I have no idea what this function represents (if you know what it does,
-	 * please rename)
-	 */
-	public boolean unsureFunction(EntityLivingBase target, EntityLivingBase targetOwner) {
-		return super.func_142018_a(target, targetOwner);
-	}
-
 	@Override
 	protected void updateFallState(double p_70064_1_, boolean p_70064_3_) {
 		if (this.isFlying()) {
 			this.fallDistance = 0;
-		} else {
-			if (this.fallDistance > 3.2F) {
-				this.setFlying(true);
-				this.updateFallState(p_70064_1_, p_70064_3_);
-			}
+		} else if (this.fallDistance > 3.2F) {
+			this.setFlying(true);
+			this.updateFallState(p_70064_1_, p_70064_3_);
 		}
+		super.updateFallState(p_70064_1_, p_70064_3_);
 	}
 
 	@Override
 	public void writeEntityToNBT(NBTTagCompound tag) {
 		super.writeEntityToNBT(tag);
-		tag.setBoolean(NBT_IS_FLYING, isFlying());
+		tag.setBoolean(NBT_IS_FLYING, this.isFlying());
 	}
 
 	@Override
 	public void readEntityFromNBT(NBTTagCompound tag) {
 		super.readEntityFromNBT(tag);
-		setFlying(tag.getBoolean(NBT_IS_FLYING));
+		this.setFlying(tag.getBoolean(NBT_IS_FLYING));
 	}
 
 	public boolean interact(EntityPlayer player) {
@@ -236,7 +222,7 @@ public abstract class EntityTameableFlying extends EntityTameable implements ITa
 		} else if (HTTYMDMod.getConfig().isDebugMode() && hand.getItem() == ItemRegistry.wing) {
 			this.onTakeoff();
 			return true;
-		} else if (!this.isTamed() && this.isTameItem(hand) && this.isTameable(player)) {
+		} else if (!this.isTamed() && this.canTame(player, hand)) {
 			if (!player.capabilities.isCreativeMode && --hand.stackSize <= 0) {
 				player.inventory.setInventorySlotContents(player.inventory.currentItem, (ItemStack) null);
 			}
@@ -270,7 +256,44 @@ public abstract class EntityTameableFlying extends EntityTameable implements ITa
 	public boolean isBreedingItem(ItemStack p_70877_1_) {
 		return false;
 	}
-
+	
+	/**
+	 * X Offset of mounted entity
+	 * 
+	 * <p>Useful for odd positioning of rider location (in comparison to regular mobs)</p>
+	 * 
+	 * @see #getMountedYOffset()
+	 * @see #getMountedZOffset()
+	 */
+	public double getMountedXOffset() {
+		return 0;
+	}
+	
+	/**
+	 * Z Offset of mounted entity
+	 * 
+	 * <p>Useful for odd positioning of rider location (in comparison to regular mobs)</p>
+	 * 
+	 * @see #getMountedYOffset()
+	 * @see #getMountedXOffset()
+	 */
+	public double getMountedZOffset() {
+		return 0;
+	}
+	
+	public void updateRiderPosition() {
+        if (this.riddenByEntity != null)
+        {
+            this.riddenByEntity.setPosition(this.posX + this.getMountedXOffset(), this.posY + this.getMountedYOffset() + this.riddenByEntity.getYOffset(), this.posZ + this.getMountedZOffset());
+        }
+    }
+	
+	public void doJump() {
+		if(!this.isAirBelow(1)) {
+			this.jump();
+		}
+	}
+	
 	@Override
 	public EntityAgeable createChild(EntityAgeable mate) {
 		if (!this.getClass().equals(mate.getClass()))
@@ -280,10 +303,5 @@ public abstract class EntityTameableFlying extends EntityTameable implements ITa
 		} catch (Exception e) {
 			return null;
 		}
-	}
-
-	@Override
-	public boolean func_142018_a(EntityLivingBase p_142018_1_, EntityLivingBase p_142018_2_) {
-		return this.unsureFunction(p_142018_1_, p_142018_2_);
 	}
 }

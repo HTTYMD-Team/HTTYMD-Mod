@@ -10,7 +10,7 @@ import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent.NameFormat;
 
-public class MobEventHandler {
+public class ForgeEventHandler {
 
 	/**
 	 * Handles and manipulates registered drops according to current system

@@ -1,5 +1,7 @@
 package com.httymd.entity;
 
+import com.httymd.HTTYMDMod;
+import com.httymd.item.registry.ItemRegistry;
 import com.httymd.util.DragonDamageSource;
 
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -7,6 +9,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
@@ -21,6 +24,7 @@ public class EntityDragon extends EntityTameableFlying {
 
 	public EntityDragon(World world) {
 		super(world);
+		this.isImmuneToFire = true;
 	}
 
 	@Override
@@ -30,7 +34,11 @@ public class EntityDragon extends EntityTameableFlying {
 	}
 
 	public boolean isRideableBy(Entity rider) {
-		return this.riddenByEntity == null || rider == this.riddenByEntity;
+		return rider != null && rider instanceof EntityLivingBase;
+	}
+
+	private boolean isRidden() {
+		return this.isRideableBy(this.riddenByEntity);
 	}
 
 	private void onMount(Entity mounter) {
@@ -42,7 +50,37 @@ public class EntityDragon extends EntityTameableFlying {
 		}
 	}
 
+	public void moveEntityWithHeading(float strafe, float forward) {
+		if (this.isRidden()) {
+			this.prevRotationYaw = this.rotationYaw = this.riddenByEntity.rotationYaw;
+			this.rotationPitch = this.riddenByEntity.rotationPitch * 0.8F;
+			this.setRotation(this.rotationYaw, this.rotationPitch);
+			this.rotationYawHead = this.renderYawOffset = this.rotationYaw;
+			if (this.riddenByEntity instanceof EntityLivingBase) {
+				strafe = ((EntityLivingBase) this.riddenByEntity).moveStrafing * 0.5F;
+				forward = ((EntityLivingBase) this.riddenByEntity).moveForward;
+			}
+			forward *= 0.5;
+			strafe *= 0.5;
+			if (this.isFlying() && forward > 0 && HTTYMDMod.getConfig().getVerticalDragonRiding()) {
+				float sin = MathHelper.sin(this.rotationPitch * (float) Math.PI / 180.0F);
+				this.motionY += (-sin * forward) * 1.5;
+			}
+			if (this.worldObj.isRemote)
+				return;
+		}
+		super.moveEntityWithHeading(strafe, forward);
+	}
+
 	public boolean interact(EntityPlayer ply) {
+		ItemStack hand = ply.getCurrentEquippedItem();
+		if (hand == null)
+			;
+		else if (HTTYMDMod.getConfig().isDebugMode() && hand.getItem() == ItemRegistry.wing) {
+			this.onTakeoff();
+			return true;
+		}
+
 		if (this.isOwner(ply) && this.isRideableBy(ply)) {
 			this.onMount(ply);
 			return true;
@@ -136,5 +174,16 @@ public class EntityDragon extends EntityTameableFlying {
 	public void writeEntityToNBT(NBTTagCompound tag) {
 		super.writeEntityToNBT(tag);
 		tag.setBoolean(NBT_IS_STARTLED, this.isStartled());
+	}
+
+	/**
+	 * Sets isImmuneToFire to false, allows dragon burning
+	 * 
+	 * <p>
+	 * For dragons that are not so fire proof
+	 * </p>
+	 */
+	protected void setNotFireproof() {
+		this.isImmuneToFire = false;
 	}
 }

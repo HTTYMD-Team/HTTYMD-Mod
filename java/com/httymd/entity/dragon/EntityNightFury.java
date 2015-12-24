@@ -1,7 +1,6 @@
 package com.httymd.entity.dragon;
 
 import com.httymd.entity.EntityDragon;
-import com.httymd.entity.dragon.ai.EntityAIRidden;
 import com.httymd.entity.dragon.ai.EntityDragonAIWander;
 
 import net.minecraft.entity.EntityLivingBase;
@@ -26,10 +25,9 @@ public class EntityNightFury extends EntityDragon {
 
 	public EntityNightFury(World world) {
 		super(world);
-		this.setSize(2, 2.25F);
+		this.setSize(1.7F, 2.25F);
 		this.stepHeight = 1;
 		this.getNavigator().setAvoidsWater(true);
-		this.tasks.addTask(1, new EntityAIRidden(this));
 		// Since ground and flight AI can't possibly run concurrently (and they
 		// shouldn't), why separate the tasks
 		// Also for flight to work, it should probably run first, though it
@@ -55,9 +53,9 @@ public class EntityNightFury extends EntityDragon {
 	@Override
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
-		this.getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(0.8D);
+		this.getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(0.7D);
 		this.getEntityAttribute(SharedMonsterAttributes.attackDamage).setBaseValue(2.0D);
-		this.getEntityAttribute(flyingSpeed).setBaseValue(2D);
+		this.getEntityAttribute(flyingSpeed).setBaseValue(0.25D);
 	}
 
 	@Override
@@ -66,13 +64,7 @@ public class EntityNightFury extends EntityDragon {
 	}
 
 	@Override
-	public boolean isTameable(EntityLivingBase e) {
-		return !this.isAngry();
-	}
-
-	@Override
-	public boolean isTameItem(ItemStack s) {
+	public boolean canTame(EntityLivingBase tamer, ItemStack s) {
 		return s.getItem() == Items.fish;
 	}
-
 }

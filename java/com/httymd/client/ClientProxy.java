@@ -12,8 +12,10 @@ import com.httymd.common.CommonProxy;
 import com.httymd.entity.dragon.EntityNightFury;
 import com.httymd.entity.dragon.EntitySkrill;
 import com.httymd.entity.dragon.EntityTerribleTerror;
+import com.httymd.event.KeyPressEventHandler;
 
 import cpw.mods.fml.client.registry.RenderingRegistry;
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.common.MinecraftForge;
 
@@ -44,5 +46,10 @@ public class ClientProxy extends CommonProxy {
 	private void registerItemRendering() {
 		// MinecraftForgeClient.registerItemRenderer(ItemRegistry.zippleGasContainer, new RenderItemContainer());
 		// empty for 1.8 compat
+	}
+	
+	protected void registerHandlers() {
+		super.registerHandlers();
+		FMLCommonHandler.instance().bus().register(new KeyPressEventHandler());
 	}
 }

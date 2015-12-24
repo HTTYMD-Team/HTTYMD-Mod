@@ -2,10 +2,11 @@ package com.httymd.common;
 
 import com.httymd.HTTYMDMod;
 import com.httymd.block.registry.BlockRegistry;
+import com.httymd.common.network.PlyJumpMessage;
 import com.httymd.entity.dragon.EntityNightFury;
 import com.httymd.entity.dragon.EntitySkrill;
 import com.httymd.entity.dragon.EntityTerribleTerror;
-import com.httymd.event.MobEventHandler;
+import com.httymd.event.ForgeEventHandler;
 import com.httymd.item.registry.ItemRegistry;
 import com.httymd.item.registry.MaterialRegistry;
 import com.httymd.item.registry.WorldItemRegistry;
@@ -17,6 +18,7 @@ import cpw.mods.fml.common.event.FMLServerStartedEvent;
 import cpw.mods.fml.common.event.FMLServerStoppedEvent;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
+import cpw.mods.fml.relauncher.Side;
 import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.common.MinecraftForge;
 
@@ -35,9 +37,8 @@ public class CommonProxy {
 		this.registerEntities();
 		this.registerHandlers();
 
-		this.network = NetworkRegistry.INSTANCE.newSimpleChannel("HTTYMDChannel");
-		// network.registerMessage(ControlMessageHandler.class,
-		// ControlMessage.class, 0, Side.SERVER);
+		this.network = NetworkRegistry.INSTANCE.newSimpleChannel(HTTYMDMod.ID+"Channel");
+		this.network.registerMessage(PlyJumpMessage.PlyJumpMsgHandler.class, PlyJumpMessage.class, 0, Side.SERVER);
 	}
 
 	public void onPostInit(FMLPostInitializationEvent event) {
@@ -70,7 +71,7 @@ public class CommonProxy {
 		HTTYMDMod.registerEntity(EntityNightFury.class, "NightFury", 0x000000, 0x222222);
 	}
 	
-	private void registerHandlers() {
-		MinecraftForge.EVENT_BUS.register(new MobEventHandler());
+	protected void registerHandlers() {
+		MinecraftForge.EVENT_BUS.register(new ForgeEventHandler());
 	}
 }

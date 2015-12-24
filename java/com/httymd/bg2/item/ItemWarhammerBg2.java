@@ -28,10 +28,12 @@ import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 @InterfaceList(value={
 		@Interface(iface = "mods.battlegear2.api.weapons.IBattlegearWeapon", modid = Utils.bg2Id, striprefs = true),
 		@Interface(iface = "mods.battlegear2.api.weapons.IHitTimeModifier", modid = Utils.bg2Id, striprefs = true),
-		@Interface(iface = "mods.battlegear2.api.weapons.IPenetrateWeapon", modid = Utils.bg2Id, striprefs = true)
+		@Interface(iface = "mods.battlegear2.api.weapons.IPenetrateWeapon", modid = Utils.bg2Id, striprefs = true),
+		@Interface(iface = "mods.battlegear2.api.weapons.Attributes", modid = Utils.bg2Id, striprefs = true)
 })
 public class ItemWarhammerBg2 extends ItemWeapon implements mods.battlegear2.api.weapons.IBattlegearWeapon, 
-		mods.battlegear2.api.weapons.IHitTimeModifier, mods.battlegear2.api.weapons.IPenetrateWeapon {
+		mods.battlegear2.api.weapons.IHitTimeModifier, mods.battlegear2.api.weapons.IPenetrateWeapon, 
+		mods.battlegear2.api.weapons.Attributes {
 
 	protected final float hitTime = 4F;
 	protected final int ignoreDam = 4;
@@ -80,27 +82,24 @@ public class ItemWarhammerBg2 extends ItemWeapon implements mods.battlegear2.api
 
 	@Override
 	public int getHitTime(ItemStack stack, EntityLivingBase arg1) {
-		return (int)getModifiedAmount(stack, Utils.shouldForceBg2ForWarhammer() ? 
-				mods.battlegear2.items.ItemWeapon.attackSpeed.getAttributeUnlocalizedName() : "");
+		return (int)getModifiedAmount(stack, Utils.shouldForceBg2ForWarhammer() ? attackSpeed.getAttributeUnlocalizedName() : "");
 	}
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public Multimap getAttributeModifiers(ItemStack stack) {
 		Multimap map = super.getAttributeModifiers(stack);
 		if(Utils.shouldForceBg2ForWarhammer()) {
-			map.put(mods.battlegear2.items.ItemWeapon.attackSpeed.getAttributeUnlocalizedName(), 
-				new AttributeModifier(mods.battlegear2.items.ItemWeapon.attackSpeedUUID,
-				"Speed Modifier", this.hitTime, 1));
-			 map.put(mods.battlegear2.items.ItemWeapon.armourPenetrate.getAttributeUnlocalizedName(), 
-					 new AttributeModifier(mods.battlegear2.items.ItemWeapon.penetrateArmourUUID, 
-							 "Attack Modifier", this.ignoreDam, 0));
+			map.put(attackSpeed.getAttributeUnlocalizedName(), 
+				new AttributeModifier(attackSpeedUUID, "Speed Modifier", this.hitTime, 1));
+			map.put(armourPenetrate.getAttributeUnlocalizedName(), 
+				 new AttributeModifier(penetrateArmourUUID, "Attack Modifier", this.ignoreDam, 0));
 		}
 		return map;
 	}
 
 	public int getPenetratingPower(ItemStack stack) {
 		return (int) getModifiedAmount(stack, Utils.shouldForceBg2ForWarhammer() ? 
-				mods.battlegear2.items.ItemWeapon.armourPenetrate.getAttributeUnlocalizedName() : "");
+				armourPenetrate.getAttributeUnlocalizedName() : "");
 	}
 	
 	public void onUpdate(ItemStack stack, World world, Entity user, int p_77663_4_, boolean inHand) {
