@@ -2,7 +2,7 @@ package com.httymd.client.event;
 
 import com.httymd.client.render.RenderGlide;
 import com.httymd.item.ItemGlideArmor;
-import com.httymd.util.Utils;
+import com.httymd.item.util.ItemUtils.EnumArmorType;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.client.renderer.entity.RenderManager;
@@ -23,16 +23,19 @@ public class PlayerClientHandler {
 	public void beforeBodyRender(RenderLivingEvent.Pre event) {
 		if (!(event.entity instanceof EntityPlayer) || event.renderer == this.glideRender || event.entity != this.ent)
 			return;
-		ItemStack stack = Utils.getArmor(event.entity, 2);
-		if (stack == null)
+
+		ItemStack stack = null;
+		for (EnumArmorType type : EnumArmorType.values()) {
+			stack = event.entity.getEquipmentInSlot(type.ordinal() + 1);
+			if (stack != null && stack.getItem() instanceof ItemGlideArmor)
+				break;
+		}
+		if (stack == null || !(stack.getItem() instanceof ItemGlideArmor))
 			return;
-		ItemGlideArmor armor = stack.getItem() instanceof ItemGlideArmor ? (ItemGlideArmor) stack.getItem() : null;
-		if (armor != null)
-			if (armor.isGliding(stack)) {
-				this.glideRender.doRender(event.entity, event.x, event.y + event.entity.yOffset, event.z, 0.0F,
-						this.playerTicks);
-				event.setCanceled(true);
-			}
+		if (((ItemGlideArmor) stack.getItem()).isGliding(stack)) {
+			glideRender.doRender(event.entity, event.x, event.y + event.entity.yOffset, event.z, 0.0F, playerTicks);
+			event.setCanceled(true);
+		}
 	}
 
 	@SubscribeEvent

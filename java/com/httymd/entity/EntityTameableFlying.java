@@ -186,6 +186,13 @@ public abstract class EntityTameableFlying extends EntityTameable implements ITa
 		return result;
 	}
 
+	/**
+	 * Determines whether our owner should be defended
+	 */
+	public boolean shouldDefendOwner(EntityLivingBase attacker, EntityLivingBase ourOwner) {
+		return super.func_142018_a(attacker, ourOwner);
+	}
+	
 	public void setOwnerString(String s) {
 		this.func_152115_b(s);
 	}
@@ -303,5 +310,10 @@ public abstract class EntityTameableFlying extends EntityTameable implements ITa
 		} catch (Exception e) {
 			return null;
 		}
+	}
+
+	@Override
+	public boolean func_142018_a(EntityLivingBase p_142018_1_, EntityLivingBase p_142018_2_) {
+		return this.shouldDefendOwner(p_142018_1_, p_142018_2_);
 	}
 }

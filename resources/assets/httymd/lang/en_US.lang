@@ -5,6 +5,27 @@ entity.httymd.DeadlyNadder.name=Deadly Nadder
 
 key.categories.httymd=HTTYMD
 
+config.httymd:category.dragons=Dragons
+config.httymd:category.testing=Testing
+config.httymd:category.bg2=Battlegear2
+
+config.httymd:verticalDragonRiding=Vertical Riding
+config.httymd:verticalDragonRiding.tooltip=Enable the vertical climb when riding by looking up or down
+config.httymd:multiOwn=Multi Ownership
+config.httymd:multiOwn.tooltip=Provides ability to own multiple dragons
+config.httymd:forcedTameable=Force Tameable
+config.httymd:forcedTameable.tooltip=A list of entity names which are forced to be tameable (seperator may be anything ths isn't a space)
+config.httymd:debugMode=Debug Mode
+config.httymd:debugMode.tooltip=Enable debug mode, developers recommended
+config.httymd:experimentalMode=Experimental Mode
+config.httymd:experimentalMode.tooltip=Enable an experimental version (warning: may be less stable)
+config.httymd:useBG2=Use BG2
+config.httymd:useBG2.tooltip=Enables the use of BG2 (if installed)
+config.httymd:useBg2Daggers=Use BG2 Daggers
+config.httymd:useBg2Daggers.tooltip=Allows you to specifiy whether to use Battlegear 2 to replace HTTYMD dagger behavior with BG2 dagger behavior
+config.httymd:useBg2ForWarhammer=Use BG2 Warhammers
+config.httymd:useBg2ForWarhammer.tooltip=Allows you to specifiy whether to use Battlegear 2 for HTTYMD Warhammers
+
 item.httymd:sword_gronkle.name=Gronkle Iron Sword
 item.httymd:axe_gronkle.name=Gronkle Iron Axe
 item.httymd:pickaxe_gronkle.name=Gronkle Iron Pickaxe

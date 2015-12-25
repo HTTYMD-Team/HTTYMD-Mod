@@ -153,4 +153,27 @@ public class ItemUtils {
 
 		return result;
 	}
+
+	/**
+	 * A utility enum for determining a difference between armor types (for easy
+	 * of access)
+	 */
+	public static enum EnumArmorType {
+		/**
+		 * Represents a helmet
+		 */
+		HELMET,
+		/**
+		 * Represents a chestplate
+		 */
+		CHESTPLATE,
+		/**
+		 * Represents leggings (pants)
+		 */
+		LEGGINGS,
+		/**
+		 * Represents boots
+		 */
+		BOOTS;
+	}
 }

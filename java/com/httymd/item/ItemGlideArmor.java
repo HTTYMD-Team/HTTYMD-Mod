@@ -1,57 +1,130 @@
 package com.httymd.item;
 
-import java.util.List;
-
+import com.httymd.HTTYMDMod;
 import com.httymd.client.model.ModelGlideSuit;
+import com.httymd.item.util.ItemUtils.EnumArmorType;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.block.material.Material;
 import net.minecraft.client.model.ModelBiped;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ISpecialArmor;
 
-/**
- * Base Item class for Hiccup's Glider Suit, using {@link ISpecialArmor}
- * 
- * @author George Albany
- *
- */
 public class ItemGlideArmor extends ItemArmorExtension implements ISpecialArmor {
 
-	public static final String NBT_FLYING = "IsGliding";
-
-	public static void setGliding(ItemStack stack, boolean gliding) {
-		if (!(stack.getItem() instanceof ItemGlideArmor))
-			return;
-		if (!stack.hasTagCompound())
-			stack.setTagCompound(new NBTTagCompound());
-		stack.getTagCompound().setBoolean(NBT_FLYING, gliding);
-	}
+	public static final String NBT_GLIDING = "IsGliding";
 
 	public ItemGlideArmor(String name, ArmorMaterial mat, int type) {
 		super(name, mat, type);
 	}
 
-	public boolean canGlide(EntityLivingBase entity, ItemStack stack) {
-		boolean flag = this.isFlyable(entity)
-				&& (entity.motionY < -1.0 && entity.moveForward >= 0.1 && entity.isSneaking() || this.isGliding(stack));
+	protected EnumArmorType[] getRequiredSlotsForFlight() {
+		return new EnumArmorType[] { EnumArmorType.CHESTPLATE, EnumArmorType.LEGGINGS };
+	}
+
+	private boolean isInLiquid(EntityLivingBase entity) {
+		return entity.worldObj.getBlock(MathHelper.floor_double(entity.posX), MathHelper.floor_double(entity.posY),
+				MathHelper.floor_double(entity.posZ)).getMaterial().isLiquid();
+	}
+
+	public boolean isFlyable(EntityLivingBase entity) {
+		boolean flag = entity != null && (!entity.onGround && !this.isInLiquid(entity));
+
+		if (entity instanceof EntityPlayer)
+			flag = flag && !((EntityPlayer) entity).capabilities.isFlying;
+
+		for (EnumArmorType slot : this.getRequiredSlotsForFlight()) {
+			ItemStack armor = entity.getEquipmentInSlot(slot.ordinal() + 1);
+			flag = flag && (armor != null && armor.getItem() instanceof ItemGlideArmor);
+		}
 		return flag;
 	}
 
-	@Override
-	public void damageArmor(EntityLivingBase entity, ItemStack armor, DamageSource source, int damage, int slot) {
-		if (source == DamageSource.fall && this.canGlide(entity, armor))
+	public boolean canGlide(EntityLivingBase entity, ItemStack stack) {
+		boolean canGlide = this.isFlyable(entity) && (this.isGliding(stack)
+				|| (entity.motionY < -1.0 && entity.moveForward >= 0.1 && entity.isSneaking()));
+		setGliding(stack, canGlide);
+		if (canGlide) {
+			for (int i = 1; i <= 4; i++) {
+				ItemStack armor = entity.getEquipmentInSlot(i);
+				if (armor != null && armor.getItem() instanceof ItemGlideArmor)
+					((ItemGlideArmor) armor.getItem()).setGliding(armor, true);
+			}
+		}
+		return canGlide;
+	}
+
+	public boolean isGliding(ItemStack stack) {
+		if (stack == null)
+			return false;
+		if (!stack.hasTagCompound()) {
+			stack.setTagCompound(new NBTTagCompound());
+			return this.isGliding(stack);
+		} else
+			return stack.getTagCompound().getBoolean(NBT_GLIDING);
+	}
+
+	public void setGliding(ItemStack stack, boolean gliding) {
+		if (!(stack.getItem() instanceof ItemGlideArmor))
 			return;
-		armor.damageItem(damage, entity);
+		if (!stack.hasTagCompound())
+			stack.setTagCompound(new NBTTagCompound());
+		stack.getTagCompound().setBoolean(NBT_GLIDING, gliding);
+	}
+
+	@Override
+	public void onArmorTick(World world, EntityPlayer player, ItemStack stack) {
+		this.onArmorTick(world, (EntityLivingBase) player, stack);
+	}
+
+	public void onArmorTick(World world, EntityLivingBase entity, ItemStack stack) {
+		boolean canGlide = this.canGlide(entity, stack);
+		if (canGlide) {
+			entity.motionX = -(Math.sin(Math.toRadians(entity.getRotationYawHead())) * ((2 + entity.moveForward) / 3));
+			entity.motionZ = (Math.cos(Math.toRadians(entity.getRotationYawHead())) * ((2 + entity.moveForward) / 3));
+			if (entity.motionY < -0.2) {
+				entity.motionY /= 2;
+			}
+			if (entity instanceof EntityPlayer)
+				((EntityPlayer) entity).stopUsingItem();
+		} else {
+			if (entity instanceof EntityPlayer)
+				super.onArmorTick(world, (EntityPlayer) entity, stack);
+		}
+	}
+
+	public boolean onDroppedByPlayer(ItemStack stack, EntityPlayer player) {
+		setGliding(stack, false);
+		return super.onDroppedByPlayer(stack, player);
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public ModelBiped getArmorModel(EntityLivingBase entityLiving, ItemStack itemStack, int armorSlot) {
+		if (isGliding(itemStack)) {
+			if (armorSlot == EnumArmorType.LEGGINGS.ordinal()) {
+				return new ModelGlideSuit(0.5F);
+			} else {
+				return new ModelGlideSuit(1.0F);
+			}
+		}
+		return super.getArmorModel(entityLiving, itemStack, armorSlot);
+	}
+
+	@Override
+	public ArmorProperties getProperties(EntityLivingBase entity, ItemStack armor, DamageSource source, double damage,
+			int slot) {
+		if (source == DamageSource.fall && this.isGliding(armor)) {
+			return new ArmorProperties(1, 1, 200);
+		}
+		return new ArmorProperties(0, 0, 0);
 	}
 
 	@Override
@@ -60,88 +133,19 @@ public class ItemGlideArmor extends ItemArmorExtension implements ISpecialArmor 
 	}
 
 	@Override
+	public void damageArmor(EntityLivingBase entity, ItemStack armor, DamageSource source, int damage, int slot) {
+		if (source == DamageSource.fall && this.isGliding(armor))
+			return;
+		armor.damageItem(damage, entity);
+	}
+
+	@Override
 	@SideOnly(Side.CLIENT)
-	public ModelBiped getArmorModel(EntityLivingBase entityLiving, ItemStack itemStack, int armorSlot) {
-		if (this.isGliding(itemStack))
-			if (armorSlot == 2)
-				return new ModelGlideSuit(new ModelBiped(1.0F));
-			else
-				return new ModelGlideSuit(new ModelBiped(0.5F));
-		return super.getArmorModel(entityLiving, itemStack, armorSlot);
-	}
-
-	@Override
-	public ArmorProperties getProperties(EntityLivingBase entity, ItemStack armor, DamageSource source, double damage,
-			int slot) {
-		if (source == DamageSource.fall && this.canGlide(entity, armor))
-			return new ArmorProperties(1, 1, 1);
-		return new ArmorProperties(0, this.damageReduceAmount / 25D, this.getMaxDamage() + 1 - armor.getItemDamage());
-	}
-
-	protected int[] getRequiredSlotsForFlight() {
-		return new int[] { 1, 2 };
-	}
-
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	@Override
-	public void getSubItems(Item item, CreativeTabs tab, List list) {
-		for (int i = 0; i < 1; i++) {
-			ItemStack is = new ItemStack(item, 1);
-			list.add(is);
+	public String getArmorTexture(ItemStack stack, Entity entity, int slot, String type) {
+		if (this.isGliding(stack) && slot == 5) {
+			return HTTYMDMod.ID + ":textures/armor/"
+					+ getRegistryName().substring(0, getRegistryName().lastIndexOf("_")) + "_fins.png";
 		}
-	}
-
-	public boolean isFlyable(EntityLivingBase entity) {
-		boolean flag = entity != null
-				&& (!entity.onGround && !entity.isInWater() && !entity.isInsideOfMaterial(Material.lava));
-
-		if (entity instanceof EntityPlayer)
-			flag = flag && !((EntityPlayer) entity).capabilities.isFlying;
-
-		for (int slot : this.getRequiredSlotsForFlight()) {
-			ItemStack armor = entity.getEquipmentInSlot(slot + 1);
-			flag = flag && armor != null && armor.getItem() instanceof ItemGlideArmor;
-		}
-		return flag;
-	}
-
-	public boolean isGliding(ItemStack stack) {
-		boolean flag;
-		if (!stack.hasTagCompound()) {
-			stack.setTagCompound(new NBTTagCompound());
-			return false;
-		} else
-			flag = stack.getTagCompound().getBoolean(NBT_FLYING);
-		return flag;
-	}
-
-	public void onArmorTick(World world, EntityLivingBase entity, ItemStack stack) {
-		boolean canGlide = this.canGlide(entity, stack);
-		setGliding(stack, canGlide);
-		if (canGlide) {
-			entity.motionX = -(Math.sin(Math.toRadians(entity.getRotationYawHead())) * ((2 + entity.moveForward) / 3));
-			entity.motionZ = Math.cos(Math.toRadians(entity.getRotationYawHead())) * ((2 + entity.moveForward) / 3);
-			if (entity.motionY < -0.2)
-				entity.motionY /= 2;
-			if (entity instanceof EntityPlayer)
-				((EntityPlayer) entity).stopUsingItem();
-		} else if (entity instanceof EntityPlayer)
-			super.onArmorTick(world, (EntityPlayer) entity, stack);
-	}
-
-	@Override
-	public void onArmorTick(World world, EntityPlayer player, ItemStack stack) {
-		this.onArmorTick(world, (EntityLivingBase) player, stack);
-	}
-
-	public boolean onDroppedByPlayer(ItemStack stack, EntityPlayer player) {
-		setGliding(stack, false);
-		return super.onDroppedByPlayer(stack, player);
-	}
-
-	public void onUpdate(ItemStack stack, World world, Entity holder, int p_77663_4_, boolean p_77663_5_) {
-		if (!(holder instanceof EntityLivingBase) || !this.canGlide((EntityLivingBase) holder, stack))
-			setGliding(stack, false);
-		super.onUpdate(stack, world, holder, p_77663_4_, p_77663_5_);
+		return super.getArmorTexture(stack, entity, slot, type);
 	}
 }

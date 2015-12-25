@@ -7,7 +7,6 @@ import com.httymd.HTTYMDMod;
 
 import cpw.mods.fml.common.Loader;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -46,17 +45,6 @@ public class Utils {
 			return ((EntityPlayer) entity).inventory.consumeInventoryItem(item);
 
 		return false;
-	}
-
-	public static ItemStack getArmor(EntityLivingBase entity, int slot) {
-		if (entity instanceof EntityPlayer) {
-			EntityPlayer player = (EntityPlayer) entity;
-			return player.getCurrentArmor(slot);
-		} else if (entity instanceof EntityLiving) {
-			EntityLiving living = (EntityLiving) entity;
-			return living.getEquipmentInSlot(slot + 1);
-		}
-		return null;
 	}
 
 	/**

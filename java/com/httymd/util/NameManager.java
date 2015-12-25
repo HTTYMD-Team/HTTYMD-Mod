@@ -51,10 +51,10 @@ public class NameManager {
 
 				String id = ((EntityPlayer) entity).getGameProfile().getId().toString();
 
-				if (id == "b2848781-aafe-454b-a87d-89ceffad585f")
+				if (id.equals("b2848781-aafe-454b-a87d-89ceffad585f"))
 					return "s322";
 
-				if (id == "5c884585-0245-4452-bcac-5005c73d3196")
+				if (id.equals("5c884585-0245-4452-bcac-5005c73d3196"))
 					return "cmmr";
 
 				return null;
