@@ -8,17 +8,54 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.passive.EntitySheep;
 import net.minecraft.item.Item;
 
+/**
+ * An enum designated to hold types of food for easier registry management
+ *
+ * @author George Albany
+ *
+ */
 public enum EnumFoodType {
 	MUTTON(true, 8, 0.8F, true, EntitySheep.class),
 
-	CRAB(false, 6, 0.6F, false), HCOMB(false, 3, 0.3F, false), FWEED(false, 5, 0.5F, false), SFLOWER(false, 1, 0.1F,
-			false), DNIP(false, 2, 0.5F, false);
+	CRAB(false, 6, 0.6F, false), 
+	HCOMB(false, 3, 0.3F, false), 
+	FWEED(false, 5, 0.5F, false), 
+	SFLOWER(false, 1, 0.1F, false), 
+	DNIP(false, 2, 0.5F, false);
+
+	/**
+	 * Generates and returns a registered MultiMap for current food
+	 */
+	public static Multimap<EnumFoodType, Item> generateFood() {
+		Multimap<EnumFoodType, Item> foods = ArrayListMultimap.create();
+		for (EnumFoodType food : EnumFoodType.values()) {
+
+			if (food.isMeat())
+				foods.put(food, new ItemFoodDrop(food.toString() + "_raw", food.getHeal() / 2, food.getSaturation() / 2,
+						food.getForWolfs(), food.getDropFor()).registerItem());
+
+			foods.put(food, new ItemFoodDrop(food.toString(), food.getHeal(), food.getSaturation(), food.getForWolfs(),
+					food.getDropFor(), food.isMeat()) {
+
+				public boolean isForEntity(EntityLivingBase entity) {
+					return super.isForEntity(entity) && entity.isBurning();
+				}
+
+			}.registerItem());
+		}
+		return foods;
+	}
 
 	private final boolean isMeat;
 	private final int heal;
 	private final float satu;
 	private final boolean wolfMeat;
+
 	private final Class<? extends EntityLivingBase> dropsFor;
+
+	private EnumFoodType(boolean isMeat, int heal, float satu, boolean wolf) {
+		this(isMeat, heal, satu, wolf, null);
+	}
 
 	private EnumFoodType(boolean isMeat, int heal, float satu, boolean wolf,
 			Class<? extends EntityLivingBase> dropsFor) {
@@ -28,52 +65,50 @@ public enum EnumFoodType {
 		this.wolfMeat = wolf;
 		this.dropsFor = dropsFor;
 	}
-
-	private EnumFoodType(boolean isMeat, int heal, float satu, boolean wolf) {
-		this(isMeat, heal, satu, wolf, null);
-	}
-
-	public boolean isMeat() {
-		return this.isMeat;
-	}
-
-	public int getHeal() {
-		return heal;
-	}
-
-	public float getSatuartion() {
-		return satu;
-	}
-
-	public boolean getForWolfs() {
-		return wolfMeat;
-	}
-
+	
+	/**
+	 * Retrieves the Entity class this food type will drop for (or null for none)
+	 */
 	public Class<? extends EntityLivingBase> getDropFor() {
-		return dropsFor;
+		return this.dropsFor;
 	}
 
 	/**
-	 * Generates and returns a registered MultiMap for current food
+	 * Whether a wolf can use this food type for healing
 	 */
-	public static Multimap<EnumFoodType, Item> generateFood() {
-		Multimap<EnumFoodType, Item> foods = ArrayListMultimap.create();
-		for (EnumFoodType food : EnumFoodType.values()) {
+	public boolean getForWolfs() {
+		return this.wolfMeat;
+	}
 
-			if (food.isMeat()) {
-				foods.put(food, (new ItemFoodDrop(food.toString() + "_raw", food.getHeal() / 2,
-						food.getSatuartion() / 2, food.getForWolfs(), food.getDropFor())).registerItem());
-			}
+	/**
+	 * The amount of hunger restored by this food type (or amount healed for wolves)
+	 * 
+	 * <p>(its called heal in minecraft, keeping consistent)</p>
+	 */
+	public int getHeal() {
+		return this.heal;
+	}
 
-			foods.put(food, (new ItemFoodDrop(food.toString(), food.getHeal(), food.getSatuartion(), food.getForWolfs(),
-					food.getDropFor(), food.isMeat()) {
+	/**
+	 * The saturation level for food type
+	 * 
+	 * @deprecated for incorrect spelling, removal in 2.0.0 (following http://semver.org guidelines)
+	 */
+	public float getSatuartion() {
+		return this.satu;
+	}
+	
+	/**
+	 * The saturation level for food type
+	 */
+	public float getSaturation() {
+		return this.satu;
+	}
 
-				public boolean isForEntity(EntityLivingBase entity) {
-					return super.isForEntity(entity) && entity.isBurning();
-				}
-
-			}).registerItem());
-		}
-		return foods;
+	/**
+	 * Determines whether food is considered cookable or not
+	 */
+	public boolean isMeat() {
+		return this.isMeat;
 	}
 }

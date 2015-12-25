@@ -3,17 +3,21 @@ package com.httymd.item.registry;
 import java.util.HashMap;
 
 import com.google.common.collect.Multimap;
-import com.httymd.item.ItemContainer;
+import com.httymd.bg2.item.ItemDaggerBg2;
+import com.httymd.bg2.item.ItemWarhammerBg2;
 import com.httymd.item.ItemExtension;
 import com.httymd.item.ItemFlameSword;
 import com.httymd.item.ItemGlideArmor;
+import com.httymd.item.ItemShield;
 import com.httymd.item.ItemSpawnEgg;
 import com.httymd.item.ItemToolExtension;
 import com.httymd.item.ItemWeapon;
 import com.httymd.item.ItemWeaponCrossbow;
 import com.httymd.item.util.EnumFoodType;
 import com.httymd.item.util.EnumToolType;
+import com.httymd.item.util.EnumWeaponType;
 import com.httymd.item.util.ItemUtils;
+import com.httymd.util.Utils;
 
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.item.Item;
@@ -23,21 +27,12 @@ import net.minecraft.item.ItemStack;
 
 public class ItemRegistry {
 
-	private final static String daggerN = "dagger";
-	private final static String clubN = "club";
-	private final static String maceN = "mace";
-	private final static String hammerN = "hammer";
-	private final static String waraxeN = "waraxe";
 	private final static String swordN = "sword";
 
-	private final static float daggerD = 2f;
-	private final static float clubD = 4.5f;
-	private final static float maceD = 5f;
-	private final static float hammerD = 6.5f;
-	private final static float waraxeD = 5.5f;
 	private final static float swordD = 4f;
 
 	public static final HashMap<Integer, ItemSpawnEgg> spawnEggIDMapping = new HashMap<Integer, ItemSpawnEgg>();
+	public static final HashMap<String, Item> itemRegistry = new HashMap<String, Item>();
 
 	public static Item daggerWood;
 	public static Item clubWood;
@@ -94,46 +89,49 @@ public class ItemRegistry {
 	public static Item wing;
 	public static Item flameSword;
 
-	public static ItemContainer zippleGasContainer;
-	public static ItemContainer nightmareSalivaContainer;
+	//public static ItemContainer zippleGasContainer;
+	//public static ItemContainer nightmareSalivaContainer;
 
 	public static void init() {
 
-		daggerWood = new ItemWeapon(ToolMaterial.WOOD, daggerN, daggerD).registerItem();
-		clubWood = new ItemWeapon(ToolMaterial.WOOD, clubN, clubD).registerItem();
-		maceWood = new ItemWeapon(ToolMaterial.WOOD, maceN, maceD).registerItem();
-		hammerWood = new ItemWeapon(ToolMaterial.WOOD, hammerN, hammerD).registerItem();
-		waraxeWood = new ItemWeapon(ToolMaterial.WOOD, waraxeN, waraxeD).registerItem();
+		daggerWood = new ItemDaggerBg2(ToolMaterial.WOOD).registerItem();
+		clubWood = new ItemWeapon(ToolMaterial.WOOD, EnumWeaponType.CLUB).registerItem();
+		maceWood = new ItemWeapon(ToolMaterial.WOOD, EnumWeaponType.MACE).registerItem();
+		hammerWood = new ItemWarhammerBg2(ToolMaterial.WOOD).registerItem();
+		waraxeWood = new ItemWeapon(ToolMaterial.WOOD, EnumWeaponType.WARAXE).registerItem();
 
-		daggerStone = new ItemWeapon(ToolMaterial.STONE, daggerN, daggerD).registerItem();
-		clubStone = new ItemWeapon(ToolMaterial.STONE, clubN, clubD).registerItem();
-		maceStone = new ItemWeapon(ToolMaterial.STONE, maceN, maceD).registerItem();
-		hammerStone = new ItemWeapon(ToolMaterial.STONE, hammerN, hammerD).registerItem();
-		waraxeStone = new ItemWeapon(ToolMaterial.STONE, waraxeN, waraxeD).registerItem();
+		daggerStone = new ItemDaggerBg2(ToolMaterial.STONE).registerItem();
+		clubStone = new ItemWeapon(ToolMaterial.STONE, EnumWeaponType.CLUB).registerItem();
+		maceStone = new ItemWeapon(ToolMaterial.STONE, EnumWeaponType.MACE).registerItem();
+		hammerStone = new ItemWarhammerBg2(ToolMaterial.STONE).registerItem();
+		waraxeStone = new ItemWeapon(ToolMaterial.STONE, EnumWeaponType.WARAXE).registerItem();
 
-		daggerIron = new ItemWeapon(ToolMaterial.IRON, daggerN, daggerD).registerItem();
-		clubIron = new ItemWeapon(ToolMaterial.IRON, clubN, clubD).registerItem();
-		maceIron = new ItemWeapon(ToolMaterial.IRON, maceN, maceD).registerItem();
-		hammerIron = new ItemWeapon(ToolMaterial.IRON, hammerN, hammerD).registerItem();
-		waraxeIron = new ItemWeapon(ToolMaterial.IRON, waraxeN, waraxeD).registerItem();
+		daggerIron = Utils.shouldForceBg2Daggers() ? new ItemDaggerBg2(ToolMaterial.IRON).registerItem()
+				: new ItemWeapon(ToolMaterial.IRON, EnumWeaponType.DAGGER).registerItem();
+		clubIron = new ItemWeapon(ToolMaterial.IRON, EnumWeaponType.CLUB).registerItem();
+		maceIron = new ItemWeapon(ToolMaterial.IRON, EnumWeaponType.MACE).registerItem();
+		hammerIron = new ItemWarhammerBg2(ToolMaterial.IRON).registerItem();
+		waraxeIron = new ItemWeapon(ToolMaterial.IRON, EnumWeaponType.WARAXE).registerItem();
 
-		daggerGold = new ItemWeapon(ToolMaterial.GOLD, daggerN, daggerD).registerItem();
-		clubGold = new ItemWeapon(ToolMaterial.GOLD, clubN, clubD).registerItem();
-		maceGold = new ItemWeapon(ToolMaterial.GOLD, maceN, maceD).registerItem();
-		hammerGold = new ItemWeapon(ToolMaterial.GOLD, hammerN, hammerD).registerItem();
-		waraxeGold = new ItemWeapon(ToolMaterial.GOLD, waraxeN, waraxeD).registerItem();
+		daggerGold = Utils.shouldForceBg2Daggers() ? new ItemDaggerBg2(ToolMaterial.GOLD).registerItem()
+				: new ItemWeapon(ToolMaterial.GOLD, EnumWeaponType.DAGGER).registerItem();
+		clubGold = new ItemWeapon(ToolMaterial.GOLD, EnumWeaponType.CLUB).registerItem();
+		maceGold = new ItemWeapon(ToolMaterial.GOLD, EnumWeaponType.MACE).registerItem();
+		hammerGold = new ItemWarhammerBg2(ToolMaterial.GOLD).registerItem();
+		waraxeGold = new ItemWeapon(ToolMaterial.GOLD, EnumWeaponType.WARAXE).registerItem();
 
-		daggerDiam = new ItemWeapon(ToolMaterial.EMERALD, daggerN, daggerD).registerItem();
-		clubDiam = new ItemWeapon(ToolMaterial.EMERALD, clubN, clubD).registerItem();
-		maceDiam = new ItemWeapon(ToolMaterial.EMERALD, maceN, maceD).registerItem();
-		hammerDiam = new ItemWeapon(ToolMaterial.EMERALD, hammerN, hammerD).registerItem();
-		waraxeDiam = new ItemWeapon(ToolMaterial.EMERALD, waraxeN, waraxeD).registerItem();
+		daggerDiam = Utils.shouldForceBg2Daggers() ? new ItemDaggerBg2(ToolMaterial.EMERALD).registerItem()
+				: new ItemWeapon(ToolMaterial.EMERALD, EnumWeaponType.DAGGER).registerItem();
+		clubDiam = new ItemWeapon(ToolMaterial.EMERALD, EnumWeaponType.CLUB).registerItem();
+		maceDiam = new ItemWeapon(ToolMaterial.EMERALD, EnumWeaponType.MACE).registerItem();
+		hammerDiam = new ItemWarhammerBg2(ToolMaterial.EMERALD).registerItem();
+		waraxeDiam = new ItemWeapon(ToolMaterial.EMERALD, EnumWeaponType.WARAXE).registerItem();
 
-		daggerGron = new ItemWeapon(MaterialRegistry.toolGronkle, daggerN, daggerD).registerItem();
-		clubGron = new ItemWeapon(MaterialRegistry.toolGronkle, clubN, clubD).registerItem();
-		maceGron = new ItemWeapon(MaterialRegistry.toolGronkle, maceN, maceD).registerItem();
-		hammerGron = new ItemWeapon(MaterialRegistry.toolGronkle, hammerN, hammerD).registerItem();
-		waraxeGron = new ItemWeapon(MaterialRegistry.toolGronkle, waraxeN, waraxeD).registerItem();
+		daggerGron = new ItemDaggerBg2(MaterialRegistry.toolGronkle).registerItem();
+		clubGron = new ItemWeapon(MaterialRegistry.toolGronkle, EnumWeaponType.CLUB).registerItem();
+		maceGron = new ItemWeapon(MaterialRegistry.toolGronkle, EnumWeaponType.MACE).registerItem();
+		hammerGron = new ItemWarhammerBg2(MaterialRegistry.toolGronkle).registerItem();
+		waraxeGron = new ItemWeapon(MaterialRegistry.toolGronkle, EnumWeaponType.WARAXE).registerItem();
 
 		swordGron = new ItemWeapon(MaterialRegistry.toolGronkle, swordN, swordD).registerItem();
 		shovelGron = new ItemToolExtension(MaterialRegistry.toolGronkle, EnumToolType.SHOVEL).registerItem();
@@ -149,12 +147,12 @@ public class ItemRegistry {
 		wing = new ItemExtension("wing_item").registerItem();
 		flameSword = new ItemFlameSword(ToolMaterial.IRON, "flame_sword", swordD).registerItem();
 
-		shieldWood = new ItemExtension("shield_wood").registerItem();
-		shieldStone = new ItemExtension("shield_stone").registerItem();
-		shieldIron = new ItemExtension("shield_iron").registerItem();
-		shieldGold = new ItemExtension("shield_gold").registerItem();
-		shieldDiam = new ItemExtension("shield_emerald").registerItem();
-		shieldGron = new ItemExtension("shield_gronkle").registerItem();
+		shieldWood = new ItemShield(ToolMaterial.WOOD).registerItem();
+		shieldStone = new ItemShield(ToolMaterial.STONE).registerItem();
+		shieldIron = new ItemShield(ToolMaterial.IRON).registerItem();
+		shieldGold = new ItemShield(ToolMaterial.GOLD).registerItem();
+		shieldDiam = new ItemShield(ToolMaterial.EMERALD).registerItem();
+		shieldGron = new ItemShield(MaterialRegistry.toolGronkle).registerItem();
 
 		// zippleGasContainer = new ItemContainer("zipple_gas_cont", 10.0F,
 		// EntityZippleback.class);
@@ -167,10 +165,12 @@ public class ItemRegistry {
 	}
 
 	/**
-	 * Only use is for items that don't use meta, or don't do special
-	 * texture/model junk
+	 * Registers item using a string name (for consistency with 1.8)
+	 * @param item Item to register
+	 * @param regName Name to register item (mustn't have a colon)
 	 */
 	public static void registerItem(Item item, String regName) {
 		GameRegistry.registerItem(item, regName);
+		itemRegistry.put(regName, item);
 	}
 }

@@ -74,6 +74,8 @@ item.httymd:wing_item.name=Wing
 
 item.httymd:egg_spawn.spawn.text=Spawn %s
 
+tile.httymd:giron_block.name=Gronkle Iron Block
+
 itemGroup.httymd:mcdTab=HTTYMD Tab
 
 death.attack.httymd:dragon.direct.1=%1$s was eaten by %2$s
@@ -101,6 +103,7 @@ httymd:name.special.add.relentless=%s the Relentless
 httymd:name.special.add.excited=%s the Excited
 httymd:name.special.add.champion=%s the Champion
 httymd:name.special.add.sailor=%s the Sailor
+httymd:name.special.add.ataryn=%s the Taryn
 httymd:name.random.smelly=%s the Smelly
 httymd:name.random.angry=%s the Angry
 httymd:name.random.fat=%s the Fat

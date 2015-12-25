@@ -20,7 +20,11 @@ public class RenderDragonEEgg extends RenderPlayer {
 	public RenderDragonEEgg() {
 		super();
 		this.modelBipedMain = new ModelDragonEEgg();
-		this.modelMainEgg = (ModelDragonEEgg) modelBipedMain;
+		this.modelMainEgg = (ModelDragonEEgg) this.modelBipedMain;
+	}
+
+	protected ResourceLocation getEntityTexture(AbstractClientPlayer p_110775_1_) {
+		return eeggTex;
 	}
 
 	public void renderFirstPersonArm(EntityPlayer p_82441_1_) {
@@ -29,10 +33,6 @@ public class RenderDragonEEgg extends RenderPlayer {
 		this.modelBipedMain.onGround = 0.0F;
 		this.modelBipedMain.setRotationAngles(0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0625F, p_82441_1_);
 		this.modelMainEgg.RightArm_1.render(0.0625F);
-	}
-
-	protected ResourceLocation getEntityTexture(AbstractClientPlayer p_110775_1_) {
-		return eeggTex;
 	}
 
 }

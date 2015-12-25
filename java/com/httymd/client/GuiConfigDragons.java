@@ -1,29 +1,26 @@
 package com.httymd.client;
 
+import com.httymd.HTTYMDMod;
+
+import cpw.mods.fml.client.config.GuiConfig;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraftforge.common.config.ConfigElement;
 import net.minecraftforge.common.config.Configuration;
 
-import com.httymd.HTTYMDMod;
-
-import cpw.mods.fml.client.config.GuiConfig;
-
 public class GuiConfigDragons extends GuiConfig {
-
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public GuiConfigDragons(GuiScreen parentScreen) {
-		super(parentScreen,
-				new ConfigElement(HTTYMDMod.getConfig().getConfig().getCategory(Configuration.CATEGORY_GENERAL))
-						.getChildElements(),
+		super(parentScreen, new ConfigElement(HTTYMDMod.getConfig().getConfig().getCategory(Configuration.CATEGORY_GENERAL)).getChildElements(), 
 				HTTYMDMod.ID, true, false, "The HTTYMD Config");
-		titleLine2 = "cause the Ender Dragon wasn't fun enough";
+		this.titleLine2 = "cause the Ender Dragon wasn't fun enough\n";
 	}
 
 	@Override
-	public void initGui() {
-		// You can add buttons and initialize fields here
-		super.initGui();
+	protected void actionPerformed(GuiButton button) {
+		// You can process any additional buttons you may have added here
+		super.actionPerformed(button);
 	}
 
 	@Override
@@ -34,9 +31,9 @@ public class GuiConfigDragons extends GuiConfig {
 	}
 
 	@Override
-	protected void actionPerformed(GuiButton button) {
-		// You can process any additional buttons you may have added here
-		super.actionPerformed(button);
+	public void initGui() {
+		// You can add buttons and initialize fields here
+		super.initGui();
 	}
 
 }

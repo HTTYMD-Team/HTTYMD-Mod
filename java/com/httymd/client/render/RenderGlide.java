@@ -11,10 +11,52 @@ import net.minecraft.client.renderer.entity.RenderBiped;
 import net.minecraft.client.renderer.entity.RenderPlayer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 
 public class RenderGlide extends RenderPlayer {
+
+	public static class ModelGlide extends ModelBiped {
+
+		public ModelGlide(float scale) {
+			super(scale, 0, 64, 32);
+			heldItemLeft = 0;
+			heldItemRight = 0;
+			isSneak = false;
+			aimedBow = false;
+		}
+
+		public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {
+			final float headAngleAligner = -75.0f;
+			super.render(entity, f, f1, f2, f3, f4 + headAngleAligner, f5);
+			this.isSneak = false;
+		}
+
+		@Override
+		public void setRotationAngles(float p_78087_1_, float p_78087_2_, float p_78087_3_, float p_78087_4_,
+				float p_78087_5_, float p_78087_6_, Entity p_78087_7_) {
+			this.isSneak = false;
+			// Prevents all alternate arm angles
+			super.setRotationAngles(0.0F, 0.0F, 0.0F, p_78087_4_, p_78087_5_, p_78087_6_, p_78087_7_);
+			float armBendAngle = (float) (Math.PI / 180 * 45);
+
+			bipedRightArm.rotateAngleZ = armBendAngle;
+			bipedLeftArm.rotateAngleZ = -armBendAngle;
+			// Prevents any other leg movement
+			bipedRightLeg.rotateAngleX = 0;
+			bipedLeftLeg.rotateAngleX = 0;
+
+			if (((AbstractClientPlayer) p_78087_7_).moveForward < 0) {
+				float legBendAngle = (float) (Math.PI / 180 * 30);
+				bipedRightLeg.rotateAngleZ = legBendAngle;
+				bipedLeftLeg.rotateAngleZ = -legBendAngle;
+			} else {
+				bipedRightLeg.rotateAngleZ = 0;
+				bipedLeftLeg.rotateAngleZ = 0;
+			}
+		}
+	}
 
 	public RenderGlide() {
 		super();
@@ -119,50 +161,6 @@ public class RenderGlide extends RenderPlayer {
 			if (textureResource != null) {
 				this.bindTexture(RenderBiped.getArmorResource(e, stack, 5, null));
 				((ModelGlideSuit) this.modelArmor).renderWings(e, f5);
-			}
-		}
-	}
-
-	public static class ModelGlide extends ModelBiped {
-
-		public ModelGlide(float scale) {
-			super(scale, 0, 64, 32);
-			heldItemLeft = 0;
-			heldItemRight = 0;
-			isSneak = false;
-			aimedBow = false;
-		}
-
-		public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {
-			final float headAngleAligner = -75.0f;
-			super.render(entity, f, f1, f2, f3, f4 + headAngleAligner, f5);
-			this.isSneak = false;
-		}
-
-		@Override
-		public void setRotationAngles(float p_78087_1_, float p_78087_2_, float p_78087_3_, float p_78087_4_,
-				float p_78087_5_, float p_78087_6_, Entity p_78087_7_) {
-			this.isSneak = false;
-			// Prevents all alternate arm angles
-			super.setRotationAngles(0.0F, 0.0F, 0.0F, p_78087_4_, p_78087_5_, p_78087_6_, p_78087_7_);
-			float armBendAngle = (float) (Math.PI / 180 * 45);
-
-			bipedRightArm.rotateAngleZ = armBendAngle;
-			bipedLeftArm.rotateAngleZ = -armBendAngle;
-			// Prevents any other leg movement
-			bipedRightLeg.rotateAngleX = 0;
-			bipedLeftLeg.rotateAngleX = 0;
-
-			System.out.println(bipedRightLeg.rotateAngleZ);
-			System.out.println(bipedLeftLeg.rotateAngleZ);
-
-			if (((AbstractClientPlayer) p_78087_7_).moveForward < 0) {
-				float legBendAngle = (float) (Math.PI / 180 * 30);
-				bipedRightLeg.rotateAngleZ = legBendAngle;
-				bipedLeftLeg.rotateAngleZ = -legBendAngle;
-			} else {
-				bipedRightLeg.rotateAngleZ = 0;
-				bipedLeftLeg.rotateAngleZ = 0;
 			}
 		}
 	}

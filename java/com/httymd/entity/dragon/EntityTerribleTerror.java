@@ -1,5 +1,9 @@
 package com.httymd.entity.dragon;
 
+import com.httymd.entity.EntityDragon;
+import com.httymd.entity.EntityVikingBase;
+
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIAttackOnCollide;
@@ -20,9 +24,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
-
-import com.httymd.entity.EntityDragon;
-import com.httymd.entity.EntityVikingBase;
 
 public class EntityTerribleTerror extends EntityDragon {
 
@@ -50,18 +51,26 @@ public class EntityTerribleTerror extends EntityDragon {
 	@Override
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
-		getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(10);
-		getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(0.7F);
-		getEntityAttribute(flyingSpeed).setBaseValue(0.4D);
+		this.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(10);
+		this.getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(0.3F);
+		this.getEntityAttribute(flyingSpeed).setBaseValue(0.2D);
 	}
 
 	@Override
-	public boolean isTameable(EntityLivingBase e) {
-		return !this.isAngry();
-	}
-
-	@Override
-	public boolean isTameItem(ItemStack s) {
+	public boolean canTame(EntityLivingBase tamer, ItemStack s) {
 		return s.getItem() == Items.fish;
+	}
+
+	@Override
+	public boolean isRideableBy(Entity e) {
+		if(!super.isRideableBy(e)) return false;
+		double deltaX = this.boundingBox.maxX - this.boundingBox.minX;
+		double deltaY = this.boundingBox.maxY - this.boundingBox.minY;
+		double deltaZ = this.boundingBox.maxZ - this.boundingBox.minZ;
+		double eDeltaX = e.boundingBox.maxX - e.boundingBox.minX;
+		double eDeltaY = e.boundingBox.maxY - e.boundingBox.minY;
+		double eDeltaZ = e.boundingBox.maxZ - e.boundingBox.minZ;
+		return eDeltaX < deltaX * 0.5 && eDeltaY < deltaY * 0.5 && eDeltaZ < deltaZ * 0.5;
+		// Entity e must be less then half as small as the terror to ride
 	}
 }

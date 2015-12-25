@@ -31,6 +31,12 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 
+/**
+ * Creates a custom spawn egg which well handles custom entities
+ * 
+ * @author George Albany (using Jabelar's Spawn Egg class)
+ *
+ */
 public class ItemSpawnEgg extends ItemMonsterPlacer implements IRegisterable {
 
 	public static Logger L = HTTYMDMod.getLogger();
@@ -51,131 +57,52 @@ public class ItemSpawnEgg extends ItemMonsterPlacer implements IRegisterable {
 
 	public ItemSpawnEgg(String parEntityToSpawnName, int parPrimaryColor, int parSecondaryColor) {
 		this(parEntityToSpawnName);
-		setHasSubtypes(false);
-		setEntityToSpawnName(parEntityToSpawnName);
-		setColors(parPrimaryColor, parSecondaryColor);
+		this.setHasSubtypes(false);
+		this.setEntityToSpawnName(parEntityToSpawnName);
+		this.setColors(parPrimaryColor, parSecondaryColor);
 	}
 
-	/**
-	 * Callback for item usage. If the item does something special on right
-	 * clicking, he will have one of those. Return True if something happen and
-	 * false if it don't. This is for ITEMS, not BLOCKS
-	 */
-	@Override
-	public boolean onItemUse(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, World par3World, int par4,
-			int par5, int par6, int par7, float par8, float par9, float par10) {
-		if (par3World.isRemote) {
-			return true;
-		} else {
-			Block block = par3World.getBlock(par4, par5, par6);
-			par4 += Facing.offsetsXForSide[par7];
-			par5 += Facing.offsetsYForSide[par7];
-			par6 += Facing.offsetsZForSide[par7];
-			double d0 = 0.0D;
-
-			if (par7 == 1 && block.getRenderType() == 11) {
-				d0 = 0.5D;
-			}
-
-			Entity entity = spawnEntity(par3World, par4 + 0.5D, par5 + d0, par6 + 0.5D);
-
-			if (entity != null) {
-				if (entity instanceof EntityLivingBase && par1ItemStack.hasDisplayName()) {
-					((EntityLiving) entity).setCustomNameTag(par1ItemStack.getDisplayName());
-				}
-
-				if (!par2EntityPlayer.capabilities.isCreativeMode) {
-					--par1ItemStack.stackSize;
-				}
-			}
-
-			return true;
-		}
+	public int getColorBase() {
+		return this.colorBase;
 	}
 
-	/**
-	 * Called whenever this item is equipped and the right mouse button is
-	 * pressed. Args: itemStack, world, entityPlayer
-	 */
 	@Override
-	public ItemStack onItemRightClick(ItemStack par1ItemStack, World par2World, EntityPlayer par3EntityPlayer) {
-		if (par2World.isRemote) {
-			return par1ItemStack;
-		} else {
-			MovingObjectPosition movingobjectposition = getMovingObjectPositionFromPlayer(par2World, par3EntityPlayer,
-					true);
+	@SideOnly(Side.CLIENT)
+	public int getColorFromItemStack(ItemStack par1ItemStack, int parColorType) {
+		return parColorType == 0 ? this.colorBase : this.colorSpots;
+	}
 
-			if (movingobjectposition == null) {
-				return par1ItemStack;
-			} else {
-				if (movingobjectposition.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK) {
-					int i = movingobjectposition.blockX;
-					int j = movingobjectposition.blockY;
-					int k = movingobjectposition.blockZ;
-
-					if (!par2World.canMineBlock(par3EntityPlayer, i, j, k)) {
-						return par1ItemStack;
-					}
-
-					if (!par3EntityPlayer.canPlayerEdit(i, j, k, movingobjectposition.sideHit, par1ItemStack)) {
-						return par1ItemStack;
-					}
-
-					if (par2World.getBlock(i, j, k) instanceof BlockLiquid) {
-						Entity entity = spawnEntity(par2World, i, j, k);
-
-						if (entity != null) {
-							if (entity instanceof EntityLivingBase && par1ItemStack.hasDisplayName()) {
-								((EntityLiving) entity).setCustomNameTag(par1ItemStack.getDisplayName());
-							}
-
-							if (!par3EntityPlayer.capabilities.isCreativeMode) {
-								--par1ItemStack.stackSize;
-							}
-						}
-					}
-				}
-
-				return par1ItemStack;
-			}
-		}
+	public int getColorSpots() {
+		return this.colorSpots;
 	}
 
 	private String getEntityLocalName(ItemStack stack) {
-		if (stack.hasDisplayName()) {
+		if (stack.hasDisplayName())
 			return stack.getDisplayName();
-		}
 
-		return StatCollector.translateToLocal("entity." + entityToSpawnNameFull + ".name");
+		return StatCollector.translateToLocal("entity." + this.entityToSpawnNameFull + ".name");
 	}
 
 	/**
-	 * Spawns the creature specified by the egg's type in the location specified
-	 * by the last three parameters. Parameters: world, entityID, x, y, z.
+	 * Gets an icon index based on an item's damage value and the given render
+	 * pass
 	 */
-	public Entity spawnEntity(World parWorld, double parX, double parY, double parZ) {
+	@Override
+	@SideOnly(Side.CLIENT)
+	public IIcon getIconFromDamageForRenderPass(int parDamageVal, int parRenderPass) {
+		return parRenderPass > 0 ? this.theIcon : super.getIconFromDamageForRenderPass(parDamageVal, parRenderPass);
+	}
 
-		if (!parWorld.isRemote) // never spawn entity on client side
-		{
-			entityToSpawnNameFull = HTTYMDMod.ID + "." + entityToSpawnName;
-			if (EntityList.stringToClassMapping.containsKey(entityToSpawnNameFull)) {
-				entityToSpawn = (EntityLiving) EntityList.createEntityByName(entityToSpawnNameFull, parWorld);
-				if (entityToSpawn == null) {
-					L.error("Entity exists but can't be created " + entityToSpawnNameFull);
-					return null;
-				}
-				entityToSpawn.setLocationAndAngles(parX, parY, parZ,
-						MathHelper.wrapAngleTo180_float(parWorld.rand.nextFloat() * 360.0F), 0.0F);
-				parWorld.spawnEntityInWorld(entityToSpawn);
-				entityToSpawn.onSpawnWithEgg((IEntityLivingData) null);
-				entityToSpawn.playLivingSound();
-			} else {
-				// DEBUG
-				L.warn("Entity not found " + entityToSpawnName);
-			}
-		}
+	@Override
+	// Doing this override means that there is no localization for language
+	// unless you specifically check for localization here and convert
+	public String getItemStackDisplayName(ItemStack stack) {
+		return StatCollector.translateToLocalFormatted("item." + HTTYMDMod.ID + ":egg_spawn.spawn.text",
+				this.getEntityLocalName(stack));
+	}
 
-		return entityToSpawn;
+	public String getRegistryName() {
+		return ItemUtils.findRegistryName(this.getUnlocalizedName());
 	}
 
 	/**
@@ -189,10 +116,94 @@ public class ItemSpawnEgg extends ItemMonsterPlacer implements IRegisterable {
 		parList.add(new ItemStack(parItem, 1, 0));
 	}
 
+	/**
+	 * Called whenever this item is equipped and the right mouse button is
+	 * pressed. Args: itemStack, world, entityPlayer
+	 */
+	@Override
+	public ItemStack onItemRightClick(ItemStack par1ItemStack, World par2World, EntityPlayer par3EntityPlayer) {
+		if (par2World.isRemote)
+			return par1ItemStack;
+		else {
+			MovingObjectPosition movingobjectposition = this.getMovingObjectPositionFromPlayer(par2World,
+					par3EntityPlayer, true);
+
+			if (movingobjectposition == null)
+				return par1ItemStack;
+			else {
+				if (movingobjectposition.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK) {
+					int i = movingobjectposition.blockX;
+					int j = movingobjectposition.blockY;
+					int k = movingobjectposition.blockZ;
+
+					if (!par2World.canMineBlock(par3EntityPlayer, i, j, k))
+						return par1ItemStack;
+
+					if (!par3EntityPlayer.canPlayerEdit(i, j, k, movingobjectposition.sideHit, par1ItemStack))
+						return par1ItemStack;
+
+					if (par2World.getBlock(i, j, k) instanceof BlockLiquid) {
+						Entity entity = this.spawnEntity(par2World, i, j, k);
+
+						if (entity != null) {
+							if (entity instanceof EntityLivingBase && par1ItemStack.hasDisplayName())
+								((EntityLiving) entity).setCustomNameTag(par1ItemStack.getDisplayName());
+
+							if (!par3EntityPlayer.capabilities.isCreativeMode)
+								--par1ItemStack.stackSize;
+						}
+					}
+				}
+
+				return par1ItemStack;
+			}
+		}
+	}
+
+	/**
+	 * Callback for item usage. If the item does something special on right
+	 * clicking, he will have one of those. Return True if something happen and
+	 * false if it don't. This is for ITEMS, not BLOCKS
+	 */
+	@Override
+	public boolean onItemUse(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, World par3World, int par4,
+			int par5, int par6, int par7, float par8, float par9, float par10) {
+		if (par3World.isRemote)
+			return true;
+		else {
+			Block block = par3World.getBlock(par4, par5, par6);
+			par4 += Facing.offsetsXForSide[par7];
+			par5 += Facing.offsetsYForSide[par7];
+			par6 += Facing.offsetsZForSide[par7];
+			double d0 = 0.0D;
+
+			if (par7 == 1 && block.getRenderType() == 11)
+				d0 = 0.5D;
+
+			Entity entity = this.spawnEntity(par3World, par4 + 0.5D, par5 + d0, par6 + 0.5D);
+
+			if (entity != null) {
+				if (entity instanceof EntityLivingBase && par1ItemStack.hasDisplayName())
+					((EntityLiving) entity).setCustomNameTag(par1ItemStack.getDisplayName());
+
+				if (!par2EntityPlayer.capabilities.isCreativeMode)
+					--par1ItemStack.stackSize;
+			}
+
+			return true;
+		}
+	}
+
 	@Override
 	@SideOnly(Side.CLIENT)
-	public int getColorFromItemStack(ItemStack par1ItemStack, int parColorType) {
-		return (parColorType == 0) ? colorBase : colorSpots;
+	public void registerIcons(IIconRegister par1IconRegister) {
+		super.registerIcons(par1IconRegister);
+		this.theIcon = par1IconRegister.registerIcon(this.getIconString() + "_overlay");
+	}
+
+	public Item registerItem() {
+		GameRegistry.registerItem(this, this.getRegistryName());
+		return this;
 	}
 
 	@Override
@@ -201,56 +212,42 @@ public class ItemSpawnEgg extends ItemMonsterPlacer implements IRegisterable {
 		return true;
 	}
 
-	@Override
-	// Doing this override means that there is no localization for language
-	// unless you specifically check for localization here and convert
-	public String getItemStackDisplayName(ItemStack stack) {
-		return StatCollector.translateToLocalFormatted("item." + HTTYMDMod.ID + ":egg_spawn.spawn.text",
-				this.getEntityLocalName(stack));
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void registerIcons(IIconRegister par1IconRegister) {
-		super.registerIcons(par1IconRegister);
-		theIcon = par1IconRegister.registerIcon(getIconString() + "_overlay");
-	}
-
-	/**
-	 * Gets an icon index based on an item's damage value and the given render
-	 * pass
-	 */
-	@Override
-	@SideOnly(Side.CLIENT)
-	public IIcon getIconFromDamageForRenderPass(int parDamageVal, int parRenderPass) {
-		return parRenderPass > 0 ? theIcon : super.getIconFromDamageForRenderPass(parDamageVal, parRenderPass);
-	}
-
 	public void setColors(int parColorBase, int parColorSpots) {
-		colorBase = parColorBase;
-		colorSpots = parColorSpots;
-	}
-
-	public int getColorBase() {
-		return colorBase;
-	}
-
-	public int getColorSpots() {
-		return colorSpots;
+		this.colorBase = parColorBase;
+		this.colorSpots = parColorSpots;
 	}
 
 	public void setEntityToSpawnName(String parEntityToSpawnName) {
-		entityToSpawnName = parEntityToSpawnName;
-		entityToSpawnNameFull = HTTYMDMod.ID + "." + entityToSpawnName;
+		this.entityToSpawnName = parEntityToSpawnName;
+		this.entityToSpawnNameFull = HTTYMDMod.ID + "." + this.entityToSpawnName;
 	}
 
-	public String getRegistryName() {
-		return ItemUtils.findRegistryName(this.getUnlocalizedName());
-	}
+	/**
+	 * Spawns the creature specified by the egg's type in the location specified
+	 * by the last three parameters. Parameters: world, entityID, x, y, z.
+	 */
+	public Entity spawnEntity(World parWorld, double parX, double parY, double parZ) {
 
-	public Item registerItem() {
-		GameRegistry.registerItem(this, this.getRegistryName());
-		return this;
+		if (!parWorld.isRemote) // never spawn entity on client side
+		{
+			this.entityToSpawnNameFull = HTTYMDMod.ID + "." + this.entityToSpawnName;
+			if (EntityList.stringToClassMapping.containsKey(this.entityToSpawnNameFull)) {
+				this.entityToSpawn = (EntityLiving) EntityList.createEntityByName(this.entityToSpawnNameFull, parWorld);
+				if (this.entityToSpawn == null) {
+					L.error("Entity exists but can't be created " + this.entityToSpawnNameFull);
+					return null;
+				}
+				this.entityToSpawn.setLocationAndAngles(parX, parY, parZ,
+						MathHelper.wrapAngleTo180_float(parWorld.rand.nextFloat() * 360.0F), 0.0F);
+				parWorld.spawnEntityInWorld(this.entityToSpawn);
+				this.entityToSpawn.onSpawnWithEgg((IEntityLivingData) null);
+				this.entityToSpawn.playLivingSound();
+			} else
+				// DEBUG
+				L.warn("Entity not found " + this.entityToSpawnName);
+		}
+
+		return this.entityToSpawn;
 	}
 
 }

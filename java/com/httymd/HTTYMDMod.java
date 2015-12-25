@@ -1,7 +1,5 @@
 package com.httymd;
 
-import net.minecraft.entity.Entity;
-
 import java.util.ArrayList;
 
 import org.apache.logging.log4j.LogManager;
@@ -12,6 +10,7 @@ import com.httymd.entity.EntityRegister;
 import com.httymd.item.recipe.RecipeRegistry;
 import com.httymd.util.CreativeTab;
 import com.httymd.util.StatListMod;
+import com.httymd.util.Utils;
 
 import cpw.mods.fml.client.event.ConfigChangedEvent.OnConfigChangedEvent;
 import cpw.mods.fml.common.FMLCommonHandler;
@@ -26,8 +25,9 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartedEvent;
 import cpw.mods.fml.common.event.FMLServerStoppedEvent;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import net.minecraft.entity.Entity;
 
-@Mod(modid = HTTYMDMod.ID, name = HTTYMDMod.NAME, guiFactory = HTTYMDMod.GUIFACORY)
+@Mod(modid = HTTYMDMod.ID, name = HTTYMDMod.NAME, guiFactory = HTTYMDMod.GUIFACORY, dependencies = "after:"+Utils.bg2Id)
 public class HTTYMDMod {
 
 	//////////////////////////////////////////////////////
@@ -48,35 +48,44 @@ public class HTTYMDMod {
 	@SidedProxy(modId = ID, clientSide = CLIENT_PROXY, serverSide = COMMON_PROXY)
 	public static CommonProxy proxy;
 
-	private ModMetadata metadata;
-	private Config config;
-	private final Logger log = LogManager.getLogger(NAME);
-
-	private ArrayList<String> dragonNameList = new ArrayList<String>();
-
-	public static void registerDragonName(String name) {
-		INSTANCE.dragonNameList.add(name);
+	/**
+	 * Retrieves the config for the mod
+	 */
+	public static Config getConfig() {
+		return INSTANCE.config;
 	}
 
+	/**
+	 * Retrieves the mod Creative Tab instance
+	 */
+	public static CreativeTab getCreativeTab() {
+		return CreativeTab.DRAGON_TAB;
+	}
+
+	/**
+	 * Retrieves a clone list of the current list of registered dragon names
+	 */
 	@SuppressWarnings("unchecked")
 	public static ArrayList<String> getDragonList() {
 		return (ArrayList<String>) INSTANCE.dragonNameList.clone();
 	}
 
-	public static ModMetadata getMetadata() {
-		return INSTANCE.metadata;
-	}
-
-	public static Config getConfig() {
-		return INSTANCE.config;
-	}
-
+	/**
+	 * Retrieves the mod's logger
+	 */
 	public static Logger getLogger() {
 		return INSTANCE.log;
 	}
 
-	public static CreativeTab getCreativeTab() {
-		return CreativeTab.DRAGON_TAB;
+	/**
+	 * Retrieves the mod's metadata object
+	 */
+	public static ModMetadata getMetadata() {
+		return INSTANCE.metadata;
+	}
+
+	public static void registerDragonName(String name) {
+		INSTANCE.dragonNameList.add(name);
 	}
 
 	public static void registerEntity(Class<? extends Entity> entityClass, String entityName, int solidColor,
@@ -84,14 +93,13 @@ public class HTTYMDMod {
 		EntityRegister.createEntity(entityClass, entityName, solidColor, spotColor);
 	}
 
-	@EventHandler
-	public void modPreInit(FMLPreInitializationEvent event) {
-		config = new Config(event);
-		metadata = event.getModMetadata();
-		proxy.onPreInit(event);
-		StatListMod.registerStats(); // Guarantees stats register with all
-										// information
-	}
+	private ModMetadata metadata;
+
+	private Config config;
+
+	private final Logger log = LogManager.getLogger(NAME);
+
+	private ArrayList<String> dragonNameList = new ArrayList<String>();
 
 	@EventHandler
 	public void modInit(FMLInitializationEvent event) {
@@ -106,6 +114,20 @@ public class HTTYMDMod {
 	}
 
 	@EventHandler
+	public void modPreInit(FMLPreInitializationEvent event) {
+		this.config = new Config(event);
+		this.metadata = event.getModMetadata();
+		proxy.onPreInit(event);
+		StatListMod.registerStats(); // Guarantees stats register with all information (not used yet)
+	}
+
+	@SubscribeEvent
+	public void onConfigChanged(OnConfigChangedEvent eventArgs) {
+		if (eventArgs.modID.equals(ID))
+			this.config.syncConfig();
+	}
+
+	@EventHandler
 	public void onServerStarted(FMLServerStartedEvent evt) {
 		proxy.onServerStarted(evt);
 	}
@@ -113,12 +135,5 @@ public class HTTYMDMod {
 	@EventHandler
 	public void onServerStopped(FMLServerStoppedEvent evt) {
 		proxy.onServerStopped(evt);
-	}
-
-	@SubscribeEvent
-	public void onConfigChanged(OnConfigChangedEvent eventArgs) {
-		if (eventArgs.modID.equals(ID)) {
-			config.syncConfig();
-		}
 	}
 }

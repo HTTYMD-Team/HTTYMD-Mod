@@ -1,9 +1,9 @@
 package com.httymd.entity.dragon;
 
+import com.httymd.entity.EntityDragon;
+
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.world.World;
-
-import com.httymd.entity.EntityDragon;
 
 public class EntityZippleback extends EntityDragon {
 

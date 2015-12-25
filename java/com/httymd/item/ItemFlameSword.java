@@ -16,6 +16,12 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 
+/**
+ * Base Item class for Hiccup's Inferno
+ * 
+ * @author George Albany
+ *
+ */
 public class ItemFlameSword extends ItemWeapon {
 
 	public static final String DISABLED_SUFFIX = "_disabled";
@@ -32,53 +38,30 @@ public class ItemFlameSword extends ItemWeapon {
 		super(name, toolMaterial, defAttackDamage, CreativeTab.DRAGON_TAB);
 		this.defaultDamage = this.attackDamage;
 	}
-
-	@Override
-	public boolean onLeftClickEntity(ItemStack stack, EntityPlayer player, Entity entity) {
-		if (this.isToggled(stack)) {
-			entity.setFire(60);
-		}
-		return super.onLeftClickEntity(stack, player, entity);
-	}
-
-	@Override
-	public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player) {
-		if (player.isSneaking()) {
-			if (!world.isRemote) {
-				explode(world, player, 2F);
-			}
-		} else {
-			this.onToggle(stack, !this.isToggled(stack));
-		}
-		return super.onItemRightClick(stack, world, player);
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void registerIcons(IIconRegister registry) {
-		super.registerIcons(registry);
-		this.defaultIcon = this.itemIcon;
-		this.disabledIcon = registry.registerIcon(this.getIconString() + DISABLED_SUFFIX);
+	
+	/**
+	 * Creates an explosion usable by this item
+	 */
+	private void explode(World world, Entity entity, float explosionSize) {
+		world.createExplosion(entity, entity.posX, entity.posY, entity.posZ, explosionSize, false);
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
 	public IIcon getIcon(ItemStack stack, int pass) {
-		if (this.isToggled(stack)) {
+		if (this.isToggled(stack))
 			return this.defaultIcon;
-		} else {
+		else
 			return this.disabledIcon;
-		}
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
 	public IIcon getIconIndex(ItemStack stack) {
-		if (this.isToggled(stack)) {
+		if (this.isToggled(stack))
 			return this.defaultIcon;
-		} else {
+		else
 			return this.disabledIcon;
-		}
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
@@ -91,10 +74,36 @@ public class ItemFlameSword extends ItemWeapon {
 		}
 	}
 
-	private void explode(World world, Entity entity, float explosionSize) {
-		world.createExplosion(entity, entity.posX, entity.posY, entity.posZ, explosionSize, false);
+	/**
+	 * Determines if ItemStack is toggled based on NBT
+	 */
+	public boolean isToggled(ItemStack stack) {
+		if (stack.getItem() instanceof ItemFlameSword && stack.hasTagCompound())
+			return stack.getTagCompound().getBoolean(NBT_ISON);
+		return false;
 	}
 
+	@Override
+	public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player) {
+		if (player.isSneaking()) {
+			if (!world.isRemote)
+				this.explode(world, player, 2F);
+		} else {
+			world.playSoundAtEntity(player, "mob.sheep.shear", 2.0F, 1F);
+			this.onToggle(stack, !this.isToggled(stack));
+		}
+		return super.onItemRightClick(stack, world, player);
+	}
+
+	@Override
+	public boolean onLeftClickEntity(ItemStack stack, EntityPlayer player, Entity entity) {
+		if (this.isToggled(stack)) entity.setFire(60);
+		return super.onLeftClickEntity(stack, player, entity);
+	}
+
+	/**
+	 * Sets toggle for ItemStack
+	 */
 	public void onToggle(ItemStack stack, boolean toggle) {
 		if (!(stack.getItem() instanceof ItemFlameSword))
 			return;
@@ -104,10 +113,11 @@ public class ItemFlameSword extends ItemWeapon {
 		this.attackDamage = toggle ? this.defaultDamage : 1;
 	}
 
-	public boolean isToggled(ItemStack stack) {
-		if (stack.getItem() instanceof ItemFlameSword && stack.hasTagCompound()) {
-			return stack.getTagCompound().getBoolean(NBT_ISON);
-		}
-		return false;
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void registerIcons(IIconRegister registry) {
+		super.registerIcons(registry);
+		this.defaultIcon = this.itemIcon;
+		this.disabledIcon = registry.registerIcon(this.getIconString() + DISABLED_SUFFIX);
 	}
 }

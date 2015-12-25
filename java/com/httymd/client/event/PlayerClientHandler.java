@@ -19,26 +19,10 @@ public class PlayerClientHandler {
 	protected float playerTicks = 0.0F;
 	protected Entity ent = null;
 
-	public void renderLoad() {
-		if (glideRender == null) {
-			glideRender = new RenderGlide();
-			glideRender.setRenderManager(RenderManager.instance);
-		}
-	}
-
-	@SubscribeEvent
-	public void beforePlayerBodyRender(RenderPlayerEvent.Pre event) {
-		renderLoad();
-
-		playerTicks = event.partialRenderTick;
-		ent = event.entityLiving;
-	}
-
 	@SubscribeEvent
 	public void beforeBodyRender(RenderLivingEvent.Pre event) {
-		if (!(event.entity instanceof EntityPlayer) || event.renderer == glideRender || event.entity != ent) {
+		if (!(event.entity instanceof EntityPlayer) || event.renderer == this.glideRender || event.entity != this.ent)
 			return;
-		}
 
 		ItemStack stack = null;
 		for (EnumArmorType type : EnumArmorType.values()) {
@@ -54,4 +38,20 @@ public class PlayerClientHandler {
 		}
 	}
 
+	@SubscribeEvent
+	public void beforePlayerBodyRender(RenderPlayerEvent.Pre event) {
+		this.renderLoad();
+
+		this.playerTicks = event.partialRenderTick;
+		this.ent = event.entityLiving;
+	}
+
+	public void renderLoad() {
+		if (this.glideRender == null) {
+			this.glideRender = new RenderGlide();
+			this.glideRender.setRenderManager(RenderManager.instance);
+		}
+	}
+
+	
 }
