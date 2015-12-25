@@ -1,20 +1,32 @@
 package com.httymd.client;
 
+import java.util.List;
+
+import com.httymd.Config;
 import com.httymd.HTTYMDMod;
 
 import cpw.mods.fml.client.config.GuiConfig;
+import cpw.mods.fml.client.config.IConfigElement;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraftforge.common.config.ConfigElement;
 import net.minecraftforge.common.config.Configuration;
 
+@SuppressWarnings("rawtypes")
 public class GuiConfigDragons extends GuiConfig {
 	
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings("unchecked")
+	private static List<IConfigElement> elements = new ConfigElement(HTTYMDMod.getConfig().getConfig().getCategory(Configuration.CATEGORY_GENERAL)).getChildElements();
+	
+	static {
+		for(String cat : Config.CATEGORYS) {
+			elements.add(new ConfigElement(HTTYMDMod.getConfig().getConfig().getCategory(cat)));
+		}
+	}
+	
 	public GuiConfigDragons(GuiScreen parentScreen) {
-		super(parentScreen, new ConfigElement(HTTYMDMod.getConfig().getConfig().getCategory(Configuration.CATEGORY_GENERAL)).getChildElements(), 
-				HTTYMDMod.ID, true, false, "The HTTYMD Config");
-		this.titleLine2 = "cause the Ender Dragon wasn't fun enough\n";
+		super(parentScreen, elements, HTTYMDMod.ID, true, false, "The HTTYMD Config");
+		this.titleLine2 = "cause the Ender Dragon wasn't fun enough";
 	}
 
 	@Override

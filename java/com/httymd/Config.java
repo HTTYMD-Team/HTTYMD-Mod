@@ -3,7 +3,6 @@ package com.httymd;
 import java.util.HashMap;
 
 import com.httymd.entity.EntityTameableFlying;
-import com.httymd.util.Utils;
 
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import net.minecraft.entity.EntityList;
@@ -12,9 +11,14 @@ import net.minecraftforge.common.config.Configuration;
 
 public class Config {
 
-	public static final String CATEGORYS[] = {"Dragons", "Testing", "BG2"};
+	public static String CATEGORYS[] = {"dragons", "testing", "bg2"};
+	private static final String STRING_PREFIX = "config."+HTTYMDMod.ID+":";
 	
-	private static final String STRING_PREFIX = "config.";
+	static {
+		for(int i = 0; i < CATEGORYS.length; i++)
+			CATEGORYS[i] = STRING_PREFIX+"category."+CATEGORYS[i];
+	}
+	
 	private final Configuration config;
 	private int startEntityID = -1;
 	/////////////////
@@ -48,7 +52,7 @@ public class Config {
 	}
 
 	protected String getLocalKey(String ending) {
-		return Utils.getLocalString(STRING_PREFIX + ending);
+		return STRING_PREFIX + ending;
 	}
 	
 	public boolean getVerticalDragonRiding() {
@@ -101,16 +105,19 @@ public class Config {
 		
 		String cat = Configuration.CATEGORY_GENERAL;
 		
+		cat = CATEGORYS[0];
 		this.verticalDragonRiding = this.config.getBoolean("Vertical Riding", cat, true, "Enable the vertical climb when riding by looking up or down", this.getLocalKey("verticalDragonRiding"));
-		this.canOwnMultipleDragons = this.config.getBoolean("Multi Ownership", cat, true, "Provides ability to own multiple dragons", this.getLocalKey("multiDragonOwnership"));
+		this.canOwnMultipleDragons = this.config.getBoolean("Multi Ownership", cat, true, "Provides ability to own multiple dragons", this.getLocalKey("multiOwn"));
 		this.forcedTameable = this.config.getString("Force Tameable", cat, "", "A list of entity names which are forced to be tameable (seperator may be anything ths isn't a space)", this.getLocalKey("forcedTameable"));
 		
+		cat = CATEGORYS[1];
 		this.debugMode = this.config.getBoolean("Debug Mode", cat, false, "Enable debug mode, developers recommended", this.getLocalKey("debugMode"));
 		this.experimentalMode = this.config.getBoolean("Experimental Mode", cat, false, "Enable an experimental version (warning: may be less stable)", this.getLocalKey("experimentalMode"));
 		
+		cat = CATEGORYS[2];
 		this.useBG2 = this.config.getBoolean("Use BG2", cat, true, "Enables the use of BG2 (if installed)", this.getLocalKey("useBG2"));
-		this.useBg2Daggers = this.config.getBoolean("Use BG2 Daggers", cat, true, "Allows you to specifiy whether to use Battlegear 2 to replace HTTYMD dagger behavior with BG2 dagger behavior", this.getLocalKey("useBG2Daggers"));
-		this.useBg2ForWarhammer  = this.config.getBoolean("Use BG2 Warhammers", cat, true, "Allows you to specifiy whether to use Battlegear 2 for HTTYMD Warhammers", this.getLocalKey("useBG2ForWarhammer"));
+		this.useBg2Daggers = this.config.getBoolean("Use BG2 Daggers", cat, true, "Allows you to specifiy whether to use Battlegear 2 to replace HTTYMD dagger behavior with BG2 dagger behavior", this.getLocalKey("useBg2Daggers"));
+		this.useBg2ForWarhammer  = this.config.getBoolean("Use BG2 Warhammers", cat, true, "Allows you to specifiy whether to use Battlegear 2 for HTTYMD Warhammers", this.getLocalKey("useBg2ForWarhammer"));
 		
 		if (this.config.hasChanged())
 			this.config.save();
