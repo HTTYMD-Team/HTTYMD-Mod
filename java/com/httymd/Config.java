@@ -26,6 +26,7 @@ public class Config {
 	/////////////////
 	private boolean verticalDragonRiding = true;
 	private boolean canOwnMultipleDragons = true;
+	private boolean feedHealsDragons = true;
 	private String forcedTameable = "";
 	/////////////////
 	// Testing Cat
@@ -96,6 +97,10 @@ public class Config {
 		this.forcedTameCache.put(e.getClass(), result);
 		return result;
 	}
+	
+	public boolean canFeedHeal() {
+		return this.feedHealsDragons;
+	}
 
 	public void syncConfig() {
 
@@ -108,6 +113,7 @@ public class Config {
 		cat = CATEGORYS[0];
 		this.verticalDragonRiding = this.config.getBoolean("Vertical Riding", cat, true, "Enable the vertical climb when riding by looking up or down", this.getLocalKey("verticalDragonRiding"));
 		this.canOwnMultipleDragons = this.config.getBoolean("Multi Ownership", cat, true, "Provides ability to own multiple dragons", this.getLocalKey("multiOwn"));
+		this.feedHealsDragons = this.config.getBoolean("Feed Heals", cat, true, "Determines whether feeding dragons heals them", this.getLocalKey("feedHeals"));
 		this.forcedTameable = this.config.getString("Force Tameable", cat, "", "A list of entity names which are forced to be tameable (seperator may be anything ths isn't a space)", this.getLocalKey("forcedTameable"));
 		
 		cat = CATEGORYS[1];

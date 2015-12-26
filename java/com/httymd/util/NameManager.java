@@ -98,7 +98,7 @@ public class NameManager {
 		for (ISpecialName name : this.specialNames) {
 			newName = name.get(entity, originalName);
 			if (newName != null) {
-				translateStr = HTTYMDMod.ID + ":" + ".name.special.add." + newName;
+				translateStr = HTTYMDMod.ID + ":" + "name.special.add." + newName;
 				if (StatCollector.canTranslate(translateStr))
 					return StatCollector.translateToLocalFormatted(translateStr, originalName);
 				return originalName + " the " + newName;

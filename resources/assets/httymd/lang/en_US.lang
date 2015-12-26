@@ -2,6 +2,7 @@ entity.httymd.TerribleTerror.name=Terrible Terror
 entity.httymd.Skrill.name=Skrill
 entity.httymd.NightFury.name=Night Fury
 entity.httymd.DeadlyNadder.name=Deadly Nadder
+entity.httymd.MonstrousNightmare.name=Monstrous Nightmare
 
 key.categories.httymd=HTTYMD
 
@@ -12,7 +13,9 @@ config.httymd:category.bg2=Battlegear2
 config.httymd:verticalDragonRiding=Vertical Riding
 config.httymd:verticalDragonRiding.tooltip=Enable the vertical climb when riding by looking up or down
 config.httymd:multiOwn=Multi Ownership
-config.httymd:multiOwn.tooltip=Provides ability to own multiple dragons
+config.httymd:multiOwn.tooltip=Provides ability to own multiple dragons (currently useless)
+config.httymd:feedHeals=Feed Heals
+config.httymd:feedHeals.tooltip=Determines whether feeding dragons heals them
 config.httymd:forcedTameable=Force Tameable
 config.httymd:forcedTameable.tooltip=A list of entity names which are forced to be tameable (seperator may be anything ths isn't a space)
 config.httymd:debugMode=Debug Mode

@@ -2,6 +2,7 @@ package com.httymd.entity;
 
 import com.httymd.HTTYMDMod;
 import com.httymd.item.registry.ItemRegistry;
+import com.httymd.item.util.ItemUtils;
 import com.httymd.util.DragonDamageSource;
 
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -25,6 +26,7 @@ public class EntityDragon extends EntityTameableFlying {
 	public EntityDragon(World world) {
 		super(world);
 		this.isImmuneToFire = true;
+		this.ignoreFrustumCheck = true;
 	}
 
 	@Override
@@ -71,6 +73,20 @@ public class EntityDragon extends EntityTameableFlying {
 		}
 		super.moveEntityWithHeading(strafe, forward);
 	}
+	
+	/**
+	 * Behavior described when eating food
+	 * @param feeder The feeding entity
+	 * @param feed The food item
+	 * @return Should the item stack will decrease
+	 */
+	public boolean onFeed(EntityLivingBase feeder, ItemStack feed) {
+		if(HTTYMDMod.getConfig().canFeedHeal()) {
+			this.setHealth(this.getHealth()+1);
+			return true;
+		}
+		return false;
+	}
 
 	public boolean interact(EntityPlayer ply) {
 		ItemStack hand = ply.getCurrentEquippedItem();
@@ -79,6 +95,11 @@ public class EntityDragon extends EntityTameableFlying {
 		else if (HTTYMDMod.getConfig().isDebugMode() && hand.getItem() == ItemRegistry.wing) {
 			this.onTakeoff();
 			return true;
+		} else if (ItemUtils.isFood(hand)) {
+			boolean feed = this.onFeed(ply, hand); // Running twice might cause problems
+			if(this.canTame(ply, hand) && feed); // Prevents double taking of tame items
+			else if(feed && !ply.capabilities.isCreativeMode && --hand.stackSize <= 0)
+				ply.inventory.setInventorySlotContents(ply.inventory.currentItem, (ItemStack) null);
 		}
 
 		if (this.isOwner(ply) && this.isRideableBy(ply)) {

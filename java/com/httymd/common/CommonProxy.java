@@ -3,7 +3,9 @@ package com.httymd.common;
 import com.httymd.HTTYMDMod;
 import com.httymd.block.registry.BlockRegistry;
 import com.httymd.common.network.PlyJumpMessage;
+import com.httymd.entity.dragon.EntityNadder;
 import com.httymd.entity.dragon.EntityNightFury;
+import com.httymd.entity.dragon.EntityNightmare;
 import com.httymd.entity.dragon.EntitySkrill;
 import com.httymd.entity.dragon.EntityTerribleTerror;
 import com.httymd.event.ForgeEventHandler;
@@ -69,6 +71,8 @@ public class CommonProxy {
 		HTTYMDMod.registerEntity(EntityTerribleTerror.class, "TerribleTerror", 0x00FF00, 0x44FF44);
 		HTTYMDMod.registerEntity(EntitySkrill.class, "Skrill", 0xFF0000, 0xFF4444);
 		HTTYMDMod.registerEntity(EntityNightFury.class, "NightFury", 0x000000, 0x222222);
+		HTTYMDMod.registerEntity(EntityNightmare.class, "MountrousNightmare", 0xE3172F, 0x000000);
+		HTTYMDMod.registerEntity(EntityNadder.class, "DeadlyNadder", 0x1B99BF, 0xE3E017);
 	}
 	
 	protected void registerHandlers() {

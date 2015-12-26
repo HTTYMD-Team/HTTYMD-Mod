@@ -29,6 +29,7 @@ public class EntityTerribleTerror extends EntityDragon {
 
 	public EntityTerribleTerror(World world) {
 		super(world);
+		this.ignoreFrustumCheck = false;
 		this.getNavigator().setAvoidsWater(true);
 		this.tasks.addTask(1, new EntityAISwimming(this));
 		this.tasks.addTask(2, new EntityAILeapAtTarget(this, 0.4F));

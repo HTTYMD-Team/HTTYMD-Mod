@@ -12,6 +12,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemArmor.ArmorMaterial;
+import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.WeightedRandomFishable;
 import net.minecraftforge.common.util.EnumHelper;
@@ -152,6 +153,11 @@ public class ItemUtils {
 		}
 
 		return result;
+	}
+	
+	public static boolean isFood(ItemStack item) {
+		if(item == null) return false;
+		return item.getItem() instanceof ItemFood;
 	}
 
 	/**

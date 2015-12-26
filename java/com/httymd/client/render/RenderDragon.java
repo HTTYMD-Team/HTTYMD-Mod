@@ -8,12 +8,12 @@ import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityList;
 import net.minecraft.util.ResourceLocation;
 
 @SideOnly(Side.CLIENT)
-public abstract class RenderDragon extends RenderLiving {
-	private static final ResourceLocation entityTextures = new ResourceLocation(
-			HTTYMDMod.ID + ":textures/entities/dragon" + ".png");
+public class RenderDragon extends RenderLiving {
+	private static final String entityTexLoc = HTTYMDMod.ID + ":textures/entities/";
 
 	public RenderDragon(ModelBase p_i1253_1_, float p_i1253_2_) {
 		super(p_i1253_1_, p_i1253_2_);
@@ -24,7 +24,7 @@ public abstract class RenderDragon extends RenderLiving {
 		return this.getEntityTexture((EntityDragon) p_110775_1_);
 	}
 
-	protected ResourceLocation getEntityTexture(EntityDragon p_110775_1_) {
-		return entityTextures;
+	protected ResourceLocation getEntityTexture(EntityDragon dragon) {
+		return new ResourceLocation(entityTexLoc+EntityList.getEntityString(dragon).replace(HTTYMDMod.ID+".", "")+".png");
 	}
 }
