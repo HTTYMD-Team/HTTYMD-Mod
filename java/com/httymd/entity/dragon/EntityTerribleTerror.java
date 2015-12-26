@@ -5,7 +5,6 @@ import com.httymd.entity.EntityVikingBase;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIAttackOnCollide;
 import net.minecraft.entity.ai.EntityAIFollowOwner;
 import net.minecraft.entity.ai.EntityAIHurtByTarget;
@@ -29,6 +28,7 @@ public class EntityTerribleTerror extends EntityDragon {
 
 	public EntityTerribleTerror(World world) {
 		super(world);
+		this.setSize(0.7F, 0.7F);
 		this.ignoreFrustumCheck = false;
 		this.getNavigator().setAvoidsWater(true);
 		this.tasks.addTask(1, new EntityAISwimming(this));
@@ -45,16 +45,16 @@ public class EntityTerribleTerror extends EntityDragon {
 		this.targetTasks.addTask(2, new EntityAIOwnerHurtTarget(this));
 		this.targetTasks.addTask(3, new EntityAIHurtByTarget(this, true));
 		this.targetTasks.addTask(4, new EntityAITargetNonTamed(this, EntitySheep.class, 50, false));
-		this.setSize(0.7F, 0.7F);
 		this.setTamed(false);
 	}
 
 	@Override
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
-		this.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(10);
-		this.getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(0.3F);
-		this.getEntityAttribute(flyingSpeed).setBaseValue(0.2D);
+		this.getEntityAttribute(healthAtt).setBaseValue(10);
+		this.getEntityAttribute(speedAtt).setBaseValue(0.3);
+		this.getEntityAttribute(damageAtt).setBaseValue(0.5);
+		this.getEntityAttribute(flyingSpeed).setBaseValue(0.2);
 	}
 
 	@Override

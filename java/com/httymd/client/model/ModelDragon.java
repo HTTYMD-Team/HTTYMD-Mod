@@ -27,9 +27,6 @@ public abstract class ModelDragon extends ModelBase {
 
 	protected ModelRenderer wing;
 
-	public ModelDragon() {
-	}
-
 	@Override
 	public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {
 		this.setRotationAngles(f, f1, f2, f3, f4, f5, entity);
@@ -86,9 +83,7 @@ public abstract class ModelDragon extends ModelBase {
 	 */
 	@Override
 	public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5, Entity entity) {
-		EntityDragon dragon = null;
-		if (entity instanceof EntityDragon)
-			dragon = (EntityDragon) entity;
+		EntityDragon dragon = entity instanceof EntityDragon ? (EntityDragon)entity : null;
 
 		this.head.rotateAngleX = f4 / (180F / (float) Math.PI);
 		this.head.rotateAngleY = f3 / (180F / (float) Math.PI);

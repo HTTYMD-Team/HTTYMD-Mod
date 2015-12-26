@@ -10,6 +10,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.IAttribute;
 import net.minecraft.entity.ai.attributes.RangedAttribute;
 import net.minecraft.entity.passive.EntityTameable;
@@ -39,6 +40,10 @@ public abstract class EntityTameableFlying extends EntityTameable implements ITa
 	public static final int BOOL_WATCHER = 16;
 	///////////////////////////////////////////////////////////////////////////
 
+	protected static final IAttribute healthAtt = SharedMonsterAttributes.maxHealth;
+	protected static final IAttribute speedAtt = SharedMonsterAttributes.movementSpeed;
+	protected static final IAttribute damageAtt = SharedMonsterAttributes.attackDamage;
+	
 	protected EntityLivingBase owner = null;
 
 	public EntityTameableFlying(World w) {

@@ -3,14 +3,15 @@ package com.httymd.entity.dragon;
 import java.util.UUID;
 
 import com.httymd.entity.EntityDragon;
-import com.httymd.entity.EntityVikingBase;
 
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIAttackOnCollide;
 import net.minecraft.entity.ai.EntityAIFollowOwner;
+import net.minecraft.entity.ai.EntityAIHurtByTarget;
 import net.minecraft.entity.ai.EntityAILookIdle;
 import net.minecraft.entity.ai.EntityAIMate;
+import net.minecraft.entity.ai.EntityAIOwnerHurtByTarget;
+import net.minecraft.entity.ai.EntityAIOwnerHurtTarget;
 import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.ai.EntityAITempt;
 import net.minecraft.entity.ai.EntityAIWander;
@@ -29,6 +30,9 @@ public class EntityNadder extends EntityDragon {
 	
 	public EntityNadder(World world) {
 		super(world);
+		this.setSize(1.4F, 3.5F);
+		this.stepHeight = 1;
+		this.getNavigator().setAvoidsWater(true);
 		this.getNavigator().setAvoidsWater(true);
 		this.tasks.addTask(1, new EntityAISwimming(this));
 		this.tasks.addTask(2, new EntityAIAttackOnCollide(this, 0.9D, false));
@@ -36,21 +40,23 @@ public class EntityNadder extends EntityDragon {
 		this.tasks.addTask(4, new EntityAITempt(this, 0.7, Items.fish, true));
 		this.tasks.addTask(4, new EntityAITempt(this, 0.7, Items.chicken, true));
 		this.tasks.addTask(4, new EntityAITempt(this, 0.7, Items.cooked_chicken, true));
-		this.tasks.addTask(4, new EntityAIMate(this, 1.0D));
-		this.tasks.addTask(5, new EntityAIWander(this, 1.0D));
-		this.tasks.addTask(6, new EntityAIWatchClosest(this, EntityVikingBase.class, 8.0F));
+		this.tasks.addTask(5, new EntityAIMate(this, 1.0D));
+		this.tasks.addTask(6, new EntityAIWander(this, 1.0D));
 		this.tasks.addTask(7, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
 		this.tasks.addTask(8, new EntityAILookIdle(this));
-		this.setSize(1, 1);
+		this.targetTasks.addTask(1, new EntityAIOwnerHurtByTarget(this));
+		this.targetTasks.addTask(2, new EntityAIOwnerHurtTarget(this));
+		this.targetTasks.addTask(2, new EntityAIHurtByTarget(this, true));
 		this.setTamed(false);
 	}
 
 	@Override
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
-		this.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(10);
-		this.getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(0.2F);
-		this.getEntityAttribute(flyingSpeed).setBaseValue(0.1D);
+		this.getEntityAttribute(healthAtt).setBaseValue(17);
+		this.getEntityAttribute(speedAtt).setBaseValue(0.6);
+		this.getEntityAttribute(damageAtt).setBaseValue(1.5);
+		this.getEntityAttribute(flyingSpeed).setBaseValue(0.1);
 	}
 	
 	@Override
@@ -64,7 +70,6 @@ public class EntityNadder extends EntityDragon {
 		if(feed.getItem() == Items.chicken || feed.getItem() == Items.cooked_chicken) {
 			instance.applyModifier(chickenSpeedModifier);
 			this.setHealth(this.getHealth()+0.5F);
-			return true;
 		} else if(instance.getModifier(chickenSpeedModifier.getID()) != null) {
 			instance.removeModifier(chickenSpeedModifier);
 		} // If feed anything other then chicken, cancels speed effect, TODO make it timed

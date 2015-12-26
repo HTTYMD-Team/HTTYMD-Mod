@@ -4,7 +4,6 @@ import com.httymd.entity.EntityDragon;
 import com.httymd.entity.dragon.ai.EntityDragonAIWander;
 
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIAttackOnCollide;
 import net.minecraft.entity.ai.EntityAIFollowOwner;
 import net.minecraft.entity.ai.EntityAIHurtByTarget;
@@ -46,16 +45,16 @@ public class EntityNightFury extends EntityDragon {
 		this.targetTasks.addTask(1, new EntityAIOwnerHurtByTarget(this));
 		this.targetTasks.addTask(2, new EntityAIOwnerHurtTarget(this));
 		this.targetTasks.addTask(2, new EntityAIHurtByTarget(this, true));
-		this.ignoreFrustumCheck = true;
 		this.setTamed(false);
 	}
 
 	@Override
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
-		this.getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(0.7D);
-		this.getEntityAttribute(SharedMonsterAttributes.attackDamage).setBaseValue(2.0D);
-		this.getEntityAttribute(flyingSpeed).setBaseValue(0.25D);
+		this.getEntityAttribute(healthAtt).setBaseValue(20);
+		this.getEntityAttribute(speedAtt).setBaseValue(0.7);
+		this.getEntityAttribute(damageAtt).setBaseValue(2.0);
+		this.getEntityAttribute(flyingSpeed).setBaseValue(0.25);
 	}
 
 	@Override
