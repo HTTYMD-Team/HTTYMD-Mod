@@ -8,7 +8,6 @@ import com.httymd.util.DragonDamageSource;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -21,7 +20,7 @@ public class EntityDragon extends EntityTameableFlying {
 
 	private static final String NBT_IS_STARTLED = "IsStartled";
 
-	protected boolean isStartled = false;
+	protected boolean startled = false;
 
 	public EntityDragon(World world) {
 		super(world);
@@ -32,7 +31,7 @@ public class EntityDragon extends EntityTameableFlying {
 	@Override
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
-		this.getAttributeMap().registerAttribute(SharedMonsterAttributes.attackDamage);
+		this.getAttributeMap().registerAttribute(damageAtt);
 	}
 
 	public boolean isRideableBy(Entity rider) {
@@ -90,16 +89,13 @@ public class EntityDragon extends EntityTameableFlying {
 
 	public boolean interact(EntityPlayer ply) {
 		ItemStack hand = ply.getCurrentEquippedItem();
-		if (hand == null)
-			;
-		else if (HTTYMDMod.getConfig().isDebugMode() && hand.getItem() == ItemRegistry.wing) {
-			this.onTakeoff();
-			return true;
-		} else if (ItemUtils.isFood(hand)) {
-			boolean feed = this.onFeed(ply, hand); // Running twice might cause problems
-			if(this.canTame(ply, hand) && feed); // Prevents double taking of tame items
-			else if(feed && !ply.capabilities.isCreativeMode && --hand.stackSize <= 0)
-				ply.inventory.setInventorySlotContents(ply.inventory.currentItem, (ItemStack) null);
+		if (hand != null) {
+			if (HTTYMDMod.getConfig().isDebugMode() && hand.getItem() == ItemRegistry.wing) {
+				this.onTakeoff();
+				return true;
+			} else if (ItemUtils.isFood(hand) && !this.canTame(ply, hand) && 
+					this.onFeed(ply, hand) && !ply.capabilities.isCreativeMode && --hand.stackSize <= 0) 
+						ply.inventory.setInventorySlotContents(ply.inventory.currentItem, (ItemStack) null);
 		}
 
 		if (this.isOwner(ply) && this.isRideableBy(ply)) {
@@ -112,7 +108,6 @@ public class EntityDragon extends EntityTameableFlying {
 	@Override
 	public boolean attackEntityAsMob(Entity target) {
 		double damage = 2.0D;
-
 		int knockback = 0;
 
 		if (target instanceof EntityLivingBase) {
@@ -153,7 +148,7 @@ public class EntityDragon extends EntityTameableFlying {
 	}
 
 	public boolean isStartled() {
-		return this.isStartled;
+		return this.startled;
 	}
 
 	public boolean isTameable(EntityLivingBase tamer) {
@@ -170,12 +165,12 @@ public class EntityDragon extends EntityTameableFlying {
 	 * Sets whether this dragon is angry or not.
 	 */
 	public void setAngry(boolean p_70916_1_) {
-		byte b0 = this.dataWatcher.getWatchableObjectByte(BOOL_WATCHER);
+		byte boolByte = this.dataWatcher.getWatchableObjectByte(BOOL_WATCHER);
 
 		if (p_70916_1_)
-			this.dataWatcher.updateObject(16, Byte.valueOf((byte) (b0 | BOOL_IS_ANGRY)));
+			this.dataWatcher.updateObject(16, Byte.valueOf((byte) (boolByte | BOOL_IS_ANGRY)));
 		else
-			this.dataWatcher.updateObject(16, Byte.valueOf((byte) (b0 & -(BOOL_IS_ANGRY + 1))));
+			this.dataWatcher.updateObject(16, Byte.valueOf((byte) (boolByte & -(BOOL_IS_ANGRY + 1))));
 	}
 
 	public void setAttackTarget(EntityLivingBase p_70624_1_) {
@@ -188,7 +183,7 @@ public class EntityDragon extends EntityTameableFlying {
 	}
 
 	public void setStartled(boolean startled) {
-		this.isStartled = startled;
+		this.startled = startled;
 	}
 
 	@Override

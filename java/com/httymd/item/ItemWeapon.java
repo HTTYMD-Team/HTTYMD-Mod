@@ -109,7 +109,7 @@ public class ItemWeapon extends ItemSword implements IRegisterable, IFuelHandler
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public float getModifiedAmount(ItemStack stack, String modifierName) {
-		if(modifierName.equals("")) return 0; 
+		if(modifierName.isEmpty()) return 0; 
 		Iterator itr = stack.getAttributeModifiers().get(modifierName).iterator();
 		float f = 0;
 		while (itr.hasNext()) {
