@@ -1,6 +1,8 @@
-[![Stories in Ready](https://badge.waffle.io/HTTYMD-Team/HTTYMD-Mod.png?label=ready&title=Ready)](https://waffle.io/HTTYMD-Team/HTTYMD-Mod)
+
 ![](resources/logo.gif?raw=true)
 ===============
+[![Stories in Progress](https://badge.waffle.io/HTTYMD-Team/HTTYMD-Mod.png?label=in%20progress&title=In%20Progress)](https://waffle.io/HTTYMD-Team/HTTYMD-Mod) [![Stories Ready](https://badge.waffle.io/HTTYMD-Team/HTTYMD-Mod.png?label=ready&title=Ready)](https://waffle.io/HTTYMD-Team/HTTYMD-Mod) [![Codacy Badge](https://api.codacy.com/project/badge/grade/3001af4bbf404f58b680fccfc62067f3)](https://www.codacy.com/app/HTTYMD-Team/HTTYMD-Mod)
+
 The Minecraft Mod that adds the (movie) HTTYD universe to Minecraft (and more)
 
 #### Important
