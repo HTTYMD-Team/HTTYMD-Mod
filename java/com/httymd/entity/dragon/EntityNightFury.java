@@ -4,7 +4,6 @@ import com.httymd.entity.EntityDragon;
 import com.httymd.entity.dragon.ai.EntityDragonAIWander;
 
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIAttackOnCollide;
 import net.minecraft.entity.ai.EntityAIFollowOwner;
 import net.minecraft.entity.ai.EntityAIHurtByTarget;
@@ -25,7 +24,7 @@ public class EntityNightFury extends EntityDragon {
 
 	public EntityNightFury(World world) {
 		super(world);
-		setSize(2, 2.25F);
+		this.setSize(1.7F, 2.25F);
 		this.stepHeight = 1;
 		this.getNavigator().setAvoidsWater(true);
 		// Since ground and flight AI can't possibly run concurrently (and they
@@ -36,7 +35,7 @@ public class EntityNightFury extends EntityDragon {
 		this.tasks.addTask(4, new EntityDragonAIWander(this));
 		// Ground
 		this.tasks.addTask(1, new EntityAISwimming(this));
-		this.tasks.addTask(2, new EntityAIAttackOnCollide(this, 1.0D, true));
+		this.tasks.addTask(3, new EntityAIAttackOnCollide(this, 1.0D, true));
 		this.tasks.addTask(4, new EntityAIFollowOwner(this, 1.1D, 8F, 40F));
 		this.tasks.addTask(4, new EntityAITempt(this, 0.5, Items.fish, true));
 		this.tasks.addTask(4, new EntityAIMate(this, 1.0D));
@@ -46,8 +45,16 @@ public class EntityNightFury extends EntityDragon {
 		this.targetTasks.addTask(1, new EntityAIOwnerHurtByTarget(this));
 		this.targetTasks.addTask(2, new EntityAIOwnerHurtTarget(this));
 		this.targetTasks.addTask(2, new EntityAIHurtByTarget(this, true));
-		this.ignoreFrustumCheck = true;
 		this.setTamed(false);
+	}
+
+	@Override
+	protected void applyEntityAttributes() {
+		super.applyEntityAttributes();
+		this.getEntityAttribute(healthAtt).setBaseValue(20);
+		this.getEntityAttribute(speedAtt).setBaseValue(0.7);
+		this.getEntityAttribute(damageAtt).setBaseValue(2.0);
+		this.getEntityAttribute(flyingSpeed).setBaseValue(0.25);
 	}
 
 	@Override
@@ -56,21 +63,7 @@ public class EntityNightFury extends EntityDragon {
 	}
 
 	@Override
-	protected void applyEntityAttributes() {
-		super.applyEntityAttributes();
-		getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(0.8D);
-		getEntityAttribute(SharedMonsterAttributes.attackDamage).setBaseValue(2.0D);
-		getEntityAttribute(flyingSpeed).setBaseValue(2D);
-	}
-
-	@Override
-	public boolean isTameable(EntityLivingBase e) {
-		return !this.isAngry();
-	}
-
-	@Override
-	public boolean isTameItem(ItemStack s) {
+	public boolean canTame(EntityLivingBase tamer, ItemStack s) {
 		return s.getItem() == Items.fish;
 	}
-
 }

@@ -3,9 +3,9 @@ package com.httymd.entity;
 public interface IFlyable {
 
 	/**
-	 * Retrieves whether this object is flying
+	 * Retrieves the current speed of this object flying
 	 */
-	boolean isFlying();
+	double getFlySpeed();
 
 	/**
 	 * Retrieves whether this currently has the ability to fly
@@ -13,17 +13,17 @@ public interface IFlyable {
 	boolean isFlyable();
 
 	/**
-	 * Retrieves the current speed of this object flying
+	 * Retrieves whether this object is flying
 	 */
-	double getFlySpeed();
-
-	/**
-	 * Sets whether this object is flying
-	 */
-	void setFlying(boolean flying);
+	boolean isFlying();
 
 	/**
 	 * Throws on takeoff for flight of this object
 	 */
 	void onTakeoff();
+
+	/**
+	 * Sets whether this object is flying
+	 */
+	void setFlying(boolean flying);
 }

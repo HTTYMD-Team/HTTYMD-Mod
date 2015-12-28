@@ -14,6 +14,11 @@ public class EntityAIWeary extends EntityAIWatchClosest2 {
 	protected int startledTime;
 
 	public EntityAIWeary(EntityDragon watcher, Class<? extends EntityLivingBase> classToWatch, float maxDist,
+			float chance, float reactDist) {
+		this(watcher, classToWatch, maxDist, chance, reactDist, 100);
+	}
+
+	public EntityAIWeary(EntityDragon watcher, Class<? extends EntityLivingBase> classToWatch, float maxDist,
 			float chance, float reactDist, int minStartleTime) {
 		super(watcher, classToWatch, maxDist, chance);
 		this.dragon = watcher;
@@ -21,16 +26,10 @@ public class EntityAIWeary extends EntityAIWatchClosest2 {
 		this.minStartleTime = minStartleTime;
 	}
 
-	public EntityAIWeary(EntityDragon watcher, Class<? extends EntityLivingBase> classToWatch, float maxDist,
-			float chance, float reactDist) {
-		this(watcher, classToWatch, maxDist, chance, reactDist, 100);
-	}
-
 	@Override
 	public boolean shouldExecute() {
-		if (this.dragon.isStartled() && --this.startledTime > 0) {
+		if (this.dragon.isStartled() && --this.startledTime > 0)
 			return false;
-		}
 
 		this.dragon.setStartled(false);
 		return !this.dragon.isTamed() && this.closestEntity != null
@@ -40,8 +39,8 @@ public class EntityAIWeary extends EntityAIWatchClosest2 {
 	@Override
 	public void updateTask() {
 		this.dragon.getLookHelper().setLookPosition(this.closestEntity.posX,
-				this.closestEntity.posY + (double) this.closestEntity.getEyeHeight(), this.closestEntity.posZ, 20.0F,
-				(float) this.dragon.getVerticalFaceSpeed());
+				this.closestEntity.posY + this.closestEntity.getEyeHeight(), this.closestEntity.posZ, 20.0F,
+				this.dragon.getVerticalFaceSpeed());
 		this.dragon.setAIMoveSpeed(this.dragon.getAIMoveSpeed() * 0.5F);
 
 		if (this.dragon.getDistanceSqToEntity(this.closestEntity) < this.reactDist * this.reactDist) {

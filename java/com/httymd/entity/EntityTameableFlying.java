@@ -6,13 +6,16 @@ import com.httymd.HTTYMDMod;
 import com.httymd.item.registry.ItemRegistry;
 import com.httymd.util.Utils;
 
+import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.IAttribute;
 import net.minecraft.entity.ai.attributes.RangedAttribute;
 import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.pathfinding.PathEntity;
@@ -26,17 +29,21 @@ public abstract class EntityTameableFlying extends EntityTameable implements ITa
 	private static final String NBT_IS_FLYING = "Flying";
 	///////////////////////////////////////////////////////////////////////////
 	// Entity Attributes
-	public static final IAttribute flyingSpeed = (new RangedAttribute(Utils.getModString("flyingSpeed"), 1D, 0.0D,
-			Double.MAX_VALUE)).setDescription("Flying Speed").setShouldWatch(true);
-	public static final IAttribute flyingYaw = (new RangedAttribute(Utils.getModString("flyingYaw"), 25D, 0.0D,
-			Double.MAX_VALUE)).setDescription("Flying Yaw Speed").setShouldWatch(true);
-	public static final IAttribute flyingPitch = (new RangedAttribute(Utils.getModString("flyingPitch"), 20D, 0.0D,
-			Double.MAX_VALUE)).setDescription("Flying Pitch Speed").setShouldWatch(true);
+	public static final IAttribute flyingSpeed = new RangedAttribute(Utils.getModString("flyingSpeed"), 1D, 0.0D,
+			Double.MAX_VALUE).setDescription("Flying Speed").setShouldWatch(true);
+	public static final IAttribute flyingYaw = new RangedAttribute(Utils.getModString("flyingYaw"), 25D, 0.0D,
+			Double.MAX_VALUE).setDescription("Flying Yaw Speed").setShouldWatch(true);
+	public static final IAttribute flyingPitch = new RangedAttribute(Utils.getModString("flyingPitch"), 20D, 0.0D,
+			Double.MAX_VALUE).setDescription("Flying Pitch Speed").setShouldWatch(true);
 	///////////////////////////////////////////////////////////////////////////
 	// Datawatcher
 	public static final int BOOL_WATCHER = 16;
 	///////////////////////////////////////////////////////////////////////////
 
+	protected static final IAttribute healthAtt = SharedMonsterAttributes.maxHealth;
+	protected static final IAttribute speedAtt = SharedMonsterAttributes.movementSpeed;
+	protected static final IAttribute damageAtt = SharedMonsterAttributes.attackDamage;
+	
 	protected EntityLivingBase owner = null;
 
 	public EntityTameableFlying(World w) {
@@ -50,27 +57,15 @@ public abstract class EntityTameableFlying extends EntityTameable implements ITa
 		this.getAttributeMap().registerAttribute(flyingPitch);
 	}
 
-	@Override
-	public boolean isTameItem(ItemStack item) {
-		return false;
+	protected boolean canDespawn() {
+		return !this.isTamed() && this.ticksExisted > 2400;
 	}
 
-	@Override
-	public boolean isTameable(EntityLivingBase tamer) {
-		return false;
-	}
-
-	@Override
-	public boolean isFlying() {
-		if (!isFlyable()) {
-			setFlying(false);
-			return false;
-		}
-		return (dataWatcher.getWatchableObjectByte(BOOL_WATCHER) & 32) != 0;
-	}
-
-	public boolean isFlyable() {
-		return true;
+	/**
+	 * Retrieves the Flight Pitch Delta Speed
+	 */
+	public double getFlyPitch() {
+		return this.getEntityAttribute(flyingPitch).getAttributeValue();
 	}
 
 	public double getFlySpeed() {
@@ -83,63 +78,67 @@ public abstract class EntityTameableFlying extends EntityTameable implements ITa
 	public double getFlyYaw() {
 		return this.getEntityAttribute(flyingYaw).getAttributeValue();
 	}
-
-	/**
-	 * Retrieves the Flight Pitch Delta Speed
-	 */
-	public double getFlyPitch() {
-		return this.getEntityAttribute(flyingPitch).getAttributeValue();
-	}
-
-	@Override
-	public void setFlying(boolean flying) {
-		byte b0 = dataWatcher.getWatchableObjectByte(BOOL_WATCHER);
-
-		if (flying && isFlyable()) {
-			dataWatcher.updateObject(BOOL_WATCHER, Byte.valueOf((byte) (b0 | 32)));
-		} else {
-			dataWatcher.updateObject(BOOL_WATCHER, Byte.valueOf((byte) (b0 & -33)));
-		}
-	}
-
-	public void onTakeoff() {
-		if (!this.isFlying() && this.onGround) {
-			this.jump();
-			this.motionY += this.getFlySpeed();
-		} else {
-			this.motionY += this.getFlySpeed() * 0.25;
-		}
-		this.setFlying(true);
+	
+	public String getOwnerString() {
+		return this.func_152113_b();
 	}
 
 	/**
 	 * Detects if there are air blocks below the entities lowest bounding box
-	 * position based on range, semi-accurate boolean
+	 * position based on range, centered on entity's x/z axis
 	 */
-	protected boolean isAirBelow(int range) {
-		for (int curBlock = 1; curBlock <= range; curBlock++) {
+	public boolean isAirBelow(int range) {
+		for (int curBlock = 1; curBlock <= range; curBlock++)
 			if (!this.worldObj.isAirBlock(MathHelper.floor_double(this.posX),
 					MathHelper.floor_double(this.boundingBox.minY) - curBlock, MathHelper.floor_double(this.posZ)))
 				return false;
-		}
 		return true;
+	}
+
+	/**
+	 * Retrieves if this entity is inside a liquid material (provides a better
+	 * cross-mod implementation then {@link Entity#isInsideOfMaterial(Material)}
+	 * )
+	 */
+	private boolean isInLiquid() {
+		return this.worldObj.getBlock(MathHelper.floor_double(this.posX), MathHelper.floor_double(this.posY),
+				MathHelper.floor_double(this.posZ)).getMaterial().isLiquid();
+	}
+
+	public boolean isFlyable() {
+		return true;
+	}
+
+	@Override
+	public boolean isFlying() {
+		if (!this.isFlyable()) {
+			this.setFlying(false);
+			return false;
+		}
+		return (this.dataWatcher.getWatchableObjectByte(BOOL_WATCHER) & 32) != 0;
+	}
+
+	public boolean isOwner(EntityLivingBase e) {
+		return this.func_152114_e(e);
+	}
+	
+	@Override
+	public boolean canTame(EntityLivingBase tamer, ItemStack item) {
+		return item.getItem() == Items.fish && HTTYMDMod.getConfig().isTameable(this);
 	}
 
 	@Override
 	public void moveEntityWithHeading(float strafe, float forward) {
 		if (this.isFlying()) {
-			if ((!this.isAirBelow(1) && this.motionY < 0) || this.isOffsetPositionInLiquid(1, 1, 1)) {
-				// How could you fly in a liquid? :P
+			if ((!this.isAirBelow(1) && this.motionY < -0.1) || this.isInLiquid()) {
 				this.setFlying(false);
 				this.moveEntityWithHeading(strafe, forward);
 				return;
 			}
-			if (this.motionY < 0) {
+			if (this.motionY < 0)
 				this.motionY *= 0.8;
-			}
-			if (forward < 0) {
+			if (forward < 0)
 				forward *= 0.15;
-			}
 
 			final float timeSpeedMultipler = 0.91F;
 
@@ -149,31 +148,33 @@ public abstract class EntityTameableFlying extends EntityTameable implements ITa
 
 			this.moveFlying(strafe, forward, (float) this.getFlySpeed());
 			this.moveEntity(this.motionX, this.motionY, this.motionZ);
-		} else {
+		} else
 			super.moveEntityWithHeading(strafe, forward);
-		}
 	}
 
-	public String getOwnerString() {
-		return this.func_152113_b();
+	public void onTakeoff() {
+		if (!this.isFlying() && this.onGround) {
+			this.jump();
+			this.motionY += this.getFlySpeed();
+		}// else
+			//this.motionY += this.getFlySpeed() * 0.25;
+		this.setFlying(true);
 	}
 
-	public void setOwnerString(String s) {
-		this.func_152115_b(s);
-	}
+	@Override
+	public void setFlying(boolean flying) {
+		byte b0 = this.dataWatcher.getWatchableObjectByte(BOOL_WATCHER);
 
-	public boolean isOwner(EntityLivingBase e) {
-		return this.func_152114_e(e);
+		if (flying && this.isFlyable())
+			this.dataWatcher.updateObject(BOOL_WATCHER, Byte.valueOf((byte) (b0 | 32)));
+		else
+			this.dataWatcher.updateObject(BOOL_WATCHER, Byte.valueOf((byte) (b0 & -33)));
 	}
-
+	
 	public EntityLivingBase getOwner() {
-		if (this.isTamed() == false)
-			return null;
-		EntityLivingBase result = super.getOwner();
-		if (result == null)
-			result = this.owner;
+		EntityLivingBase result = this.owner != null ? this.owner : super.getOwner();
 		if (result == null) {
-			Iterator<?> it = this.worldObj.getLoadedEntityList().iterator();
+			Iterator<?> it = this.worldObj.loadedEntityList.iterator();
 			while (it.hasNext()) {
 				Entity e = (Entity) it.next();
 				if (e == null || !(e instanceof EntityLivingBase))
@@ -185,43 +186,43 @@ public abstract class EntityTameableFlying extends EntityTameable implements ITa
 			}
 		}
 		this.owner = result;
+		if (this.owner != null)
+			this.setTamed(true);
 		return result;
 	}
 
-	protected boolean canDespawn() {
-		return !this.isTamed() && this.ticksExisted > 2400;
-	}
-
 	/**
-	 * I have no idea what this function represents (if you know what it does,
-	 * please rename)
+	 * Determines whether our owner should be defended
 	 */
-	public boolean unsureFunction(EntityLivingBase target, EntityLivingBase targetOwner) {
-		return super.func_142018_a(target, targetOwner);
+	public boolean shouldDefendOwner(EntityLivingBase attacker, EntityLivingBase ourOwner) {
+		return super.func_142018_a(attacker, ourOwner);
+	}
+	
+	public void setOwnerString(String s) {
+		this.func_152115_b(s);
 	}
 
 	@Override
 	protected void updateFallState(double p_70064_1_, boolean p_70064_3_) {
 		if (this.isFlying()) {
-			if (this.fallDistance > 3) {
-				this.setFlying(true);
-				this.fallDistance = 0;
-			}
-		} else {
-			super.updateFallState(p_70064_1_, p_70064_3_);
+			this.fallDistance = 0;
+		} else if (this.fallDistance > 3.2F) {
+			this.setFlying(true);
+			this.updateFallState(p_70064_1_, p_70064_3_);
 		}
+		super.updateFallState(p_70064_1_, p_70064_3_);
 	}
 
 	@Override
 	public void writeEntityToNBT(NBTTagCompound tag) {
 		super.writeEntityToNBT(tag);
-		tag.setBoolean(NBT_IS_FLYING, isFlying());
+		tag.setBoolean(NBT_IS_FLYING, this.isFlying());
 	}
 
 	@Override
 	public void readEntityFromNBT(NBTTagCompound tag) {
 		super.readEntityFromNBT(tag);
-		setFlying(tag.getBoolean(NBT_IS_FLYING));
+		this.setFlying(tag.getBoolean(NBT_IS_FLYING));
 	}
 
 	public boolean interact(EntityPlayer player) {
@@ -232,7 +233,8 @@ public abstract class EntityTameableFlying extends EntityTameable implements ITa
 				return true;
 		} else if (HTTYMDMod.getConfig().isDebugMode() && hand.getItem() == ItemRegistry.wing) {
 			this.onTakeoff();
-		} else if (!this.isTamed() && this.isTameItem(hand) && this.isTameable(player)) {
+			return true;
+		} else if (!this.isTamed() && this.canTame(player, hand)) {
 			if (!player.capabilities.isCreativeMode && --hand.stackSize <= 0) {
 				player.inventory.setInventorySlotContents(player.inventory.currentItem, (ItemStack) null);
 			}
@@ -246,17 +248,13 @@ public abstract class EntityTameableFlying extends EntityTameable implements ITa
 					this.setOwnerString(player.getUniqueID().toString());
 					this.playTameEffect(true);
 					this.worldObj.setEntityState(this, (byte) 7);
-					HTTYMDMod.getLogger().info("Entity: " + this + " has been tamed");
 				} else {
 					this.playTameEffect(false);
 					this.worldObj.setEntityState(this, (byte) 6);
-					HTTYMDMod.getLogger().info("Entity: " + this + " not been tamed");
 				}
 			}
-
 			return true;
 		}
-
 		return super.interact(player);
 	}
 
@@ -270,9 +268,48 @@ public abstract class EntityTameableFlying extends EntityTameable implements ITa
 	public boolean isBreedingItem(ItemStack p_70877_1_) {
 		return false;
 	}
-
+	
+	/**
+	 * X Offset of mounted entity
+	 * 
+	 * <p>Useful for odd positioning of rider location (in comparison to regular mobs)</p>
+	 * 
+	 * @see #getMountedYOffset()
+	 * @see #getMountedZOffset()
+	 */
+	public double getMountedXOffset() {
+		return 0;
+	}
+	
+	/**
+	 * Z Offset of mounted entity
+	 * 
+	 * <p>Useful for odd positioning of rider location (in comparison to regular mobs)</p>
+	 * 
+	 * @see #getMountedYOffset()
+	 * @see #getMountedXOffset()
+	 */
+	public double getMountedZOffset() {
+		return 0;
+	}
+	
+	public void updateRiderPosition() {
+        if (this.riddenByEntity != null)
+        {
+            this.riddenByEntity.setPosition(this.posX + this.getMountedXOffset(), this.posY + this.getMountedYOffset() + this.riddenByEntity.getYOffset(), this.posZ + this.getMountedZOffset());
+        }
+    }
+	
+	public void doJump() {
+		if(!this.isAirBelow(1)) {
+			this.jump();
+		}
+	}
+	
 	@Override
 	public EntityAgeable createChild(EntityAgeable mate) {
+		if (!this.getClass().equals(mate.getClass()))
+			return null;
 		try {
 			return this.getClass().getConstructor(World.class).newInstance(this.worldObj);
 		} catch (Exception e) {
@@ -282,6 +319,6 @@ public abstract class EntityTameableFlying extends EntityTameable implements ITa
 
 	@Override
 	public boolean func_142018_a(EntityLivingBase p_142018_1_, EntityLivingBase p_142018_2_) {
-		return this.unsureFunction(p_142018_1_, p_142018_2_);
+		return this.shouldDefendOwner(p_142018_1_, p_142018_2_);
 	}
 }

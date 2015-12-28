@@ -2,16 +2,8 @@ package com.httymd.client.model;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
-import net.minecraft.client.model.ModelBase;
-import net.minecraft.client.model.ModelRenderer;
-import net.minecraft.entity.Entity;
-import net.minecraft.util.MathHelper;
 
 import org.lwjgl.opengl.GL11;
-
-import scala.annotation.meta.field;
 
 import com.httymd.client.animation.Animation;
 import com.httymd.client.animation.AnimationHandler;
@@ -19,16 +11,19 @@ import com.httymd.client.animation.AnimationHandler.Priority;
 import com.httymd.entity.EntityDragon;
 import com.httymd.entity.EntityTameableFlying;
 
+import net.minecraft.client.model.ModelBase;
+import net.minecraft.client.model.ModelRenderer;
+import net.minecraft.entity.Entity;
+import net.minecraft.util.MathHelper;
+
 public abstract class ModelDragonNew extends ModelBase {
 
-	private static Map<String, Animation> animations = new HashMap<String, Animation>();
-
-	public final AnimationHandler animationHandler;
+	private final HashMap<EntityDragon, AnimationHandler> animationHandlerList;
 
 	protected ModelBase model = this;
 
 	public ModelDragonNew() {
-		animationHandler = new AnimationHandler(this);
+		animationHandlerList = new HashMap<EntityDragon, AnimationHandler>();
 	}
 
 	public abstract ModelRenderer getRoot();
@@ -53,9 +48,9 @@ public abstract class ModelDragonNew extends ModelBase {
 		boolean flying = ((EntityTameableFlying) entity).isFlying();
 
 		if (flying)
-			animationHandler.addAnimation(getFlying(), Priority.WAIT_FOR_ANIM_TO_FINISH, true);
+			getAnimationHandler((EntityDragon) entity).addAnimation(getFlying(), Priority.WAIT_FOR_ANIM_TO_FINISH, true);
 		else
-			animationHandler.addAnimation(getIdle(), Priority.WAIT_FOR_ANIM_TO_FINISH, true);
+			getAnimationHandler((EntityDragon) entity).addAnimation(getIdle(), Priority.WAIT_FOR_ANIM_TO_FINISH, true);
 
 		float pitch = flying ? entity.rotationPitch : 0;
 		GL11.glRotatef(pitch / 2, 1, 0, 0);
@@ -79,7 +74,7 @@ public abstract class ModelDragonNew extends ModelBase {
 	 * @param f4
 	 *            lookAt spherical angle X
 	 * @param f5
-	 *            some weird parameter scaling the rotation point * @param f
+	 *            some weird parameter scaling the rotation point @param f
 	 * @param entity
 	 */
 	@Override
@@ -103,7 +98,7 @@ public abstract class ModelDragonNew extends ModelBase {
 					getLegs().get(i).rotateAngleX = (i % 2 == 0 ? 1 : -1) * MathHelper.cos(f * 0.6662F) * 1.4f * f1;
 		}
 
-		animationHandler.animate();
+		getAnimationHandler((EntityDragon) entity).animate();
 	}
 
 	// XXX Here or in own class?
@@ -112,12 +107,12 @@ public abstract class ModelDragonNew extends ModelBase {
 			super(p_i1173_1_);
 		}
 
-		public WingRenderer(ModelBase p_i1174_1_, int p_i1174_2_, int p_i1174_3_) {
-			super(p_i1174_1_, p_i1174_2_, p_i1174_3_);
+		public WingRenderer(ModelBase p_i1174_1, int p_i1174_2, int p_i1174_3_) {
+			super(p_i1174_1, p_i1174_2, p_i1174_3_);
 		}
 
-		public WingRenderer(ModelBase p_i1172_1_, String p_i1172_2_) {
-			super(p_i1172_1_, p_i1172_2_);
+		public WingRenderer(ModelBase p_i1172_1, String p_i1172_2) {
+			super(p_i1172_1, p_i1172_2);
 		}
 
 		@Override
@@ -138,5 +133,14 @@ public abstract class ModelDragonNew extends ModelBase {
 		model.rotateAngleX = x;
 		model.rotateAngleY = y;
 		model.rotateAngleZ = z;
+	}
+
+	private AnimationHandler getAnimationHandler(EntityDragon entity) {
+		AnimationHandler animationHandler = animationHandlerList.get(entity);
+		if (animationHandler == null) {
+			animationHandler = new AnimationHandler(this);
+			animationHandlerList.put(entity, animationHandler);
+		}
+		return animationHandler;
 	}
 }

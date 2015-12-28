@@ -2,18 +2,17 @@ package com.httymd.client.model;
 
 import com.httymd.client.render.RenderGlide;
 
-import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 
 public class ModelGlideSuit extends RenderGlide.ModelGlide {
 
-	ModelRenderer LeftWing;
-	ModelRenderer RightWing;
-	ModelRenderer BackFin;
+	public ModelRenderer LeftWing;
+	public ModelRenderer RightWing;
+	public ModelRenderer BackFin;
 
-	public ModelGlideSuit(ModelBiped baseModel) {
-		super(baseModel);
+	public ModelGlideSuit(float scale) {
+		super(scale);
 		this.textureWidth = 64;
 		this.textureHeight = 64;
 		this.LeftWing = new ModelRenderer(this, 0, 32);
@@ -34,23 +33,12 @@ public class ModelGlideSuit extends RenderGlide.ModelGlide {
 	@Override
 	public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {
 		super.render(entity, f, f1, f2, f3, f4, f5);
-		setRotationAngles(f, f1, f2, f3, f4, f5, entity);
+		this.setRotationAngles(f, f1, f2, f3, f4, f5, entity);
+	}
 
+	public void renderWings(Entity entity, float f5) {
 		LeftWing.render(f5);
 		RightWing.render(f5);
 		// BackFin.render(f5);
 	}
-
-	@SuppressWarnings("unused")
-	private void setRotation(ModelRenderer model, float x, float y, float z) {
-		model.rotateAngleX = x;
-		model.rotateAngleY = y;
-		model.rotateAngleZ = z;
-	}
-
-	@Override
-	public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5, Entity entity) {
-		super.setRotationAngles(f, f1, f2, f3, f4, f5, entity);
-	}
-
 }

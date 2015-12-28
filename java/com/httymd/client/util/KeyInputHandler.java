@@ -6,8 +6,6 @@ import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.ClientTickEvent;
 import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 
-import java.util.BitSet;
-
 public class KeyInputHandler {
 
 	public static final String CAT = "key.categories.httymd";
@@ -23,14 +21,12 @@ public class KeyInputHandler {
 		// ClientRegistry.registerKeyBinding(KEY_DRA_UP);
 	}
 
-	@SuppressWarnings("unused")
 	@SubscribeEvent
 	public void onTick(ClientTickEvent evt) {
-		BitSet flags = cm.getFlags();
+		this.cm.getFlags();
 		// flags.set(0, KEY_DRA_UP.getIsKeyPressed());
-		if (cm.hasChanged()) {
-			network.sendToServer(cm);
-		}
+		if (this.cm.hasChanged())
+			this.network.sendToServer(this.cm);
 	}
 
 }
