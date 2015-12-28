@@ -36,8 +36,8 @@ public class EntityTerribleTerror extends EntityDragon {
 		this.tasks.addTask(3, new EntityAIAttackOnCollide(this, 0.8D, false));
 		this.tasks.addTask(4, new EntityAIFollowOwner(this, 1.1D, 5F, 20F));
 		this.tasks.addTask(5, new EntityAITempt(this, 0.6D, Items.fish, true));
-		this.tasks.addTask(6, new EntityAIMate(this, 1.0D));
-		this.tasks.addTask(7, new EntityAIWander(this, 0.8D));
+		this.tasks.addTask(6, new EntityAIMate(this, 0.7D));
+		this.tasks.addTask(7, new EntityAIWander(this, 0.5D));
 		this.tasks.addTask(8, new EntityAIWatchClosest(this, EntityVikingBase.class, 8.0F));
 		this.tasks.addTask(9, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
 		this.tasks.addTask(9, new EntityAILookIdle(this));
