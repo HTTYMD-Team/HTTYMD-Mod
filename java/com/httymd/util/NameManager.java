@@ -11,20 +11,20 @@ import net.minecraft.stats.StatList;
 import net.minecraft.util.StatCollector;
 
 public class NameManager {
+	
+	private static final NameManager INSTANCE = new NameManager();
+	
+	private final ArrayList<String> randomNames = new ArrayList<String>();
+	private final ArrayList<ISpecialName> specialNames = new ArrayList<ISpecialName>();
 
 	public interface ISpecialName {
 		public String get(EntityLivingBase entity, String currentName);
 	}
 
-	private static final NameManager INSTANCE = new NameManager();
-
 	public static NameManager getInstance() {
 		return INSTANCE;
 	}
 
-	private final ArrayList<String> randomNames = new ArrayList<String>();
-
-	private final ArrayList<ISpecialName> specialNames = new ArrayList<ISpecialName>();
 
 	private NameManager() {
 		this.registerRandomName("smelly");
@@ -49,12 +49,12 @@ public class NameManager {
 				if (!(entity instanceof EntityPlayer))
 					return null;
 
-				String id = ((EntityPlayer) entity).getGameProfile().getId().toString();
+				String plyUuid = ((EntityPlayer) entity).getGameProfile().getId().toString();
 
-				if ("b2848781-aafe-454b-a87d-89ceffad585f".equals(id))
+				if ("b2848781-aafe-454b-a87d-89ceffad585f".equals(plyUuid))
 					return "s322";
 
-				if ("5c884585-0245-4452-bcac-5005c73d3196".equals(id))
+				if ("5c884585-0245-4452-bcac-5005c73d3196".equals(plyUuid))
 					return "cmmr";
 
 				return null;
