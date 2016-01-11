@@ -1,8 +1,12 @@
 package com.httymd.client.render;
 
+import java.util.Arrays;
+
 import org.lwjgl.opengl.GL11;
 
+import com.httymd.HTTYMDMod;
 import com.httymd.client.model.ModelGlideSuit;
+import com.httymd.item.ItemGlideArmor;
 import com.httymd.item.util.ItemUtils.EnumArmorType;
 
 import net.minecraft.client.entity.AbstractClientPlayer;
@@ -11,9 +15,8 @@ import net.minecraft.client.renderer.entity.RenderBiped;
 import net.minecraft.client.renderer.entity.RenderPlayer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-
-import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 
 public class RenderGlide extends RenderPlayer {
 
@@ -21,16 +24,15 @@ public class RenderGlide extends RenderPlayer {
 
 		public ModelGlide(float scale) {
 			super(scale, 0, 64, 32);
-			heldItemLeft = 0;
-			heldItemRight = 0;
-			isSneak = false;
-			aimedBow = false;
+			this.heldItemLeft = 0;
+			this.heldItemRight = 0;
+			this.isSneak = false;
+			this.aimedBow = false;
 		}
 
 		public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {
 			final float headAngleAligner = -75.0f;
 			super.render(entity, f, f1, f2, f3, f4 + headAngleAligner, f5);
-			this.isSneak = false;
 		}
 
 		@Override
@@ -39,7 +41,7 @@ public class RenderGlide extends RenderPlayer {
 			this.isSneak = false;
 			// Prevents all alternate arm angles
 			super.setRotationAngles(0.0F, 0.0F, 0.0F, p_78087_4_, p_78087_5_, p_78087_6_, p_78087_7_);
-			float armBendAngle = (float) (Math.PI / 180 * 45);
+			final float armBendAngle = (float) (Math.PI / 180 * 45);
 
 			bipedRightArm.rotateAngleZ = armBendAngle;
 			bipedLeftArm.rotateAngleZ = -armBendAngle;
@@ -48,7 +50,7 @@ public class RenderGlide extends RenderPlayer {
 			bipedLeftLeg.rotateAngleX = 0;
 
 			if (((AbstractClientPlayer) p_78087_7_).moveForward < 0) {
-				float legBendAngle = (float) (Math.PI / 180 * 30);
+				final float legBendAngle = (float) (Math.PI / 180 * 30);
 				bipedRightLeg.rotateAngleZ = legBendAngle;
 				bipedLeftLeg.rotateAngleZ = -legBendAngle;
 			} else {
@@ -62,8 +64,8 @@ public class RenderGlide extends RenderPlayer {
 		super();
 		if (mainModel instanceof ModelBiped) {
 			mainModel = new ModelGlide(0);
-			modelArmor = new ModelGlide(0);
-			modelArmorChestplate = new ModelGlide(0);
+			modelArmor = new ModelGlideSuit(0.5F);
+			modelArmorChestplate = new ModelGlideSuit(1);
 			modelArmor.bipedRightArm.mirror = true;
 			modelArmor.bipedRightLeg.mirror = true;
 			modelArmorChestplate.bipedRightArm.mirror = true;
@@ -136,31 +138,38 @@ public class RenderGlide extends RenderPlayer {
 
 		GL11.glPushMatrix();
 		GL11.glRotated(pitchTiltAngle, -playerYawCos, 0, -playerYawSin);
+		if(HTTYMDMod.getConfig().isDebugMode())
+			this.renderWings(player, 0.0625F);
 		super.doRender(player, p_76986_2, p_76986_4, p_76986_6, p_76986_8, p_76986_9_);
-		this.renderWings(player, 0.0625F);
 		GL11.glPopMatrix();
 	}
 
+	private boolean checkForWingRender(ItemStack stack, int slot) {
+		return stack != null && stack.getItem() instanceof ItemGlideArmor
+				&& Arrays.asList(((ItemGlideArmor)stack.getItem()).getRequiredSlotsForFlight()).contains(EnumArmorType.values()[slot]);
+	}
+
 	public void renderWings(Entity e, float f5) {
-		if (this.modelArmor instanceof ModelGlideSuit) {
-			String textureResource = null;
+		if (this.modelArmorChestplate instanceof ModelGlideSuit) {
+			HTTYMDMod.getLogger().info("renderWings");
+			ResourceLocation textureResource = null;
 			ItemStack stack = null;
 			if (e instanceof EntityLivingBase) {
 				for (int i = 0; i < EnumArmorType.values().length; i++) {
-					// TODO is it really (3 - i) and not (i + 1)? 0: Tool in
-					// Hand; 1-4: Armor
-					stack = ((EntityLivingBase) e).getEquipmentInSlot(3 - i);
-					if (stack != null && stack.getItem() instanceof ItemArmor)
+					stack = ((EntityLivingBase) e).getEquipmentInSlot(i + 1);
+					if (this.checkForWingRender(stack, i)) {
+						HTTYMDMod.getLogger().info("stack is " + stack.getDisplayName() + " slot: " + i);
 						break;
+					}
 					else
 						stack = null;
 				}
 				if (stack != null)
-					textureResource = ((ItemArmor) stack.getItem()).getArmorTexture(stack, e, 5, null);
+					textureResource = RenderBiped.getArmorResource(e, stack, 0, "fins");
 			}
 			if (textureResource != null) {
-				this.bindTexture(RenderBiped.getArmorResource(e, stack, 5, null));
-				((ModelGlideSuit) this.modelArmor).renderWings(e, f5);
+				this.bindTexture(textureResource);
+				((ModelGlideSuit) this.modelArmorChestplate).renderWings(e, f5);
 			}
 		}
 	}

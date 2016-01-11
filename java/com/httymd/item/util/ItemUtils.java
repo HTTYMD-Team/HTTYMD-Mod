@@ -25,8 +25,8 @@ public class ItemUtils {
 	 * Creates and retrieves a new {@link ItemArmor.ArmorMaterial}
 	 *
 	 * @param craftingMaterial
-	 *            The material that can be used to repair armors that use this
-	 *            enum
+	 *			  The material that can be used to repair armors that use this
+	 *			  enum
 	 */
 	public static ItemArmor.ArmorMaterial addArmorMaterial(String name, int durability, int[] reductionAmounts,
 			int enchantability, Item craftingMaterial) {
@@ -61,8 +61,8 @@ public class ItemUtils {
 	 * Creates and retrieves a new {@link Item.ToolMaterial}
 	 *
 	 * @param craftingMaterial
-	 *            The material that can be used to repair tools that use this
-	 *            enum
+	 *			  The material that can be used to repair tools that use this
+	 *			  enum
 	 */
 	public static Item.ToolMaterial addToolMaterial(String name, int harvestLevel, int maxUses, float efficiency,
 			float damage, int enchantability, Item craftingMaterial) {
@@ -74,7 +74,7 @@ public class ItemUtils {
 
 	/**
 	 * Retrieves registry name from unlocalized name
-	 * 
+	 *
 	 * <p>Terminates modid section</p>
 	 */
 	public static String findRegistryName(String unlocalizedName) {
@@ -83,7 +83,7 @@ public class ItemUtils {
 
 	/**
 	 * Retrieves texture name from unlocalized name
-	 * 
+	 *
 	 * <p>Will get rid of unlocazied prefix (for items, its 'item.') and retrieves texture name</p>
 	 */
 	public static String findTextureName(String unlocalizedName) {
@@ -92,7 +92,7 @@ public class ItemUtils {
 
 	/**
 	 * Creates unlocalized name for standardization
-	 * 
+	 *
 	 * <p>Syntax: "modid:&lt;lowercase name&gt;"</p>
 	 */
 	public static String findUnlocName(String name) {
@@ -106,9 +106,9 @@ public class ItemUtils {
 	 * easier to manage)
 	 *
 	 * @param baseName
-	 *            The standardized prefix name to apply to the whole object
+	 *			  The standardized prefix name to apply to the whole object
 	 * @param mat
-	 *            The {@link ArmorMaterial} of the new armor
+	 *			  The {@link ArmorMaterial} of the new armor
 	 */
 	public static Item[] generateArmor(Class<? extends ItemArmorExtension> clazz, String baseName, ArmorMaterial mat) {
 		final String[] ARMORNAMES = { "helmet", "chestplate", "leggings", "boots" };
@@ -154,7 +154,7 @@ public class ItemUtils {
 
 		return result;
 	}
-	
+
 	public static boolean isFood(ItemStack item) {
 		if(item == null) return false;
 		return item.getItem() instanceof ItemFood;
@@ -166,20 +166,29 @@ public class ItemUtils {
 	 */
 	public static enum EnumArmorType {
 		/**
-		 * Represents a helmet
+		 * Represents boots
 		 */
-		HELMET,
-		/**
-		 * Represents a chestplate
-		 */
-		CHESTPLATE,
+		BOOTS,
 		/**
 		 * Represents leggings (pants)
 		 */
 		LEGGINGS,
 		/**
-		 * Represents boots
+		 * Represents a chestplate
 		 */
-		BOOTS;
+		CHESTPLATE,
+		/**
+		 * Represents a helmet
+		 */
+		HELMET;
+
+		/**
+		 * Retrieves the reverse of the ordinal, cause Minecraft screws up armor location horribly
+		 *
+		 * <p>Eg: 0 = Helmet, 1 = Chestplate, 2 = Leggings, 3 = Boots</p>
+		 */
+		public int ordinalReverse() {
+			return values().length-this.ordinal()-1;
+		}
 	}
 }

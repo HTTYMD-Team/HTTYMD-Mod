@@ -3,11 +3,10 @@ package com.httymd.client.model.dragon;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.client.model.ModelRenderer;
-
 import com.httymd.client.animation.Animation;
 import com.httymd.client.model.ModelDragonNew;
-import com.httymd.client.model.ModelDragonNew.WingRenderer;
+
+import net.minecraft.client.model.ModelRenderer;
 
 public class ModelNightFury extends ModelDragonNew {
 

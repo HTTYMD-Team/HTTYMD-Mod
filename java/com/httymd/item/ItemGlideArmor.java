@@ -25,7 +25,7 @@ public class ItemGlideArmor extends ItemArmorExtension implements ISpecialArmor 
 		super(name, mat, type);
 	}
 
-	protected EnumArmorType[] getRequiredSlotsForFlight() {
+	public EnumArmorType[] getRequiredSlotsForFlight() {
 		return new EnumArmorType[] { EnumArmorType.CHESTPLATE, EnumArmorType.LEGGINGS };
 	}
 
@@ -39,6 +39,7 @@ public class ItemGlideArmor extends ItemArmorExtension implements ISpecialArmor 
 
 		if (entity instanceof EntityPlayer)
 			flag = flag && !((EntityPlayer) entity).capabilities.isFlying;
+		flag = flag && !entity.isRiding() && entity.riddenByEntity == null;
 
 		for (EnumArmorType slot : this.getRequiredSlotsForFlight()) {
 			ItemStack armor = entity.getEquipmentInSlot(slot.ordinal() + 1);
@@ -50,7 +51,7 @@ public class ItemGlideArmor extends ItemArmorExtension implements ISpecialArmor 
 	public boolean canGlide(EntityLivingBase entity, ItemStack stack) {
 		boolean canGlide = this.isFlyable(entity) && (this.isGliding(stack)
 				|| (entity.motionY < -1.0 && entity.moveForward >= 0.1 && entity.isSneaking()));
-		setGliding(stack, canGlide);
+		this.setGliding(stack, canGlide);
 		if (canGlide) {
 			for (int i = 1; i <= 4; i++) {
 				ItemStack armor = entity.getEquipmentInSlot(i);
@@ -108,8 +109,8 @@ public class ItemGlideArmor extends ItemArmorExtension implements ISpecialArmor 
 	@Override
 	@SideOnly(Side.CLIENT)
 	public ModelBiped getArmorModel(EntityLivingBase entityLiving, ItemStack itemStack, int armorSlot) {
-		if (isGliding(itemStack)) {
-			if (armorSlot == EnumArmorType.LEGGINGS.ordinal()) {
+		if (this.isGliding(itemStack)) {
+			if (armorSlot == EnumArmorType.LEGGINGS.ordinalReverse()) { // For some reason, armorSlot is the opposite of PlayerInventory.armorInventory
 				return new ModelGlideSuit(0.5F);
 			} else {
 				return new ModelGlideSuit(1.0F);
@@ -117,24 +118,24 @@ public class ItemGlideArmor extends ItemArmorExtension implements ISpecialArmor 
 		}
 		return super.getArmorModel(entityLiving, itemStack, armorSlot);
 	}
-
+	
 	@Override
 	public ArmorProperties getProperties(EntityLivingBase entity, ItemStack armor, DamageSource source, double damage,
 			int slot) {
-		if (source == DamageSource.fall && this.isGliding(armor)) {
-			return new ArmorProperties(1, 1, 200);
-		}
-		return new ArmorProperties(0, 0, 0);
+		if (source.equals(DamageSource.fall) && slot == EnumArmorType.BOOTS.ordinal())
+			return new ArmorProperties(0, 1, Integer.MAX_VALUE);
+		
+		return new ArmorProperties(0, this.damageReduceAmount / 25D, armor.getMaxDamage() + 1 - armor.getItemDamage());
 	}
 
 	@Override
 	public int getArmorDisplay(EntityPlayer player, ItemStack armor, int slot) {
-		return 0;
+		return this.damageReduceAmount;
 	}
 
 	@Override
 	public void damageArmor(EntityLivingBase entity, ItemStack armor, DamageSource source, int damage, int slot) {
-		if (source == DamageSource.fall && this.isGliding(armor))
+		if (source.equals(DamageSource.fall))
 			return;
 		armor.damageItem(damage, entity);
 	}
@@ -142,9 +143,9 @@ public class ItemGlideArmor extends ItemArmorExtension implements ISpecialArmor 
 	@Override
 	@SideOnly(Side.CLIENT)
 	public String getArmorTexture(ItemStack stack, Entity entity, int slot, String type) {
-		if (this.isGliding(stack) && slot == 5) {
+		if (this.isGliding(stack) && "fins".equals(type)) {
 			return HTTYMDMod.ID + ":textures/armor/"
-					+ getRegistryName().substring(0, getRegistryName().lastIndexOf("_")) + "_fins.png";
+					+ this.getRegistryName().substring(0, getRegistryName().lastIndexOf("_")) + "_fins.png";
 		}
 		return super.getArmorTexture(stack, entity, slot, type);
 	}
