@@ -67,8 +67,9 @@ public class ItemFlameSword extends ItemWeapon {
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	public void getSubItems(Item item, CreativeTabs tab, List list) {
+		ItemStack is;
 		for (int i = 0; i < 1; i++) {
-			ItemStack is = new ItemStack(item, 1);
+			is = new ItemStack(item, 1);
 			this.onToggle(is, false);
 			list.add(is);
 		}

@@ -19,7 +19,7 @@ import net.minecraft.world.World;
 
 public class Utils {
 	public static final double GRAVITY_FORCE = 0.6d;
-	private static Boolean isBG2Loaded = null;
+	private static Boolean isBG2Loaded;
 	public static final String bg2Id = "battlegear2";
 	
 	/**
@@ -51,10 +51,10 @@ public class Utils {
 	 * Retrieves an entity by its UUID (fails if the entity was not loaded from
 	 * file)
 	 */
-	public static Entity getEntityByUUID(UUID id, World w) {
-		for (Object o : w.getLoadedEntityList()) {
+	public static Entity getEntityByUUID(UUID uniqueId, World world) {
+		for (Object o : world.getLoadedEntityList()) {
 			Entity e = o instanceof Entity ? (Entity) o : null;
-			if (e != null && e.getPersistentID() == id)
+			if (e != null && e.getPersistentID() == uniqueId)
 				return e;
 		}
 
@@ -69,8 +69,8 @@ public class Utils {
 		return StatCollector.translateToLocal(getModString(unlocalized));
 	}
 
-	public static String getModString(String str) {
-		return HTTYMDMod.ID + ":" + str;
+	public static String getModString(String string) {
+		return HTTYMDMod.ID + ":" + string;
 	}
 
 	/**

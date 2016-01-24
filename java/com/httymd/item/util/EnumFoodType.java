@@ -28,20 +28,25 @@ public enum EnumFoodType {
 	 */
 	public static Multimap<EnumFoodType, Item> generateFood() {
 		Multimap<EnumFoodType, Item> foods = ArrayListMultimap.create();
-		for (EnumFoodType food : EnumFoodType.values()) {
-
+		Item drop = null;
+		
+		for (EnumFoodType food : EnumFoodType.values()) {			
 			if (food.isMeat())
-				foods.put(food, new ItemFoodDrop(food.toString() + "_raw", food.getHeal() / 2, food.getSaturation() / 2,
-						food.getForWolfs(), food.getDropFor()).registerItem());
-
-			foods.put(food, new ItemFoodDrop(food.toString(), food.getHeal(), food.getSaturation(), food.getForWolfs(),
+				drop = new ItemFoodDrop(food.toString() + "_raw", food.getHeal() / 2, food.getSaturation() / 2,
+						food.getForWolfs(), food.getDropFor()).registerItem();
+			
+			if(drop != null) foods.put(food, drop);
+			drop = new ItemFoodDrop(food.toString(), food.getHeal(), food.getSaturation(), food.getForWolfs(),
 					food.getDropFor(), food.isMeat()) {
 
 				public boolean isForEntity(EntityLivingBase entity) {
 					return super.isForEntity(entity) && entity.isBurning();
 				}
 
-			}.registerItem());
+			}.registerItem();
+			
+			foods.put(food, drop);
+			drop = null;
 		}
 		return foods;
 	}
@@ -87,15 +92,6 @@ public enum EnumFoodType {
 	 */
 	public int getHeal() {
 		return this.heal;
-	}
-
-	/**
-	 * The saturation level for food type
-	 * 
-	 * @deprecated for incorrect spelling, removal in 2.0.0 (following http://semver.org guidelines)
-	 */
-	public float getSatuartion() {
-		return this.satu;
 	}
 	
 	/**

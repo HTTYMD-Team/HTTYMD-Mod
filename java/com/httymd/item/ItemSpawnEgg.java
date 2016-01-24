@@ -43,11 +43,11 @@ public class ItemSpawnEgg extends ItemMonsterPlacer implements IRegisterable {
 
 	@SideOnly(Side.CLIENT)
 	private IIcon theIcon;
-	protected int colorBase = 0x000000;
+	protected int colorBase;
 	protected int colorSpots = 0xFFFFFF;
 	protected String entityToSpawnName = "";
 	protected String entityToSpawnNameFull = "";
-	protected EntityLiving entityToSpawn = null;
+	protected EntityLiving entityToSpawn;
 
 	public ItemSpawnEgg(String entityName) {
 		super();

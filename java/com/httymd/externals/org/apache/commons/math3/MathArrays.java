@@ -48,6 +48,14 @@ public class MathArrays {
 		}
 
 		// Loop early exit means wrong ordering.
-		throw new RuntimeException("Not a monotonic sequence!");
+		throw new MathArraysException("Not a monotonic sequence!");
+	}
+	
+	private static class MathArraysException extends RuntimeException {
+		private static final long serialVersionUID = 8151536343161142462L;
+
+		public MathArraysException(String message) {
+			super(message);
+		}
 	}
 }

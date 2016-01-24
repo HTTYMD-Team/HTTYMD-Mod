@@ -14,10 +14,10 @@ import net.minecraftforge.client.event.RenderPlayerEvent;
 
 public class PlayerClientHandler {
 
-	protected RenderGlide glideRender = null;
+	protected RenderGlide glideRender;
 
-	protected float playerTicks = 0.0F;
-	protected Entity ent = null;
+	protected float playerTicks;
+	protected Entity ent;
 
 	@SubscribeEvent
 	public void beforeBodyRender(RenderLivingEvent.Pre event) {

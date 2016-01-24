@@ -44,7 +44,7 @@ public abstract class EntityTameableFlying extends EntityTameable implements ITa
 	protected static final IAttribute speedAtt = SharedMonsterAttributes.movementSpeed;
 	protected static final IAttribute damageAtt = SharedMonsterAttributes.attackDamage;
 	
-	protected EntityLivingBase owner = null;
+	protected EntityLivingBase owner;
 
 	public EntityTameableFlying(World w) {
 		super(w);

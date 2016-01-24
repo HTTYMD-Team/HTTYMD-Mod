@@ -20,7 +20,7 @@ public class EntityDragon extends EntityTameableFlying {
 
 	private static final String NBT_IS_STARTLED = "IsStartled";
 
-	protected boolean startled = false;
+	protected boolean startled;
 
 	public EntityDragon(World world) {
 		super(world);

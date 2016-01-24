@@ -94,13 +94,13 @@ public class PolynomialSplineFunction {
 	 */
 	public PolynomialSplineFunction(double knots[], PolynomialFunction polynomials[]) {
 		if (knots == null || polynomials == null) {
-			throw new RuntimeException("Null argument");
+			throw new IllegalArgumentException("Null argument");
 		}
 		if (knots.length < 2) {
-			throw new RuntimeException("Number is to small: " + knots.length);
+			throw new IllegalArgumentException("Number is to small: " + knots.length);
 		}
 		if (knots.length - 1 != polynomials.length) {
-			throw new RuntimeException("Dimensions does not match! " + polynomials.length + " & " + knots.length);
+			throw new IllegalArgumentException("Dimensions does not match! " + polynomials.length + " & " + knots.length);
 		}
 		MathArrays.checkOrder(knots);
 
@@ -125,7 +125,7 @@ public class PolynomialSplineFunction {
 	 */
 	public double value(double v) {
 		if (v < knots[0] || v > knots[n]) {
-			throw new RuntimeException("out of range: " + v);
+			throw new IllegalArgumentException("out of range: " + v);
 		}
 		int i = Arrays.binarySearch(knots, v);
 		if (i < 0) {
@@ -145,6 +145,7 @@ public class PolynomialSplineFunction {
 	 *
 	 * @return the derivative function.
 	 */
+	@SuppressWarnings("unused")
 	private PolynomialSplineFunction polynomialSplineDerivative() {
 		PolynomialFunction derivativePolynomials[] = new PolynomialFunction[n];
 		for (int i = 0; i < n; i++) {

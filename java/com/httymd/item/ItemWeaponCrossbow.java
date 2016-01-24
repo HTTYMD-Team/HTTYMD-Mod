@@ -42,8 +42,8 @@ public class ItemWeaponCrossbow extends ItemExtension {
 
 	@SideOnly(Side.CLIENT)
 	private IIcon[] iconArray;
-	@SideOnly(Side.CLIENT)
-	private IIcon lastIcon;
+	//@SideOnly(Side.CLIENT)
+	//private IIcon lastIcon;
 
 	public ItemWeaponCrossbow(String name, int numberOfActions) {
 		this(name, numberOfActions, CreativeTab.DRAGON_TAB);
@@ -76,8 +76,8 @@ public class ItemWeaponCrossbow extends ItemExtension {
 			return this.iconArray[this.iconArray.length - 1];
 		if (this.iconArray.length <= deltaDuration)
 			deltaDuration = this.iconArray.length - 1;
-		else
-			this.lastIcon = this.iconArray[deltaDuration];
+		//else
+			//this.lastIcon = this.iconArray[deltaDuration];
 		return this.iconArray[deltaDuration];
 	}
 

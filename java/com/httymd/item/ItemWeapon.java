@@ -33,7 +33,7 @@ public class ItemWeapon extends ItemSword implements IRegisterable, IFuelHandler
 	private static final HashMap<ToolMaterial, HashMap<EnumWeaponType, ItemWeapon>> weaponMap = new HashMap<ToolMaterial, HashMap<EnumWeaponType, ItemWeapon>>();
 	
 	protected float attackDamage;
-	protected EnumWeaponType type = null;
+	protected EnumWeaponType type;
 
 	public ItemWeapon(Item.ToolMaterial mat, EnumWeaponType wepType) {
 		this(mat, wepType.getName(), wepType.getDamage());

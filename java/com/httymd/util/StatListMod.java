@@ -24,13 +24,14 @@ public class StatListMod {
 
 	private static void registerDragonsRidden() {
 		Iterator<String> dragonIt = HTTYMDMod.getDragonList().iterator();
-
+		StatBase stat;
+		
 		while (dragonIt.hasNext()) {
 			String dragonName = dragonIt.next();
 			String name = startSection + dragonName + endSection[endSection.length - 1];
+			stat = new StatBase(name, new ChatComponentTranslation(name)).initIndependentStat().registerStat();
 
-			dragonsRidden.put(dragonName.toLowerCase(),
-					new StatBase(name, new ChatComponentTranslation(name)).initIndependentStat().registerStat());
+			dragonsRidden.put(dragonName.toLowerCase(), stat);
 		}
 	}
 

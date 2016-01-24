@@ -55,10 +55,10 @@ public class PolynomialFunction {
 	public PolynomialFunction(double c[]) {
 		super();
 		if (c == null)
-			throw new RuntimeException();
+			throw new IllegalArgumentException("c can not be null");
 		int n = c.length;
 		if (n == 0) {
-			throw new RuntimeException("No data: " + n);
+			throw new IllegalArgumentException("No data: " + n);
 		}
 		while ((n > 1) && (c[n - 1] == 0)) {
 			--n;
@@ -112,10 +112,10 @@ public class PolynomialFunction {
 	 */
 	private static double evaluate(double[] coefficients, double argument) {
 		if (coefficients == null)
-			throw new RuntimeException();
+			throw new IllegalArgumentException("coefficients can not be null");
 		int n = coefficients.length;
 		if (n == 0) {
-			throw new RuntimeException("no data: " + n);
+			throw new IllegalArgumentException("no data: " + n);
 		}
 		double result = coefficients[n - 1];
 		for (int j = n - 2; j >= 0; j--) {
@@ -170,6 +170,7 @@ public class PolynomialFunction {
 	 *            Coefficient.
 	 * @return a string representation of {@code coeff}.
 	 */
+	@SuppressWarnings("unused")
 	private static String toString(double coeff) {
 		final String c = Double.toString(coeff);
 		if (c.endsWith(".0")) {

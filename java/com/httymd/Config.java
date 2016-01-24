@@ -9,6 +9,12 @@ import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraftforge.common.config.Configuration;
 
+/**
+ * Configuration Management class of the HTTYMD Mod
+ * 
+ * @author George Albany
+ *
+ */
 public class Config {
 
 	public static String CATEGORYS[] = {"dragons", "testing", "bg2"};
@@ -31,8 +37,8 @@ public class Config {
 	/////////////////
 	// Testing Cat
 	/////////////////
-	private boolean debugMode = false;
-	private boolean experimentalMode = false;
+	private boolean debugMode;
+	private boolean experimentalMode;
 	/////////////////
 	// BG2 Cat
 	/////////////////
@@ -48,6 +54,9 @@ public class Config {
 		this.syncConfig();
 	}
 
+	/**
+	 * Retrieves the Forge {@link Configuration}
+	 */
 	public Configuration getConfig() {
 		return this.config;
 	}
@@ -56,48 +65,82 @@ public class Config {
 		return STRING_PREFIX + ending;
 	}
 	
+	/**
+	 * Determines whether vertical climbing is based on pitch on dragons
+	 */
 	public boolean getVerticalDragonRiding() {
 		return this.verticalDragonRiding;
 	}
 
+	/**
+	 * Determines whether someone may own multiple dragons (may fade out with tame system)
+	 */
 	public boolean getMultiDragonOwnership() {
 		return this.canOwnMultipleDragons;
 	}
 
+	/**
+	 * Originally would determine start entity Id for dragons
+	 * @deprecated Does nothing
+	 */
+	@Deprecated
 	public int getStartEntityID() {
 		return this.startEntityID;
 	}
 
+	/**
+	 * Whether a developer debug mode is enabled
+	 */
 	public boolean isDebugMode() {
 		return this.debugMode;
 	}
 
+	/**
+	 * Whether the experimental mode is enabled
+	 */
 	public boolean isExperimental() {
 		return this.experimentalMode;
 	}
 	
+	/**
+	 * Whether to use Battlegear 2 alongside HTTYMD
+	 * @return
+	 */
 	public boolean canUseBg2() {
 		return this.useBG2;
 	}
 	
+	/**
+	 * Whether HTTYMD Daggers act as Battlegear 2 daggers
+	 */
 	public boolean useBg2Daggers() {
 		return this.useBg2Daggers;
 	}
 	
+	/**
+	 * Whether HTTYMD Warhammers use Battlegear 2
+	 */
 	public boolean useBg2ForWarhammer() {
 		return this.useBg2ForWarhammer;
 	}
 	
-	public boolean isTameable(EntityTameableFlying e) {
-		Boolean result = this.forcedTameCache.get(e.getClass());
+	/**
+	 * Whether an entity is tameable due to the tame system in place (note: will change)
+	 * @param tameable The entity to check
+	 */
+	public boolean isTameable(EntityTameableFlying tameable) {
+		Boolean result = this.forcedTameCache.get(tameable.getClass());
 		if(result != null) return result.booleanValue();
-		String name = EntityList.getEntityString(e).replace(" ", "").replace(HTTYMDMod.ID+".", "").toLowerCase();
+		String name = EntityList.getEntityString(tameable).replace(" ", "").replace(HTTYMDMod.ID+".", "").toLowerCase();
 		String checkStr = this.forcedTameable.replace(" ", "").toLowerCase();
 		result = checkStr.indexOf(name) != -1;
-		this.forcedTameCache.put(e.getClass(), result);
+		this.forcedTameCache.put(tameable.getClass(), result);
 		return result;
 	}
 	
+	/**
+	 * Whether feeding a dragon food may heal them
+	 */
 	public boolean canFeedHeal() {
 		return this.feedHealsDragons;
 	}

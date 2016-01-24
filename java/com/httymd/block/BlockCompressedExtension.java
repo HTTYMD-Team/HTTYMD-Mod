@@ -16,6 +16,7 @@ public class BlockCompressedExtension extends BlockExtension {
 	
 	public BlockCompressedExtension(String name, MapColor color) {
 		super(name, Material.iron);
+		this.color = color;
 	}
 	
 	public BlockCompressedExtension(String name, CreativeTabs tab, MapColor color) {

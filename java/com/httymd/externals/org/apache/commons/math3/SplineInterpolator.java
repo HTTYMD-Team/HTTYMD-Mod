@@ -62,11 +62,11 @@ public class SplineInterpolator {
 	 */
 	public PolynomialSplineFunction interpolate(double x[], double y[]) {
 		if (x.length != y.length) {
-			throw new RuntimeException("Dimensions does not match! " + x.length + " & " + y.length);
+			throw new IllegalArgumentException("Dimensions does not match! " + x.length + " & " + y.length);
 		}
 
 		if (x.length < 3) {
-			throw new RuntimeException("Dimension is to small: " + x.length);
+			throw new IllegalArgumentException("Dimension is to small: " + x.length);
 		}
 
 		// Number of intervals. The number of data points is n + 1.

@@ -48,7 +48,7 @@ public class ItemShield extends ItemExtension
 	protected final float damDecay;
 	protected final float natDecay;
 
-	private Item.ToolMaterial material = null;
+	private Item.ToolMaterial material;
 
 	public ItemShield(String name, float decay, float damDecay, int maxDam) {
 		super("shield_" + name);
@@ -147,7 +147,7 @@ public class ItemShield extends ItemExtension
 
 	public int getArrowCount(ItemStack stack) {
 		if (stack.hasTagCompound() && stack.getTagCompound().hasKey(NBT_ARROW_COUNT))
-			return stack.getTagCompound().getShort(NBT_ARROW_COUNT);
+			return stack.getTagCompound().getInteger(NBT_ARROW_COUNT);
 		return 0;
 	}
 
@@ -155,7 +155,7 @@ public class ItemShield extends ItemExtension
 		if (!stack.hasTagCompound()) stack.setTagCompound(new NBTTagCompound());
 		// Should never happen, you would need A LOT of arrows for this to happen
 		if (count > Short.MAX_VALUE) count = Short.MAX_VALUE;
-		stack.getTagCompound().setShort(NBT_ARROW_COUNT, (short) count);
+		stack.getTagCompound().setInteger(NBT_ARROW_COUNT, count);
 	}
 
 	public boolean catchArrow(ItemStack shield, EntityPlayer player, IProjectile arrow) {

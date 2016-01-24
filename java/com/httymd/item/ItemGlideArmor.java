@@ -4,6 +4,7 @@ import com.httymd.HTTYMDMod;
 import com.httymd.client.model.ModelGlideSuit;
 import com.httymd.item.util.ItemUtils.EnumArmorType;
 
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.model.ModelBiped;
@@ -12,19 +13,30 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
-import net.minecraftforge.common.ISpecialArmor;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.entity.living.LivingFallEvent;
 
-public class ItemGlideArmor extends ItemArmorExtension implements ISpecialArmor {
+/**
+ * The Item class for Hiccup's Glide Suit in HTTYD
+ * 
+ * @author George Albany,<br>Stephan Spengler
+ *
+ */
+public class ItemGlideArmor extends ItemArmorExtension {
 
 	public static final String NBT_GLIDING = "IsGliding";
+	public static final String NBT_PREVENT_FALLDAM = "PreventFallDamage";
 
 	public ItemGlideArmor(String name, ArmorMaterial mat, int type) {
 		super(name, mat, type);
+		MinecraftForge.EVENT_BUS.register(this);
 	}
 
+	/**
+	 * Returns the required slot sections for flight
+	 */
 	public EnumArmorType[] getRequiredSlotsForFlight() {
 		return new EnumArmorType[] { EnumArmorType.CHESTPLATE, EnumArmorType.LEGGINGS };
 	}
@@ -34,6 +46,10 @@ public class ItemGlideArmor extends ItemArmorExtension implements ISpecialArmor 
 				MathHelper.floor_double(entity.posZ)).getMaterial().isLiquid();
 	}
 
+	/**
+	 * Determines if the glide suit enables the ability to glide on an entity
+	 * @param entity The entity to check
+	 */
 	public boolean isFlyable(EntityLivingBase entity) {
 		boolean flag = entity != null && (!entity.onGround && !this.isInLiquid(entity));
 
@@ -48,6 +64,11 @@ public class ItemGlideArmor extends ItemArmorExtension implements ISpecialArmor 
 		return flag;
 	}
 
+	/**
+	 * Whether an entity's item can glide, for anything not covered in {@link #isFlyable(EntityLivingBase)}
+	 * @param entity The entity to check
+	 * @param stack The itemstack to check
+	 */
 	public boolean canGlide(EntityLivingBase entity, ItemStack stack) {
 		boolean canGlide = this.isFlyable(entity) && (this.isGliding(stack)
 				|| (entity.motionY < -1.0 && entity.moveForward >= 0.1 && entity.isSneaking()));
@@ -55,25 +76,29 @@ public class ItemGlideArmor extends ItemArmorExtension implements ISpecialArmor 
 		if (canGlide) {
 			for (int i = 1; i <= 4; i++) {
 				ItemStack armor = entity.getEquipmentInSlot(i);
-				if (armor != null && armor.getItem() instanceof ItemGlideArmor)
-					((ItemGlideArmor) armor.getItem()).setGliding(armor, true);
+				this.setGliding(armor, true);
 			}
 		}
 		return canGlide;
 	}
 
+	/**
+	 * Determines whether an itemstack has the {@link #NBT_GLIDING} boolean enabled
+	 * @param stack The itemstack to check
+	 */
 	public boolean isGliding(ItemStack stack) {
-		if (stack == null)
+		if (stack == null || !(stack.getItem() instanceof ItemGlideArmor) || !stack.hasTagCompound())
 			return false;
-		if (!stack.hasTagCompound()) {
-			stack.setTagCompound(new NBTTagCompound());
-			return this.isGliding(stack);
-		} else
-			return stack.getTagCompound().getBoolean(NBT_GLIDING);
+		return stack.getTagCompound().getBoolean(NBT_GLIDING);
 	}
 
+	/**
+	 * Sets the the {@link #NBT_GLIDING} boolean
+	 * @param stack The stack to set on
+	 * @param gliding The boolean to set {@link #NBT_GLIDING} as
+	 */
 	public void setGliding(ItemStack stack, boolean gliding) {
-		if (!(stack.getItem() instanceof ItemGlideArmor))
+		if (stack == null || !(stack.getItem() instanceof ItemGlideArmor))
 			return;
 		if (!stack.hasTagCompound())
 			stack.setTagCompound(new NBTTagCompound());
@@ -85,6 +110,12 @@ public class ItemGlideArmor extends ItemArmorExtension implements ISpecialArmor 
 		this.onArmorTick(world, (EntityLivingBase) player, stack);
 	}
 
+	/**
+	 * For manipulation outside of just player ticks, for anything to be covered by {@link #onArmorTick(World, EntityPlayer, ItemStack)}
+	 * @param world The world this event takes place in
+	 * @param entity The entity wearing the armor
+	 * @param stack The itemstack of armor
+	 */
 	public void onArmorTick(World world, EntityLivingBase entity, ItemStack stack) {
 		boolean canGlide = this.canGlide(entity, stack);
 		if (canGlide) {
@@ -102,7 +133,7 @@ public class ItemGlideArmor extends ItemArmorExtension implements ISpecialArmor 
 	}
 
 	public boolean onDroppedByPlayer(ItemStack stack, EntityPlayer player) {
-		setGliding(stack, false);
+		this.setGliding(stack, false);
 		return super.onDroppedByPlayer(stack, player);
 	}
 
@@ -119,25 +150,15 @@ public class ItemGlideArmor extends ItemArmorExtension implements ISpecialArmor 
 		return super.getArmorModel(entityLiving, itemStack, armorSlot);
 	}
 	
-	@Override
-	public ArmorProperties getProperties(EntityLivingBase entity, ItemStack armor, DamageSource source, double damage,
-			int slot) {
-		if (source.equals(DamageSource.fall) && slot == EnumArmorType.BOOTS.ordinal())
-			return new ArmorProperties(0, 1, Integer.MAX_VALUE);
-		
-		return new ArmorProperties(0, this.damageReduceAmount / 25D, armor.getMaxDamage() + 1 - armor.getItemDamage());
-	}
-
-	@Override
-	public int getArmorDisplay(EntityPlayer player, ItemStack armor, int slot) {
-		return this.damageReduceAmount;
-	}
-
-	@Override
-	public void damageArmor(EntityLivingBase entity, ItemStack armor, DamageSource source, int damage, int slot) {
-		if (source.equals(DamageSource.fall))
-			return;
-		armor.damageItem(damage, entity);
+	/**
+	 * An event management method for disabling fall damage in certain cases
+	 */
+	@SubscribeEvent
+	public void onFall(LivingFallEvent event) {
+		ItemStack boots = event.entityLiving.getEquipmentInSlot(EnumArmorType.BOOTS.ordinal()+1);
+		if(boots != null && boots.getItem() instanceof ItemGlideArmor) {
+			event.setCanceled(true);
+		}
 	}
 
 	@Override

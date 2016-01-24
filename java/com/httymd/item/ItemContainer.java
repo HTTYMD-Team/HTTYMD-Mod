@@ -71,7 +71,7 @@ public class ItemContainer extends ItemExtension {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack stack, EntityPlayer player, List textList, boolean p_77624_4_) {
-		String text = EnumChatFormatting.DARK_PURPLE + "" + EnumChatFormatting.ITALIC
+		String text = EnumChatFormatting.DARK_PURPLE.toString() + EnumChatFormatting.ITALIC
 				+ Utils.getLocalString(this.getRegistryName() + ".produceType") + ": ";
 		if (hasProduce(stack))
 			text += getProduceHeld(stack) + " " + Utils.getLocalString("itemNBT.milliliter");
