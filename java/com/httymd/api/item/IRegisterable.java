@@ -1,5 +1,6 @@
-package com.httymd.item.registry;
+package com.httymd.api.item;
 
+import com.httymd.item.registry.ItemRegistry;
 import com.httymd.item.util.ItemUtils;
 
 import net.minecraft.item.Item;
@@ -19,6 +20,9 @@ public interface IRegisterable {
 
 	/**
 	 * Registers the item (commonly using {@link ItemRegistry#registerItem(Item, String)}
+	 * 
+	 * @Warn
+	 * 		External use may not be trustworthy
 	 */
 	public Item registerItem();
 

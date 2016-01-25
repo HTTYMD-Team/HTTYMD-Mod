@@ -3,6 +3,8 @@ package com.httymd.item.registry;
 import java.util.HashMap;
 
 import com.google.common.collect.Multimap;
+import com.httymd.api.item.FoodType;
+import com.httymd.api.item.WeaponType;
 import com.httymd.bg2.item.ItemDaggerBg2;
 import com.httymd.bg2.item.ItemWarhammerBg2;
 import com.httymd.item.ItemExtension;
@@ -13,11 +15,8 @@ import com.httymd.item.ItemSpawnEgg;
 import com.httymd.item.ItemToolExtension;
 import com.httymd.item.ItemWeapon;
 import com.httymd.item.ItemWeaponCrossbow;
-import com.httymd.item.util.EnumFoodType;
 import com.httymd.item.util.EnumToolType;
-import com.httymd.item.util.EnumWeaponType;
 import com.httymd.item.util.ItemUtils;
-import com.httymd.util.Utils;
 
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.item.Item;
@@ -84,7 +83,7 @@ public class ItemRegistry {
 
 	public static Item crossbow;
 	public static Item[] glideSuit;
-	public static Multimap<EnumFoodType, Item> foods;
+	public static Multimap<FoodType, Item> foods;
 	public static Item gronkleIronIngot;
 	public static Item wing;
 	public static Item flameSword;
@@ -95,43 +94,40 @@ public class ItemRegistry {
 	public static void init() {
 
 		daggerWood = new ItemDaggerBg2(ToolMaterial.WOOD).registerItem();
-		clubWood = new ItemWeapon(ToolMaterial.WOOD, EnumWeaponType.CLUB).registerItem();
-		maceWood = new ItemWeapon(ToolMaterial.WOOD, EnumWeaponType.MACE).registerItem();
+		clubWood = new ItemWeapon(ToolMaterial.WOOD, WeaponType.CLUB).registerItem();
+		maceWood = new ItemWeapon(ToolMaterial.WOOD, WeaponType.MACE).registerItem();
 		hammerWood = new ItemWarhammerBg2(ToolMaterial.WOOD).registerItem();
-		waraxeWood = new ItemWeapon(ToolMaterial.WOOD, EnumWeaponType.WARAXE).registerItem();
+		waraxeWood = new ItemWeapon(ToolMaterial.WOOD, WeaponType.WARAXE).registerItem();
 
 		daggerStone = new ItemDaggerBg2(ToolMaterial.STONE).registerItem();
-		clubStone = new ItemWeapon(ToolMaterial.STONE, EnumWeaponType.CLUB).registerItem();
-		maceStone = new ItemWeapon(ToolMaterial.STONE, EnumWeaponType.MACE).registerItem();
+		clubStone = new ItemWeapon(ToolMaterial.STONE, WeaponType.CLUB).registerItem();
+		maceStone = new ItemWeapon(ToolMaterial.STONE, WeaponType.MACE).registerItem();
 		hammerStone = new ItemWarhammerBg2(ToolMaterial.STONE).registerItem();
-		waraxeStone = new ItemWeapon(ToolMaterial.STONE, EnumWeaponType.WARAXE).registerItem();
+		waraxeStone = new ItemWeapon(ToolMaterial.STONE, WeaponType.WARAXE).registerItem();
 
-		daggerIron = Utils.shouldForceBg2Daggers() ? new ItemDaggerBg2(ToolMaterial.IRON).registerItem()
-				: new ItemWeapon(ToolMaterial.IRON, EnumWeaponType.DAGGER).registerItem();
-		clubIron = new ItemWeapon(ToolMaterial.IRON, EnumWeaponType.CLUB).registerItem();
-		maceIron = new ItemWeapon(ToolMaterial.IRON, EnumWeaponType.MACE).registerItem();
+		daggerIron = new ItemDaggerBg2(ToolMaterial.IRON).registerItem();
+		clubIron = new ItemWeapon(ToolMaterial.IRON, WeaponType.CLUB).registerItem();
+		maceIron = new ItemWeapon(ToolMaterial.IRON, WeaponType.MACE).registerItem();
 		hammerIron = new ItemWarhammerBg2(ToolMaterial.IRON).registerItem();
-		waraxeIron = new ItemWeapon(ToolMaterial.IRON, EnumWeaponType.WARAXE).registerItem();
+		waraxeIron = new ItemWeapon(ToolMaterial.IRON, WeaponType.WARAXE).registerItem();
 
-		daggerGold = Utils.shouldForceBg2Daggers() ? new ItemDaggerBg2(ToolMaterial.GOLD).registerItem()
-				: new ItemWeapon(ToolMaterial.GOLD, EnumWeaponType.DAGGER).registerItem();
-		clubGold = new ItemWeapon(ToolMaterial.GOLD, EnumWeaponType.CLUB).registerItem();
-		maceGold = new ItemWeapon(ToolMaterial.GOLD, EnumWeaponType.MACE).registerItem();
+		daggerGold = new ItemDaggerBg2(ToolMaterial.GOLD).registerItem();
+		clubGold = new ItemWeapon(ToolMaterial.GOLD, WeaponType.CLUB).registerItem();
+		maceGold = new ItemWeapon(ToolMaterial.GOLD, WeaponType.MACE).registerItem();
 		hammerGold = new ItemWarhammerBg2(ToolMaterial.GOLD).registerItem();
-		waraxeGold = new ItemWeapon(ToolMaterial.GOLD, EnumWeaponType.WARAXE).registerItem();
+		waraxeGold = new ItemWeapon(ToolMaterial.GOLD, WeaponType.WARAXE).registerItem();
 
-		daggerDiam = Utils.shouldForceBg2Daggers() ? new ItemDaggerBg2(ToolMaterial.EMERALD).registerItem()
-				: new ItemWeapon(ToolMaterial.EMERALD, EnumWeaponType.DAGGER).registerItem();
-		clubDiam = new ItemWeapon(ToolMaterial.EMERALD, EnumWeaponType.CLUB).registerItem();
-		maceDiam = new ItemWeapon(ToolMaterial.EMERALD, EnumWeaponType.MACE).registerItem();
+		daggerDiam = new ItemDaggerBg2(ToolMaterial.EMERALD).registerItem();
+		clubDiam = new ItemWeapon(ToolMaterial.EMERALD, WeaponType.CLUB).registerItem();
+		maceDiam = new ItemWeapon(ToolMaterial.EMERALD, WeaponType.MACE).registerItem();
 		hammerDiam = new ItemWarhammerBg2(ToolMaterial.EMERALD).registerItem();
-		waraxeDiam = new ItemWeapon(ToolMaterial.EMERALD, EnumWeaponType.WARAXE).registerItem();
+		waraxeDiam = new ItemWeapon(ToolMaterial.EMERALD, WeaponType.WARAXE).registerItem();
 
 		daggerGron = new ItemDaggerBg2(MaterialRegistry.toolGronkle).registerItem();
-		clubGron = new ItemWeapon(MaterialRegistry.toolGronkle, EnumWeaponType.CLUB).registerItem();
-		maceGron = new ItemWeapon(MaterialRegistry.toolGronkle, EnumWeaponType.MACE).registerItem();
+		clubGron = new ItemWeapon(MaterialRegistry.toolGronkle, WeaponType.CLUB).registerItem();
+		maceGron = new ItemWeapon(MaterialRegistry.toolGronkle, WeaponType.MACE).registerItem();
 		hammerGron = new ItemWarhammerBg2(MaterialRegistry.toolGronkle).registerItem();
-		waraxeGron = new ItemWeapon(MaterialRegistry.toolGronkle, EnumWeaponType.WARAXE).registerItem();
+		waraxeGron = new ItemWeapon(MaterialRegistry.toolGronkle, WeaponType.WARAXE).registerItem();
 
 		swordGron = new ItemWeapon(MaterialRegistry.toolGronkle, swordN, swordD).registerItem();
 		shovelGron = new ItemToolExtension(MaterialRegistry.toolGronkle, EnumToolType.SHOVEL).registerItem();
@@ -159,17 +155,18 @@ public class ItemRegistry {
 		// nightmareSalivaContainer = new ItemContainer("night_saliva_cont",
 		// 20.0F, EntityNightmare.class);
 
-		foods = EnumFoodType.generateFood();
+		foods = FoodType.generateFood();
 
-		ItemUtils.addFish(new ItemStack(foods.get(EnumFoodType.CRAB).iterator().next(), 1), 50);
+		ItemUtils.addFish(new ItemStack(foods.get(FoodType.CRAB).iterator().next(), 1), 50);
 	}
 
 	/**
-	 * Registers item using a string name (for consistency with 1.8)
+	 * Registers item using a string name (for consistency with 1.8), silently ignores regName recurrences
 	 * @param item Item to register
 	 * @param regName Name to register item (mustn't have a colon)
 	 */
 	public static void registerItem(Item item, String regName) {
+		if(itemRegistry.get(regName) != null) return;
 		GameRegistry.registerItem(item, regName);
 		itemRegistry.put(regName, item);
 	}

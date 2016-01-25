@@ -2,8 +2,8 @@ package com.httymd.bg2.item;
 
 import com.google.common.collect.Multimap;
 import com.httymd.HTTYMDMod;
+import com.httymd.api.item.WeaponType;
 import com.httymd.item.ItemWeapon;
-import com.httymd.item.util.EnumWeaponType;
 import com.httymd.util.Utils;
 
 import cpw.mods.fml.common.Optional.Interface;
@@ -47,7 +47,7 @@ public class ItemDaggerBg2 extends ItemWeapon
 	}
 	
 	public ItemDaggerBg2(ToolMaterial mat) {
-		this(mat, EnumWeaponType.DAGGER.getName(), EnumWeaponType.DAGGER.getDamage());
+		this(mat, WeaponType.DAGGER.getName(), WeaponType.DAGGER.getDamage());
 	}
 	
 	public boolean onBackStab(EntityLivingBase entityHit, EntityLivingBase entityHitting) {

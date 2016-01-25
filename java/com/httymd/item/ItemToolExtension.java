@@ -4,7 +4,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Set;
 
-import com.httymd.item.registry.IRegisterable;
+import com.httymd.api.item.IRegisterable;
 import com.httymd.item.registry.ItemRegistry;
 import com.httymd.item.util.EnumToolType;
 import com.httymd.item.util.ItemUtils;

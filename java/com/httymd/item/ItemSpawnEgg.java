@@ -5,7 +5,7 @@ import java.util.List;
 import org.apache.logging.log4j.Logger;
 
 import com.httymd.HTTYMDMod;
-import com.httymd.item.registry.IRegisterable;
+import com.httymd.api.item.IRegisterable;
 import com.httymd.item.util.ItemUtils;
 
 import cpw.mods.fml.common.registry.GameRegistry;

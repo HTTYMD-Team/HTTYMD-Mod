@@ -18,14 +18,16 @@ public class StatListMod {
 	 * have no spaces)
 	 */
 	public static HashMap<String, StatBase> dragonsRidden;
-	/** Records the distance traveled on tamed dragons */
+	/** 
+	 * Records the distance traveled on tamed dragons 
+	 */
 	public static StatBase distanceByDragon = new StatBase(startSection + endSection[0],
 			new ChatComponentTranslation(startSection + endSection[0])).initIndependentStat().registerStat();
 
 	private static void registerDragonsRidden() {
 		Iterator<String> dragonIt = HTTYMDMod.getDragonList().iterator();
 		StatBase stat;
-		
+
 		while (dragonIt.hasNext()) {
 			String dragonName = dragonIt.next();
 			String name = startSection + dragonName + endSection[endSection.length - 1];

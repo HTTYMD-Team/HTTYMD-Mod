@@ -1,8 +1,8 @@
 package com.httymd.bg2.item;
 
 import com.google.common.collect.Multimap;
+import com.httymd.api.item.WeaponType;
 import com.httymd.item.ItemWeapon;
-import com.httymd.item.util.EnumWeaponType;
 import com.httymd.util.Utils;
 
 import cpw.mods.fml.common.Optional.Interface;
@@ -43,7 +43,7 @@ public class ItemWarhammerBg2 extends ItemWeapon implements mods.battlegear2.api
 	}
 	
 	public ItemWarhammerBg2(ToolMaterial mat) {
-		this(mat, EnumWeaponType.HAMMER.getName(), EnumWeaponType.HAMMER.getDamage());
+		this(mat, WeaponType.HAMMER.getName(), WeaponType.HAMMER.getDamage());
 	}
 
 	public EnumAction getItemUseAction(ItemStack stack) {

@@ -5,9 +5,9 @@ import java.util.Iterator;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
-import com.httymd.item.registry.IRegisterable;
+import com.httymd.api.item.IRegisterable;
+import com.httymd.api.item.WeaponType;
 import com.httymd.item.registry.ItemRegistry;
-import com.httymd.item.util.EnumWeaponType;
 import com.httymd.item.util.ItemUtils;
 import com.httymd.util.CreativeTab;
 
@@ -30,12 +30,12 @@ import net.minecraft.item.ItemSword;
  */
 public class ItemWeapon extends ItemSword implements IRegisterable, IFuelHandler {
 	
-	private static final HashMap<ToolMaterial, HashMap<EnumWeaponType, ItemWeapon>> weaponMap = new HashMap<ToolMaterial, HashMap<EnumWeaponType, ItemWeapon>>();
+	private static final HashMap<ToolMaterial, HashMap<WeaponType, ItemWeapon>> weaponMap = new HashMap<ToolMaterial, HashMap<WeaponType, ItemWeapon>>();
 	
 	protected float attackDamage;
-	protected EnumWeaponType type;
+	protected WeaponType type;
 
-	public ItemWeapon(Item.ToolMaterial mat, EnumWeaponType wepType) {
+	public ItemWeapon(Item.ToolMaterial mat, WeaponType wepType) {
 		this(mat, wepType.getName(), wepType.getDamage());
 		this.type = wepType;
 		if(this.type != null && this.type.getFuelTime() > 0) GameRegistry.registerFuelHandler(this);
@@ -99,7 +99,7 @@ public class ItemWeapon extends ItemSword implements IRegisterable, IFuelHandler
 	 * Whether item is effective against block
 	 */
 	public boolean func_150897_b(Block block) {
-		return this.type == EnumWeaponType.WARAXE && block.getMaterial() == Material.wood;
+		return this.type == WeaponType.WARAXE && block.getMaterial() == Material.wood;
 	}
 	
 	/**
@@ -129,18 +129,18 @@ public class ItemWeapon extends ItemSword implements IRegisterable, IFuelHandler
 		return 0;
 	}
 	
-	public static HashMap<EnumWeaponType, ItemWeapon> getWeaponMap(ToolMaterial mat) {
+	public static HashMap<WeaponType, ItemWeapon> getWeaponMap(ToolMaterial mat) {
 		return weaponMap.get(mat);
 	}
 	
-	public static ItemWeapon getWeaponFor(ToolMaterial mat, EnumWeaponType type) {
+	public static ItemWeapon getWeaponFor(ToolMaterial mat, WeaponType type) {
 		return getWeaponMap(mat).get(type);
 	}
 	
-	private static void registerWeapon(ToolMaterial mat, EnumWeaponType type, ItemWeapon wep) {
+	private static void registerWeapon(ToolMaterial mat, WeaponType type, ItemWeapon wep) {
 		if(mat != null && type != null) {
 			if(!weaponMap.containsKey(mat)) {
-				weaponMap.put(mat, new HashMap<EnumWeaponType, ItemWeapon>());
+				weaponMap.put(mat, new HashMap<WeaponType, ItemWeapon>());
 			}
 			weaponMap.get(mat).put(type, wep);
 		}

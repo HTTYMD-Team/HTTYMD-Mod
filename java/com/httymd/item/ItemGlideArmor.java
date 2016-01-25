@@ -166,6 +166,7 @@ public class ItemGlideArmor extends ItemArmorExtension {
 			} else {
 				gsuit = new ModelGlideSuit(1.0F);
 			}
+			// Because Forge is stupid and sets this crap before it calls this method
 			gsuit.bipedHead.showModel = armorSlot == 0;
 			gsuit.bipedHeadwear.showModel = armorSlot == 0;
 			gsuit.bipedBody.showModel = armorSlot == 1 || armorSlot == 2;

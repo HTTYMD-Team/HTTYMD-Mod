@@ -1,6 +1,6 @@
 package com.httymd.item;
 
-import com.httymd.item.registry.IRegisterable;
+import com.httymd.api.item.IRegisterable;
 import com.httymd.item.registry.ItemRegistry;
 import com.httymd.item.util.ItemUtils;
 import com.httymd.util.CreativeTab;

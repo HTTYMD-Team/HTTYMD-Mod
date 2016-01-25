@@ -11,9 +11,9 @@ import net.minecraft.stats.StatList;
 import net.minecraft.util.StatCollector;
 
 public class NameManager {
-	
+
 	private static final NameManager INSTANCE = new NameManager();
-	
+
 	private final ArrayList<String> randomNames = new ArrayList<String>();
 	private final ArrayList<ISpecialName> specialNames = new ArrayList<ISpecialName>();
 
@@ -24,7 +24,6 @@ public class NameManager {
 	public static NameManager getInstance() {
 		return INSTANCE;
 	}
-
 
 	private NameManager() {
 		this.registerRandomName("smelly");
@@ -66,7 +65,7 @@ public class NameManager {
 					return null;
 
 				EntityPlayerMP ply = (EntityPlayerMP) entity;
-				
+
 				if (Utils.hasPlayerGained(ply, StatList.damageDealtStat, 200000)) {
 					return "ataryn";
 				}
@@ -74,7 +73,7 @@ public class NameManager {
 				if (Utils.hasPlayerGained(ply, StatListMod.distanceByDragon, 3000))
 					return "rider";
 
-				if (Utils.hasPlayerGained(ply, StatList.playerKillsStat, 100) 
+				if (Utils.hasPlayerGained(ply, StatList.playerKillsStat, 100)
 						|| Utils.hasPlayerGained(ply, StatList.damageTakenStat, 9000000))
 					return "relentless";
 				else if (Utils.hasPlayerGained(ply, StatList.deathsStat, 100))

@@ -3,8 +3,8 @@ package com.httymd.item.registry;
 import java.util.HashMap;
 import java.util.Random;
 
+import com.httymd.api.item.WeaponType;
 import com.httymd.item.ItemWeapon;
-import com.httymd.item.util.EnumWeaponType;
 
 import cpw.mods.fml.common.registry.VillagerRegistry;
 import cpw.mods.fml.common.registry.VillagerRegistry.IVillageTradeHandler;
@@ -77,7 +77,7 @@ public class WorldItemRegistry {
 	}
 	
 	private static void addGeneratedWeapons(ChestGenHooks hook, ToolMaterial material, int weight) {
-		HashMap<EnumWeaponType, ItemWeapon> map = ItemWeapon.getWeaponMap(material);
+		HashMap<WeaponType, ItemWeapon> map = ItemWeapon.getWeaponMap(material);
 		for(ItemWeapon w : map.values()) {
 			addGeneratedItem(hook, w, 0, 1, 1, weight);
 		}

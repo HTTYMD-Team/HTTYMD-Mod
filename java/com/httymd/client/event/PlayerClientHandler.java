@@ -45,7 +45,7 @@ public class PlayerClientHandler {
 		this.playerTicks = event.partialRenderTick;
 		this.ent = event.entityLiving;
 	}
-	
+
 	@SubscribeEvent
 	public void terminateItemRenderOnGlide(RenderPlayerEvent.Specials.Pre event) {
 		ItemStack stack = null;
@@ -65,6 +65,4 @@ public class PlayerClientHandler {
 			this.glideRender.setRenderManager(RenderManager.instance);
 		}
 	}
-
-	
 }

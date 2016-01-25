@@ -1,5 +1,6 @@
 package com.httymd;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import org.apache.logging.log4j.LogManager;
@@ -27,32 +28,46 @@ import cpw.mods.fml.common.event.FMLServerStoppedEvent;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.entity.Entity;
 
-@Mod(modid = HTTYMDMod.ID, name = HTTYMDMod.NAME, guiFactory = HTTYMDMod.GUIFACORY, dependencies = "after:"+Utils.bg2Id)
+@Mod(modid = HTTYMDMod.ID, name = HTTYMDMod.NAME, guiFactory = HTTYMDMod.GUIFACORY, dependencies = "after:"
+		+ Utils.bg2Id)
 public class HTTYMDMod {
-
+	
 	//////////////////////////////////////////////////////
 	// Constant Identifier Variables
 	//////////////////////////////////////////////////////
-	public static final String ID = "httymd";
-	public static final String NAME = "HTTYMD";
 	public static final String CLIENT_PROXY = "com.httymd.client.ClientProxy";
 	public static final String COMMON_PROXY = "com.httymd.common.CommonProxy";
 	public static final String GUIFACORY = "com.httymd.client.GuiFactoryDragons";
+	public static final String ID = "httymd";
+	public static final String NAME = "HTTYMD";
 	//////////////////////////////////////////////////////
 	// End Constant Identifier Variables
 	//////////////////////////////////////////////////////
 
 	@Instance(ID)
 	public static HTTYMDMod INSTANCE;
-
+	
 	@SidedProxy(modId = ID, clientSide = CLIENT_PROXY, serverSide = COMMON_PROXY)
 	public static CommonProxy proxy;
+	
+	private Config config;
+	private File configDirectory;
+	private ArrayList<String> dragonNameList = new ArrayList<String>();
+	private final Logger log = LogManager.getLogger(NAME);
+	private ModMetadata metadata;
 
 	/**
 	 * Retrieves the config for the mod
 	 */
 	public static Config getConfig() {
 		return INSTANCE.config;
+	}
+	
+	/**
+	 * Retrieves the config directory {@link File}
+	 */
+	public static File getConfigDirectory() {
+		return INSTANCE.configDirectory;
 	}
 
 	/**
@@ -93,14 +108,6 @@ public class HTTYMDMod {
 		EntityRegister.createEntity(entityClass, entityName, solidColor, spotColor);
 	}
 
-	private ModMetadata metadata;
-
-	private Config config;
-
-	private final Logger log = LogManager.getLogger(NAME);
-
-	private ArrayList<String> dragonNameList = new ArrayList<String>();
-
 	@EventHandler
 	public void modInit(FMLInitializationEvent event) {
 		RecipeRegistry.init();
@@ -115,6 +122,7 @@ public class HTTYMDMod {
 
 	@EventHandler
 	public void modPreInit(FMLPreInitializationEvent event) {
+		this.configDirectory = event.getModConfigurationDirectory();
 		this.config = new Config(event);
 		this.metadata = event.getModMetadata();
 		proxy.onPreInit(event);

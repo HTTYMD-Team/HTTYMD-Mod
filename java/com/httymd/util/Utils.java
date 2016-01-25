@@ -1,5 +1,6 @@
 package com.httymd.util;
 
+import java.io.File;
 import java.util.UUID;
 
 import org.apache.logging.log4j.Logger;
@@ -180,7 +181,18 @@ public class Utils {
 		return HTTYMDMod.getConfig().isExperimental();
 	}
 	
+	/**
+	 * Shorthand for {@link HTTYMDMod#getLogger()}
+	 */
 	public static Logger logger() {
 		return HTTYMDMod.getLogger();
+	}
+	
+	/**
+	 * Guarantees proper retrieval of config directory
+	 * @see HTTYMDMod#getConfigDirectory()
+	 */
+	public static File getConfigDirectory() {
+		return HTTYMDMod.getConfigDirectory();
 	}
 }

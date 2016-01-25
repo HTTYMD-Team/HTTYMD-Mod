@@ -2,9 +2,9 @@ package com.httymd.item.recipe;
 
 import java.util.Collection;
 
+import com.httymd.api.item.FoodType;
 import com.httymd.block.registry.BlockRegistry;
 import com.httymd.item.registry.ItemRegistry;
-import com.httymd.item.util.EnumFoodType;
 
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.init.Blocks;
@@ -126,7 +126,7 @@ public class RecipeRegistry {
 				"III", "III", "III", 'I', ItemRegistry.gronkleIronIngot);
 		GameRegistry.addShapelessRecipe(new ItemStack(ItemRegistry.gronkleIronIngot, 9), BlockRegistry.gronkleIronBlock);
 		
-		Item[] muttonArr = getFoodArrByEnum(EnumFoodType.MUTTON);
+		Item[] muttonArr = getFoodArrByEnum(FoodType.MUTTON);
 		GameRegistry.addSmelting(muttonArr[0], new ItemStack(muttonArr[1]), 0.35F);
 		
 		/*
@@ -142,9 +142,9 @@ public class RecipeRegistry {
 	}
 	
 	/**
-	 * Retrieves food array based on {@link EnumFoodType}
+	 * Retrieves food array based on {@link FoodType}
 	 */
-	private static Item[] getFoodArrByEnum(EnumFoodType type) {
+	private static Item[] getFoodArrByEnum(FoodType type) {
 		Collection<Item> list = ItemRegistry.foods.get(type);
 		return list.toArray(new Item[list.size()]);
 	}
