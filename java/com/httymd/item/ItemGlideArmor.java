@@ -21,7 +21,8 @@ import net.minecraftforge.event.entity.living.LivingFallEvent;
 /**
  * The Item class for Hiccup's Glide Suit in HTTYD
  * 
- * @author George Albany,<br>Stephan Spengler
+ * @author George Albany,<br>
+ *         Stephan Spengler
  *
  */
 public class ItemGlideArmor extends ItemArmorExtension {
@@ -48,7 +49,9 @@ public class ItemGlideArmor extends ItemArmorExtension {
 
 	/**
 	 * Determines if the glide suit enables the ability to glide on an entity
-	 * @param entity The entity to check
+	 * 
+	 * @param entity
+	 *            The entity to check
 	 */
 	public boolean isFlyable(EntityLivingBase entity) {
 		boolean flag = entity != null && (!entity.onGround && !this.isInLiquid(entity));
@@ -65,9 +68,13 @@ public class ItemGlideArmor extends ItemArmorExtension {
 	}
 
 	/**
-	 * Whether an entity's item can glide, for anything not covered in {@link #isFlyable(EntityLivingBase)}
-	 * @param entity The entity to check
-	 * @param stack The itemstack to check
+	 * Whether an entity's item can glide, for anything not covered in
+	 * {@link #isFlyable(EntityLivingBase)}
+	 * 
+	 * @param entity
+	 *            The entity to check
+	 * @param stack
+	 *            The itemstack to check
 	 */
 	public boolean canGlide(EntityLivingBase entity, ItemStack stack) {
 		boolean canGlide = this.isFlyable(entity) && (this.isGliding(stack)
@@ -83,8 +90,11 @@ public class ItemGlideArmor extends ItemArmorExtension {
 	}
 
 	/**
-	 * Determines whether an itemstack has the {@link #NBT_GLIDING} boolean enabled
-	 * @param stack The itemstack to check
+	 * Determines whether an itemstack has the {@link #NBT_GLIDING} boolean
+	 * enabled
+	 * 
+	 * @param stack
+	 *            The itemstack to check
 	 */
 	public boolean isGliding(ItemStack stack) {
 		if (stack == null || !(stack.getItem() instanceof ItemGlideArmor) || !stack.hasTagCompound())
@@ -94,8 +104,11 @@ public class ItemGlideArmor extends ItemArmorExtension {
 
 	/**
 	 * Sets the the {@link #NBT_GLIDING} boolean
-	 * @param stack The stack to set on
-	 * @param gliding The boolean to set {@link #NBT_GLIDING} as
+	 * 
+	 * @param stack
+	 *            The stack to set on
+	 * @param gliding
+	 *            The boolean to set {@link #NBT_GLIDING} as
 	 */
 	public void setGliding(ItemStack stack, boolean gliding) {
 		if (stack == null || !(stack.getItem() instanceof ItemGlideArmor))
@@ -111,10 +124,15 @@ public class ItemGlideArmor extends ItemArmorExtension {
 	}
 
 	/**
-	 * For manipulation outside of just player ticks, for anything to be covered by {@link #onArmorTick(World, EntityPlayer, ItemStack)}
-	 * @param world The world this event takes place in
-	 * @param entity The entity wearing the armor
-	 * @param stack The itemstack of armor
+	 * For manipulation outside of just player ticks, for anything to be covered
+	 * by {@link #onArmorTick(World, EntityPlayer, ItemStack)}
+	 * 
+	 * @param world
+	 *            The world this event takes place in
+	 * @param entity
+	 *            The entity wearing the armor
+	 * @param stack
+	 *            The itemstack of armor
 	 */
 	public void onArmorTick(World world, EntityLivingBase entity, ItemStack stack) {
 		boolean canGlide = this.canGlide(entity, stack);
@@ -141,22 +159,32 @@ public class ItemGlideArmor extends ItemArmorExtension {
 	@SideOnly(Side.CLIENT)
 	public ModelBiped getArmorModel(EntityLivingBase entityLiving, ItemStack itemStack, int armorSlot) {
 		if (this.isGliding(itemStack)) {
-			if (armorSlot == EnumArmorType.LEGGINGS.ordinalReverse()) { // For some reason, armorSlot is the opposite of PlayerInventory.armorInventory
-				return new ModelGlideSuit(0.5F);
+			ModelGlideSuit gsuit;
+			// For some reason, armorSlot is the opposite of  PlayerInventory.armorInventory
+			if (armorSlot == EnumArmorType.LEGGINGS.ordinalReverse()) { 
+				gsuit = new ModelGlideSuit(0.5F);
 			} else {
-				return new ModelGlideSuit(1.0F);
+				gsuit = new ModelGlideSuit(1.0F);
 			}
+			gsuit.bipedHead.showModel = armorSlot == 0;
+			gsuit.bipedHeadwear.showModel = armorSlot == 0;
+			gsuit.bipedBody.showModel = armorSlot == 1 || armorSlot == 2;
+			gsuit.bipedRightArm.showModel = armorSlot == 1;
+			gsuit.bipedLeftArm.showModel = armorSlot == 1;
+			gsuit.bipedRightLeg.showModel = armorSlot == 2 || armorSlot == 3;
+			gsuit.bipedLeftLeg.showModel = armorSlot == 2 || armorSlot == 3;
+			return gsuit;
 		}
 		return super.getArmorModel(entityLiving, itemStack, armorSlot);
 	}
-	
+
 	/**
 	 * An event management method for disabling fall damage in certain cases
 	 */
 	@SubscribeEvent
 	public void onFall(LivingFallEvent event) {
-		ItemStack boots = event.entityLiving.getEquipmentInSlot(EnumArmorType.BOOTS.ordinal()+1);
-		if(boots != null && boots.getItem() instanceof ItemGlideArmor) {
+		ItemStack boots = event.entityLiving.getEquipmentInSlot(EnumArmorType.BOOTS.ordinal() + 1);
+		if (boots != null && boots.getItem() instanceof ItemGlideArmor) {
 			event.setCanceled(true);
 		}
 	}
@@ -166,7 +194,7 @@ public class ItemGlideArmor extends ItemArmorExtension {
 	public String getArmorTexture(ItemStack stack, Entity entity, int slot, String type) {
 		if (this.isGliding(stack) && "fins".equals(type)) {
 			return HTTYMDMod.ID + ":textures/armor/"
-					+ this.getRegistryName().substring(0, getRegistryName().lastIndexOf("_")) + "_fins.png";
+					+ this.getRegistryName().substring(0, this.getRegistryName().lastIndexOf("_")) + "_fins.png";
 		}
 		return super.getArmorTexture(stack, entity, slot, type);
 	}

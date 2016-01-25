@@ -4,10 +4,10 @@ import java.util.Arrays;
 
 import org.lwjgl.opengl.GL11;
 
-import com.httymd.HTTYMDMod;
 import com.httymd.client.model.ModelGlideSuit;
 import com.httymd.item.ItemGlideArmor;
 import com.httymd.item.util.ItemUtils.EnumArmorType;
+import com.httymd.util.Utils;
 
 import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.model.ModelBiped;
@@ -19,7 +19,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
 public class RenderGlide extends RenderPlayer {
-
+	
 	public static class ModelGlide extends ModelBiped {
 
 		public ModelGlide(float scale) {
@@ -138,8 +138,9 @@ public class RenderGlide extends RenderPlayer {
 
 		GL11.glPushMatrix();
 		GL11.glRotated(pitchTiltAngle, -playerYawCos, 0, -playerYawSin);
-		if(HTTYMDMod.getConfig().isDebugMode())
+		if(Utils.experimental())
 			this.renderWings(player, 0.0625F);
+		
 		super.doRender(player, p_76986_2, p_76986_4, p_76986_6, p_76986_8, p_76986_9_);
 		GL11.glPopMatrix();
 	}
@@ -151,14 +152,12 @@ public class RenderGlide extends RenderPlayer {
 
 	public void renderWings(Entity e, float f5) {
 		if (this.modelArmorChestplate instanceof ModelGlideSuit) {
-			HTTYMDMod.getLogger().info("renderWings");
 			ResourceLocation textureResource = null;
 			ItemStack stack = null;
 			if (e instanceof EntityLivingBase) {
 				for (int i = 0; i < EnumArmorType.values().length; i++) {
 					stack = ((EntityLivingBase) e).getEquipmentInSlot(i + 1);
 					if (this.checkForWingRender(stack, i)) {
-						HTTYMDMod.getLogger().info("stack is " + stack.getDisplayName() + " slot: " + i);
 						break;
 					}
 					else

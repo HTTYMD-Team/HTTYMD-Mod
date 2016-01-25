@@ -45,6 +45,19 @@ public class PlayerClientHandler {
 		this.playerTicks = event.partialRenderTick;
 		this.ent = event.entityLiving;
 	}
+	
+	@SubscribeEvent
+	public void terminateItemRenderOnGlide(RenderPlayerEvent.Specials.Pre event) {
+		ItemStack stack = null;
+		for (EnumArmorType type : EnumArmorType.values()) {
+			stack = event.entityLiving.getEquipmentInSlot(type.ordinal() + 1);
+			if (stack != null && stack.getItem() instanceof ItemGlideArmor)
+				break;
+		}
+		if (stack == null || !(stack.getItem() instanceof ItemGlideArmor))
+			return;
+		event.renderItem = !((ItemGlideArmor) stack.getItem()).isGliding(stack);
+	}
 
 	public void renderLoad() {
 		if (this.glideRender == null) {

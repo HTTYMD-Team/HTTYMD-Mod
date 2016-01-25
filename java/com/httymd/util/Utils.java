@@ -2,6 +2,8 @@ package com.httymd.util;
 
 import java.util.UUID;
 
+import org.apache.logging.log4j.Logger;
+
 import com.httymd.Config;
 import com.httymd.HTTYMDMod;
 
@@ -162,5 +164,23 @@ public class Utils {
 	 */
 	public static boolean shouldForceBg2ForWarhammer() {
 		return shouldUseBg2() && HTTYMDMod.getConfig().useBg2ForWarhammer();
+	}
+	
+	/**
+	 * Shorthand for {@link Config#isDebugMode() HTTYMDMod.getConfig().isDebugMode()}
+	 */
+	public static boolean debug() {
+		return HTTYMDMod.getConfig().isDebugMode();
+	}
+	
+	/**
+	 * Shorthand for {@link Config#isExperimental() HTTYMDMod.getConfig().isExperimental()}
+	 */
+	public static boolean experimental() {
+		return HTTYMDMod.getConfig().isExperimental();
+	}
+	
+	public static Logger logger() {
+		return HTTYMDMod.getLogger();
 	}
 }

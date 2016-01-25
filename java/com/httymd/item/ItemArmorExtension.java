@@ -4,6 +4,7 @@ import com.httymd.HTTYMDMod;
 import com.httymd.item.registry.IRegisterable;
 import com.httymd.item.registry.ItemRegistry;
 import com.httymd.item.util.ItemUtils;
+import com.httymd.item.util.ItemUtils.EnumArmorType;
 import com.httymd.util.CreativeTab;
 
 import cpw.mods.fml.relauncher.Side;
@@ -35,14 +36,14 @@ public class ItemArmorExtension extends ItemArmor implements IRegisterable {
 	/**
 	 * Retrieves armor texture based on name 
 	 * 
-	 * <p>Directory in &lt;modid&gt;:textures/armor/name_<1 or 2>.png</p>
+	 * <p>Directory in &lt;modid&gt;:textures/armor/&lt;name&gt;_<1 or 2>.png</p>
 	 */
 	@Override
 	@SideOnly(Side.CLIENT)
 	public String getArmorTexture(ItemStack stack, Entity entity, int slot, String type) {
 		return HTTYMDMod.ID + ":textures/armor/"
 				+ this.getRegistryName().substring(0, this.getRegistryName().lastIndexOf("_")) + "_"
-				+ (slot == 2 ? "2" : "1") + ".png";
+				+ (slot == EnumArmorType.LEGGINGS.ordinalReverse() ? "2" : "1") + ".png";
 	}
 
 	public String getRegistryName() {
