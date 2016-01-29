@@ -2,17 +2,20 @@ package com.httymd.item;
 
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
-import com.httymd.api.item.IRegisterable;
+import com.httymd.api.item.IItemWeapon;
 import com.httymd.api.item.WeaponType;
 import com.httymd.item.registry.ItemRegistry;
 import com.httymd.item.util.ItemUtils;
 import com.httymd.util.CreativeTab;
+import com.httymd.util.Utils;
 
-import cpw.mods.fml.common.IFuelHandler;
+import cpw.mods.fml.common.Optional.Method;
 import cpw.mods.fml.common.registry.GameRegistry;
+import cpw.mods.fml.relauncher.Side;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
@@ -21,6 +24,7 @@ import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 
 /**
  * A generic ItemWeapon class for ease of weapon creation, and handles fuel for fuel items
@@ -28,21 +32,22 @@ import net.minecraft.item.ItemSword;
  * @author George Albany
  *
  */
-public class ItemWeapon extends ItemSword implements IRegisterable, IFuelHandler {
+public class ItemWeapon extends ItemSword implements IItemWeapon {
 	
-	private static final HashMap<ToolMaterial, HashMap<WeaponType, ItemWeapon>> weaponMap = new HashMap<ToolMaterial, HashMap<WeaponType, ItemWeapon>>();
+	private static final Map<ToolMaterial, HashMap<WeaponType, IItemWeapon>> weaponMap = new HashMap<ToolMaterial, HashMap<WeaponType, IItemWeapon>>();
 	
 	protected float attackDamage;
+	protected ToolMaterial material;
 	protected WeaponType type;
 
-	public ItemWeapon(Item.ToolMaterial mat, WeaponType wepType) {
+	public ItemWeapon(ToolMaterial mat, WeaponType wepType) {
 		this(mat, wepType.getName(), wepType.getDamage());
 		this.type = wepType;
 		if(this.type != null && this.type.getFuelTime() > 0) GameRegistry.registerFuelHandler(this);
-		registerWeapon(mat, this.type, this);
+		registerWeapon(this);
 	}
 	
-	public ItemWeapon(Item.ToolMaterial toolMaterial, String weaponName, float weaponDamage) {
+	public ItemWeapon(ToolMaterial toolMaterial, String weaponName, float weaponDamage) {
 		this(toolMaterial, weaponName, weaponDamage, CreativeTab.DRAGON_TAB);
 	}
 
@@ -52,6 +57,7 @@ public class ItemWeapon extends ItemSword implements IRegisterable, IFuelHandler
 
 	public ItemWeapon(String name, ToolMaterial weaponMat, float weaponDam, CreativeTabs tab) {
 		super(weaponMat);
+		this.material = weaponMat;
 		this.setCreativeTab(tab);
 		this.attackDamage = weaponDam + weaponMat.getDamageVsEntity();
 		this.setUnlocalizedName(ItemUtils.findUnlocName(name));
@@ -90,7 +96,7 @@ public class ItemWeapon extends ItemSword implements IRegisterable, IFuelHandler
 		return this.func_150893_a(item, block); //getStrVsBlock in 1.8
 	}
 
-	public ItemSword registerItem() {
+	public Item register() {
 		ItemRegistry.registerItem(this, this.getRegistryName());
 		return this;
 	}
@@ -129,20 +135,66 @@ public class ItemWeapon extends ItemSword implements IRegisterable, IFuelHandler
 		return 0;
 	}
 	
-	public static HashMap<WeaponType, ItemWeapon> getWeaponMap(ToolMaterial mat) {
+	public static HashMap<WeaponType, IItemWeapon> getWeaponMap(ToolMaterial mat) {
 		return weaponMap.get(mat);
 	}
 	
-	public static ItemWeapon getWeaponFor(ToolMaterial mat, WeaponType type) {
+	public static IItemWeapon getWeaponFor(ToolMaterial mat, WeaponType type) {
 		return getWeaponMap(mat).get(type);
 	}
 	
-	private static void registerWeapon(ToolMaterial mat, WeaponType type, ItemWeapon wep) {
-		if(mat != null && type != null) {
-			if(!weaponMap.containsKey(mat)) {
-				weaponMap.put(mat, new HashMap<WeaponType, ItemWeapon>());
+	public static void registerWeapon(IItemWeapon item) {
+		if(!(item instanceof Item)) return;
+		if(item.getMaterial() != null && item.getWeaponType() != null) {
+			if(!weaponMap.containsKey(item.getMaterial())) {
+				weaponMap.put(item.getMaterial(), new HashMap<WeaponType, IItemWeapon>());
 			}
-			weaponMap.get(mat).put(type, wep);
+			weaponMap.get(item.getMaterial()).put(item.getWeaponType(), item);
 		}
+	}
+
+	@Override
+	public WeaponType getWeaponType() {
+		return this.type;
+	}
+
+	@Override
+	public ToolMaterial getMaterial() {
+		return this.material;
+	}
+
+	@Override
+	public boolean sheatheOnBack(ItemStack sheath) {
+		return false;
+	}
+
+	@Override
+	public boolean isOffhandHandDual(ItemStack offhand) {
+		return true;
+	}
+
+	@Override
+	@Method(modid = Utils.bg2Id)
+	public boolean offhandAttackEntity(mods.battlegear2.api.PlayerEventChild.OffhandAttackEvent event, ItemStack main, ItemStack offhand) {
+		return true;
+	}
+
+	@Override
+	public boolean offhandClickAir(PlayerInteractEvent event, ItemStack main, ItemStack offhand) {
+		return true;
+	}
+
+	@Override
+	public boolean offhandClickBlock(PlayerInteractEvent event, ItemStack main, ItemStack offhand) {
+		return true;
+	}
+
+	@Override
+	public void performPassiveEffects(Side side, ItemStack main, ItemStack offhand) {
+	}
+
+	@Override
+	public boolean allowOffhand(ItemStack main, ItemStack offhand) {
+		return true;
 	}
 }

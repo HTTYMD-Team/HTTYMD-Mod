@@ -63,8 +63,8 @@ public class EntityTerribleTerror extends EntityDragon {
 	}
 
 	@Override
-	public boolean isRideableBy(Entity e) {
-		if(!super.isRideableBy(e)) return false;
+	public boolean isRideable(Entity e) {
+		if(!super.isRideable(e)) return false;
 		double deltaX = this.boundingBox.maxX - this.boundingBox.minX;
 		double deltaY = this.boundingBox.maxY - this.boundingBox.minY;
 		double deltaZ = this.boundingBox.maxZ - this.boundingBox.minZ;

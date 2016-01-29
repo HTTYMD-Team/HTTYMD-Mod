@@ -1,7 +1,7 @@
 package com.httymd.item;
 
 import com.httymd.HTTYMDMod;
-import com.httymd.api.item.IRegisterable;
+import com.httymd.api.IRegisterable;
 import com.httymd.item.registry.ItemRegistry;
 import com.httymd.item.util.ItemUtils;
 import com.httymd.util.CreativeTab;
@@ -15,7 +15,7 @@ import net.minecraft.item.ItemFood;
  * @author George Albany
  *
  */
-public class ItemFoodExtension extends ItemFood implements IRegisterable {
+public class ItemFoodExtension extends ItemFood implements IRegisterable<ItemFood> {
 
 	public ItemFoodExtension(String name, int heal, float satu, boolean wolf) {
 		this(name, heal, satu, wolf, CreativeTab.DRAGON_TAB);
@@ -32,7 +32,7 @@ public class ItemFoodExtension extends ItemFood implements IRegisterable {
 		return ItemUtils.findRegistryName(this.getUnlocalizedName());
 	}
 
-	public ItemFood registerItem() {
+	public ItemFood register() {
 		ItemRegistry.registerItem(this, this.getRegistryName());
 		return this;
 	}

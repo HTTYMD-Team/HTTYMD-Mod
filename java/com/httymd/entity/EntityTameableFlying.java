@@ -3,8 +3,9 @@ package com.httymd.entity;
 import java.util.Iterator;
 
 import com.httymd.HTTYMDMod;
+import com.httymd.api.entity.IFlyable;
+import com.httymd.api.entity.ITameable;
 import com.httymd.item.registry.ItemRegistry;
-import com.httymd.util.Utils;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
@@ -12,7 +13,6 @@ import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.IAttribute;
-import net.minecraft.entity.ai.attributes.RangedAttribute;
 import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
@@ -23,18 +23,7 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
 public abstract class EntityTameableFlying extends EntityTameable implements ITameable, IFlyable {
-
-	///////////////////////////////////////////////////////////////////////////
-	// NBT Names
-	private static final String NBT_IS_FLYING = "Flying";
-	///////////////////////////////////////////////////////////////////////////
-	// Entity Attributes
-	public static final IAttribute flyingSpeed = new RangedAttribute(Utils.getModString("flyingSpeed"), 1D, 0.0D,
-			Double.MAX_VALUE).setDescription("Flying Speed").setShouldWatch(true);
-	public static final IAttribute flyingYaw = new RangedAttribute(Utils.getModString("flyingYaw"), 25D, 0.0D,
-			Double.MAX_VALUE).setDescription("Flying Yaw Speed").setShouldWatch(true);
-	public static final IAttribute flyingPitch = new RangedAttribute(Utils.getModString("flyingPitch"), 20D, 0.0D,
-			Double.MAX_VALUE).setDescription("Flying Pitch Speed").setShouldWatch(true);
+	
 	///////////////////////////////////////////////////////////////////////////
 	// Datawatcher
 	public static final int BOOL_WATCHER = 16;

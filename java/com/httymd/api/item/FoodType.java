@@ -18,47 +18,15 @@ import net.minecraft.item.Item;
  *
  */
 public class FoodType {
-	public static final FoodType MUTTON = new FoodType("mutton", true, 8, 0.8F, true, EntitySheep.class);
 	
-	public static final FoodType CRAB = new FoodType("crab", false, 6, 0.6F, false);
-	public static final FoodType HCOMB = new FoodType("hcomb", false, 3, 0.3F, false);
-	public static final FoodType FWEED = new FoodType("fweed", false, 5, 0.5F, false); 
-	public static final FoodType SFLOWER = new FoodType("sflower", false, 1, 0.1F, false); 
-	public static final FoodType DNIP = new FoodType("dnip", false, 2, 0.5F, false);
-
 	private static final List<FoodType> foodTypes = new ArrayList<FoodType>();
 	
-	/**
-	 * Generates and returns a registered MultiMap for current food
-	 */
-	public static Multimap<FoodType, Item> generateFood() {
-		Multimap<FoodType, Item> foods = ArrayListMultimap.create();
-		Item drop = null;
-		
-		for (FoodType food : FoodType.values()) {			
-			if (food.isMeat())
-				drop = new ItemFoodDrop(food.getName() + "_raw", food.getHeal() / 2, food.getSaturation() / 2,
-						food.getForWolfs(), food.getDropFor()).registerItem();
-			
-			if(drop != null) foods.put(food, drop);
-			drop = new ItemFoodDrop(food.getName(), food.getHeal(), food.getSaturation(), food.getForWolfs(),
-					food.getDropFor(), food.isMeat()) {
-
-				public boolean isForEntity(EntityLivingBase entity) {
-					return super.isForEntity(entity) && entity.isBurning();
-				}
-
-			}.registerItem();
-			
-			foods.put(food, drop);
-			drop = null;
-		}
-		return foods;
-	}
-
-	private static List<FoodType> values() {
-		return foodTypes;
-	}
+	public static final FoodType MUTTON = new FoodType("mutton", true, 8, 0.8F, true, EntitySheep.class);
+	public static final FoodType CRAB = new FoodType("crab", false, 6, 0.6F, false);
+	public static final FoodType HCOMB = new FoodType("hcomb", false, 3, 0.3F, false);
+	public static final FoodType FWEED = new FoodType("fweed", false, 5, 0.5F, false);
+	public static final FoodType SFLOWER = new FoodType("sflower", false, 1, 0.1F, false);
+	public static final FoodType DNIP = new FoodType("dnip", false, 2, 0.5F, false);
 
 	private final boolean isMeat;
 	private final int heal;
@@ -68,11 +36,11 @@ public class FoodType {
 
 	private final Class<? extends EntityLivingBase> dropsFor;
 
-	private FoodType(String name, boolean isMeat, int heal, float satu, boolean wolf) {
+	public FoodType(String name, boolean isMeat, int heal, float satu, boolean wolf) {
 		this(name, isMeat, heal, satu, wolf, null);
 	}
 
-	private FoodType(String name, boolean isMeat, int heal, float satu, boolean wolf,
+	public FoodType(String name, boolean isMeat, int heal, float satu, boolean wolf,
 			Class<? extends EntityLivingBase> dropsFor) {
 		this.isMeat = isMeat;
 		this.heal = heal;
@@ -82,9 +50,43 @@ public class FoodType {
 		this.name = name;
 		foodTypes.add(this);
 	}
+
+	/**
+	 * Generates and returns a registered MultiMap for current food
+	 */
+	public static Multimap<FoodType, Item> generateFood() {
+		Multimap<FoodType, Item> foods = ArrayListMultimap.create();
+		Item drop = null;
+
+		for (FoodType food : FoodType.values()) {
+			if (food.isMeat())
+				drop = new ItemFoodDrop(food.getName() + "_raw", food.getHeal() / 2, food.getSaturation() / 2,
+						food.getForWolfs(), food.getDropFor()).register();
+
+			if (drop != null)
+				foods.put(food, drop);
+			drop = new ItemFoodDrop(food.getName(), food.getHeal(), food.getSaturation(), food.getForWolfs(),
+					food.getDropFor(), food.isMeat()) {
+
+				public boolean isForEntity(EntityLivingBase entity) {
+					return super.isForEntity(entity) && entity.isBurning();
+				}
+
+			}.register();
+
+			foods.put(food, drop);
+			drop = null;
+		}
+		return foods;
+	}
+
+	private static List<FoodType> values() {
+		return foodTypes;
+	}
 	
 	/**
-	 * Retrieves the Entity class this food type will drop for (or null for none)
+	 * Retrieves the Entity class this food type will drop for (or null for
+	 * none)
 	 */
 	public Class<? extends EntityLivingBase> getDropFor() {
 		return this.dropsFor;
@@ -98,14 +100,17 @@ public class FoodType {
 	}
 
 	/**
-	 * The amount of hunger restored by this food type (or amount healed for wolves)
+	 * The amount of hunger restored by this food type (or amount healed for
+	 * wolves)
 	 * 
-	 * <p>(its called heal in minecraft, keeping consistent)</p>
+	 * <p>
+	 * (its called heal in minecraft, keeping consistent)
+	 * </p>
 	 */
 	public int getHeal() {
 		return this.heal;
 	}
-	
+
 	/**
 	 * The saturation level for food type
 	 */
@@ -119,7 +124,7 @@ public class FoodType {
 	public boolean isMeat() {
 		return this.isMeat;
 	}
-	
+
 	public String getName() {
 		return this.name;
 	}

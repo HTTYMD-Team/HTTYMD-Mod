@@ -26,7 +26,7 @@ public class EntityAIRidden extends EntityAIBase {
 	public boolean shouldExecute() {
 		if (this.riddenEntity.riddenByEntity != null && this.riddenEntity.riddenByEntity instanceof EntityLivingBase) {
 			if (this.riddenEntity instanceof EntityDragon
-					&& !((EntityDragon) this.riddenEntity).isRideableBy(this.riddenEntity.riddenByEntity)) {
+					&& !((EntityDragon) this.riddenEntity).isRideable(this.riddenEntity.riddenByEntity)) {
 				return false;
 			}
 			this.rider = (EntityLivingBase) this.riddenEntity.riddenByEntity;
@@ -37,7 +37,7 @@ public class EntityAIRidden extends EntityAIBase {
 	@Override
 	public boolean continueExecuting() {
 		if (this.riddenEntity instanceof EntityDragon)
-			return ((EntityDragon) this.riddenEntity).isRideableBy(this.rider)
+			return ((EntityDragon) this.riddenEntity).isRideable(this.rider)
 					&& this.riddenEntity.riddenByEntity == this.rider;
 		return this.riddenEntity.riddenByEntity == this.rider;
 	}

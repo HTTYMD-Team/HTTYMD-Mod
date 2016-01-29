@@ -1,8 +1,8 @@
 package com.httymd.block;
 
 import com.httymd.HTTYMDMod;
+import com.httymd.api.IRegisterable;
 import com.httymd.block.registry.BlockRegistry;
-import com.httymd.block.registry.IRegisterable;
 import com.httymd.item.util.ItemUtils;
 
 import net.minecraft.block.Block;
@@ -15,7 +15,7 @@ import net.minecraft.creativetab.CreativeTabs;
  * @author George Albany
  *
  */
-public class BlockExtension extends Block implements IRegisterable {
+public class BlockExtension extends Block implements IRegisterable<Block> {
 
 	public BlockExtension(String name, Material mat) {
 		this(name, HTTYMDMod.getCreativeTab(), mat);
@@ -34,7 +34,7 @@ public class BlockExtension extends Block implements IRegisterable {
 	}
 
 	@Override
-	public Block registerBlock() {
+	public Block register() {
 		BlockRegistry.registerBlock(this, this.getRegistryName());
 		return this;
 	}

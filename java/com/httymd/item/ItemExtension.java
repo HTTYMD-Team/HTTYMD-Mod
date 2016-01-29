@@ -1,6 +1,6 @@
 package com.httymd.item;
 
-import com.httymd.api.item.IRegisterable;
+import com.httymd.api.IRegisterable;
 import com.httymd.item.registry.ItemRegistry;
 import com.httymd.item.util.ItemUtils;
 import com.httymd.util.CreativeTab;
@@ -14,7 +14,7 @@ import net.minecraft.item.Item;
  * @author George Albany
  *
  */
-public class ItemExtension extends Item implements IRegisterable {
+public class ItemExtension extends Item implements IRegisterable<Item> {
 
 	public ItemExtension(String name) {
 		this(name, CreativeTab.DRAGON_TAB);
@@ -30,7 +30,8 @@ public class ItemExtension extends Item implements IRegisterable {
 		return ItemUtils.findRegistryName(this.getUnlocalizedName());
 	}
 
-	public Item registerItem() {
+	@Override
+	public Item register() {
 		ItemRegistry.registerItem(this, this.getRegistryName());
 		return this;
 	}

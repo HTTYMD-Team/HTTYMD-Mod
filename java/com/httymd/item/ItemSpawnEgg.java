@@ -5,7 +5,7 @@ import java.util.List;
 import org.apache.logging.log4j.Logger;
 
 import com.httymd.HTTYMDMod;
-import com.httymd.api.item.IRegisterable;
+import com.httymd.api.IRegisterable;
 import com.httymd.item.util.ItemUtils;
 
 import cpw.mods.fml.common.registry.GameRegistry;
@@ -37,7 +37,7 @@ import net.minecraft.world.World;
  * @author George Albany (using Jabelar's Spawn Egg class)
  *
  */
-public class ItemSpawnEgg extends ItemMonsterPlacer implements IRegisterable {
+public class ItemSpawnEgg extends ItemMonsterPlacer implements IRegisterable<ItemMonsterPlacer> {
 
 	public static Logger L = HTTYMDMod.getLogger();
 
@@ -201,7 +201,7 @@ public class ItemSpawnEgg extends ItemMonsterPlacer implements IRegisterable {
 		this.theIcon = par1IconRegister.registerIcon(this.getIconString() + "_overlay");
 	}
 
-	public Item registerItem() {
+	public ItemMonsterPlacer register() {
 		GameRegistry.registerItem(this, this.getRegistryName());
 		return this;
 	}

@@ -1,5 +1,6 @@
 package com.httymd.item;
 
+import com.httymd.api.item.IDrop;
 import com.httymd.util.EventRegistry;
 
 import net.minecraft.entity.EntityLivingBase;

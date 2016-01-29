@@ -4,7 +4,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Set;
 
-import com.httymd.api.item.IRegisterable;
+import com.httymd.api.IRegisterable;
 import com.httymd.item.registry.ItemRegistry;
 import com.httymd.item.util.EnumToolType;
 import com.httymd.item.util.ItemUtils;
@@ -31,7 +31,7 @@ import net.minecraftforge.event.entity.player.UseHoeEvent;
  * @author George Albany
  *
  */
-public class ItemToolExtension extends ItemTool implements IRegisterable, IFuelHandler {
+public class ItemToolExtension extends ItemTool implements IRegisterable<ItemTool>, IFuelHandler {
 
 	protected final Collection<EnumToolType> toolTypes;
 
@@ -152,7 +152,7 @@ public class ItemToolExtension extends ItemTool implements IRegisterable, IFuelH
 		}
 	}
 
-	public Item registerItem() {
+	public ItemTool register() {
 		ItemRegistry.registerItem(this, this.getRegistryName());
 		return this;
 	}

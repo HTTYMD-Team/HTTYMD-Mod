@@ -1,7 +1,7 @@
 package com.httymd.item;
 
 import com.httymd.HTTYMDMod;
-import com.httymd.api.item.IRegisterable;
+import com.httymd.api.IRegisterable;
 import com.httymd.item.registry.ItemRegistry;
 import com.httymd.item.util.ItemUtils;
 import com.httymd.item.util.ItemUtils.EnumArmorType;
@@ -20,7 +20,7 @@ import net.minecraft.item.ItemStack;
  * @author George Albany
  * 
  */
-public class ItemArmorExtension extends ItemArmor implements IRegisterable {
+public class ItemArmorExtension extends ItemArmor implements IRegisterable<ItemArmor> {
 
 	public ItemArmorExtension(String name, ArmorMaterial mat, int type) {
 		this(name, mat, type, CreativeTab.DRAGON_TAB);
@@ -50,7 +50,7 @@ public class ItemArmorExtension extends ItemArmor implements IRegisterable {
 		return ItemUtils.findRegistryName(this.getUnlocalizedName());
 	}
 
-	public ItemArmor registerItem() {
+	public ItemArmor register() {
 		ItemRegistry.registerItem(this, this.getRegistryName());
 		return this;
 	}

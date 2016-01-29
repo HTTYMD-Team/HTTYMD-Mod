@@ -1,11 +1,10 @@
 package com.httymd.item;
 
+import com.httymd.api.item.IShield;
 import com.httymd.item.util.ItemUtils;
 import com.httymd.util.Utils;
 
 import cpw.mods.fml.common.IFuelHandler;
-import cpw.mods.fml.common.Optional.Interface;
-import cpw.mods.fml.common.Optional.InterfaceList;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -29,18 +28,7 @@ import net.minecraft.util.IIcon;
  * @author George Albany
  *
  */
-@InterfaceList(value = {
-		@Interface(iface = "mods.battlegear2.api.shield.IShield", modid = Utils.bg2Id, striprefs = true),
-		@Interface(iface = "mods.battlegear2.api.shield.IArrowCatcher", modid = Utils.bg2Id, striprefs = true),
-		@Interface(iface = "mods.battlegear2.api.shield.IArrowDisplay", modid = Utils.bg2Id, striprefs = true),
-		@Interface(iface = "mods.battlegear2.api.IEnchantable", modid = Utils.bg2Id, striprefs = true),
-		@Interface(iface = "mods.battlegear2.api.ISheathed", modid = Utils.bg2Id, striprefs = true) 
-})
-public class ItemShield extends ItemExtension
-		implements IFuelHandler, mods.battlegear2.api.shield.IShield, mods.battlegear2.api.shield.IArrowCatcher,
-		mods.battlegear2.api.shield.IArrowDisplay, mods.battlegear2.api.IEnchantable, mods.battlegear2.api.ISheathed {
-
-	private static final String NBT_ARROW_COUNT = "ArrowCount";
+public class ItemShield extends ItemExtension implements IFuelHandler, IShield {
 
 	private IIcon backIcon;
 	private IIcon trimIcon;

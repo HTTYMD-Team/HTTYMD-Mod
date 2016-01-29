@@ -1,6 +1,8 @@
 package com.httymd.entity;
 
 import com.httymd.HTTYMDMod;
+import com.httymd.api.entity.IDragon;
+import com.httymd.api.entity.IDragonAbility;
 import com.httymd.item.registry.ItemRegistry;
 import com.httymd.item.util.ItemUtils;
 import com.httymd.util.DragonDamageSource;
@@ -14,7 +16,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
-public class EntityDragon extends EntityTameableFlying {
+public class EntityDragon extends EntityTameableFlying implements IDragon {
 
 	private static final int BOOL_IS_ANGRY = 2;
 
@@ -34,12 +36,14 @@ public class EntityDragon extends EntityTameableFlying {
 		this.getAttributeMap().registerAttribute(damageAtt);
 	}
 
-	public boolean isRideableBy(Entity rider) {
+	@Override
+	public boolean isRideable(Entity rider) {
 		return rider != null && rider instanceof EntityLivingBase;
 	}
 
-	private boolean isRidden() {
-		return this.isRideableBy(this.riddenByEntity);
+	@Override
+	public boolean isRidden() {
+		return this.isRideable(this.riddenByEntity);
 	}
 
 	private void onMount(Entity mounter) {
@@ -98,7 +102,7 @@ public class EntityDragon extends EntityTameableFlying {
 						ply.inventory.setInventorySlotContents(ply.inventory.currentItem, (ItemStack) null);
 		}
 
-		if (this.isOwner(ply) && this.isRideableBy(ply)) {
+		if (this.isOwner(ply) && this.isRideable(ply)) {
 			this.onMount(ply);
 			return true;
 		}
@@ -201,5 +205,10 @@ public class EntityDragon extends EntityTameableFlying {
 	 */
 	protected void setNotFireproof() {
 		this.isImmuneToFire = false;
+	}
+
+	@Override
+	public IDragonAbility getDragonAbility() {
+		return null;
 	}
 }

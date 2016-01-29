@@ -15,7 +15,7 @@ public class BlockRegistry {
 	public static Block gronkleIronBlock;
 	
 	public static void init() {
-		gronkleIronBlock = new BlockCompressedExtension("giron_block", MapColor.silverColor).registerBlock();
+		gronkleIronBlock = new BlockCompressedExtension("giron_block", MapColor.silverColor).register();
 	}
 	
 	/**
