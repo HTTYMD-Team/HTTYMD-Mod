@@ -36,7 +36,7 @@ public class ItemArmorExtension extends ItemArmor implements IRegisterable<ItemA
 	/**
 	 * Retrieves armor texture based on name 
 	 * 
-	 * <p>Directory in &lt;modid&gt;:textures/armor/&lt;name&gt;_<1 or 2>.png</p>
+	 * <p>Directory in &lt;modid&gt;:textures/armor/&lt;name&gt;_&lt;1 or 2&gt;.png</p>
 	 */
 	@Override
 	@SideOnly(Side.CLIENT)
