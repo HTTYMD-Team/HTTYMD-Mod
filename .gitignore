@@ -1,9 +1,18 @@
+# Ignore gradle dump folder
 .gradle/
+
+# Ignore Idea folder
 .idea/
 .settings/
+
+# Ignore Eclipse files
 .project
 .classpath
 bin/
 classes/
-minecraft/
-HTTYMD.iml
+
+# Useless Temp folder
+*/.minecraft/
+
+# Prevents project file generation (build never contructs a HTTYMD named file)
+HTTYMD.*
