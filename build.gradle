@@ -28,7 +28,7 @@ apply plugin: 'forge'
 sourceCompatibility = 1.6
 targetCompatibility = 1.6
 
-ext.configFile = file "mod.prop"
+ext.configFile = file "mod.properties"
 configFile.withReader {
 	// Load config. Can be referenced as config
 	def prop = new Properties()
@@ -42,14 +42,14 @@ archivesBaseName = "HTTYMD"
 
 minecraft {
 	version = config.mcversion+"-"+config.forgeversion //"1.7.10-10.13.2.1230"
-	runDir = "minecraft"
+	runDir = "src/.minecraft"
 }
 
 
 sourceSets {
 	main {
-		java { srcDir 'java' }
-		resources { srcDir 'resources' include('**') }
+		java { srcDir 'src/java' }
+		resources { srcDir 'src/resources' include('**') }
 	}
 }
 
