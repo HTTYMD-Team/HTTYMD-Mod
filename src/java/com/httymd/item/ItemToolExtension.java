@@ -5,9 +5,9 @@ import java.util.Collections;
 import java.util.Set;
 
 import com.httymd.api.IRegisterable;
-import com.httymd.item.registry.ItemRegistry;
 import com.httymd.item.util.EnumToolType;
-import com.httymd.item.util.ItemUtils;
+import com.httymd.registry.ItemRegistry;
+import com.httymd.util.ItemUtils;
 
 import cpw.mods.fml.common.IFuelHandler;
 import cpw.mods.fml.common.eventhandler.Event.Result;
@@ -49,57 +49,62 @@ public class ItemToolExtension extends ItemTool implements IRegisterable<ItemToo
 
 	/**
 	 * Gets strength versus a specific block
-	 * 
+	 *
 	 * <p>Becomes getStrVsBlock(ItemStack, Block) in 1.8</p>
 	 */
+	@Override
 	public float func_150893_a(ItemStack stack, Block hitBlock) {
 		if (this.isToolType(EnumToolType.PICKAXE))
 			return hitBlock.getMaterial() != Material.iron && hitBlock.getMaterial() != Material.anvil
-					&& hitBlock.getMaterial() != Material.rock ? super.func_150893_a(stack, hitBlock)
-							: this.efficiencyOnProperMaterial;
-		if (this.isToolType(EnumToolType.AXE))
-			return hitBlock.getMaterial() != Material.wood && hitBlock.getMaterial() != Material.plants
-					&& hitBlock.getMaterial() != Material.vine ? super.func_150893_a(stack, hitBlock)
-							: this.efficiencyOnProperMaterial;
-		return super.func_150893_a(stack, hitBlock);
+			&& hitBlock.getMaterial() != Material.rock ? super.func_150893_a(stack, hitBlock)
+					: this.efficiencyOnProperMaterial;
+			if (this.isToolType(EnumToolType.AXE))
+				return hitBlock.getMaterial() != Material.wood && hitBlock.getMaterial() != Material.plants
+				&& hitBlock.getMaterial() != Material.vine ? super.func_150893_a(stack, hitBlock)
+						: this.efficiencyOnProperMaterial;
+				return super.func_150893_a(stack, hitBlock);
 	}
 
 	/**
 	 * Determines whether block can be harvested
-	 * 
+	 *
 	 * <p>Becomes canHavestBlock(Block) in 1.8</p>
 	 */
+	@Override
 	public boolean func_150897_b(Block hitBlock) {
 		if (this.isToolType(EnumToolType.PICKAXE))
 			return hitBlock == Blocks.obsidian ? this.toolMaterial.getHarvestLevel() == 3
-					: hitBlock != Blocks.diamond_block && hitBlock != Blocks.diamond_ore
-							? hitBlock != Blocks.emerald_ore && hitBlock != Blocks.emerald_block
-									? hitBlock != Blocks.gold_block && hitBlock != Blocks.gold_ore
-											? hitBlock != Blocks.iron_block && hitBlock != Blocks.iron_ore
-													? hitBlock != Blocks.lapis_block && hitBlock != Blocks.lapis_ore
-															? hitBlock != Blocks.redstone_ore
-																	&& hitBlock != Blocks.lit_redstone_ore
-																			? hitBlock.getMaterial() == Material.rock
-																					? true
-																					: hitBlock
-																							.getMaterial() == Material.iron
-																									? true
-																									: hitBlock.getMaterial() == Material.anvil
-																			: this.toolMaterial.getHarvestLevel() >= 2
-															: this.toolMaterial.getHarvestLevel() >= 1
-													: this.toolMaterial.getHarvestLevel() >= 1
-											: this.toolMaterial.getHarvestLevel() >= 2
-									: this.toolMaterial.getHarvestLevel() >= 2
+			: hitBlock != Blocks.diamond_block && hitBlock != Blocks.diamond_ore
+			? hitBlock != Blocks.emerald_ore && hitBlock != Blocks.emerald_block
+			? hitBlock != Blocks.gold_block && hitBlock != Blocks.gold_ore
+			? hitBlock != Blocks.iron_block && hitBlock != Blocks.iron_ore
+			? hitBlock != Blocks.lapis_block && hitBlock != Blocks.lapis_ore
+			? hitBlock != Blocks.redstone_ore
+			&& hitBlock != Blocks.lit_redstone_ore
+			? hitBlock.getMaterial() == Material.rock
+			? true
+					: hitBlock
+					.getMaterial() == Material.iron
+					? true
+							: hitBlock.getMaterial() == Material.anvil
+							: this.toolMaterial.getHarvestLevel() >= 2
+							: this.toolMaterial.getHarvestLevel() >= 1
+							: this.toolMaterial.getHarvestLevel() >= 1
+							: this.toolMaterial.getHarvestLevel() >= 2
+							: this.toolMaterial.getHarvestLevel() >= 2
 							: this.toolMaterial.getHarvestLevel() >= 2;
+
 		if (this.isToolType(EnumToolType.SHOVEL))
 			return hitBlock == Blocks.snow_layer ? true : hitBlock == Blocks.snow;
 		return super.func_150897_b(hitBlock);
 	}
 
+	@Override
 	public String getRegistryName() {
 		return ItemUtils.findRegistryName(this.getUnlocalizedName());
 	}
 
+	@Override
 	public Set<String> getToolClasses(ItemStack stack) {
 		return this.getToolTypes() != null ? EnumToolType.getAllNames(this.getToolTypes()) : super.getToolClasses(stack);
 	}
@@ -115,6 +120,7 @@ public class ItemToolExtension extends ItemTool implements IRegisterable<ItemToo
 		return this.getToolTypes().contains(type);
 	}
 
+	@Override
 	public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side,
 			float hitX, float hitY, float hitZ) {
 		if (!this.isToolType(EnumToolType.HOE))
@@ -152,6 +158,7 @@ public class ItemToolExtension extends ItemTool implements IRegisterable<ItemToo
 		}
 	}
 
+	@Override
 	public ItemTool register() {
 		ItemRegistry.registerItem(this, this.getRegistryName());
 		return this;
@@ -160,9 +167,9 @@ public class ItemToolExtension extends ItemTool implements IRegisterable<ItemToo
 	@Override
 	public int getBurnTime(ItemStack fuel) {
 		if(fuel.getItem() == this) {
-			return this.toolMaterial == ToolMaterial.WOOD ? 
-					EnumToolType.getAverageFuelTime(this.getToolTypes()) + 50 
-					: EnumToolType.getAverageFuelTime(this.getToolTypes()); 
+			return this.toolMaterial == ToolMaterial.WOOD ?
+					EnumToolType.getAverageFuelTime(this.getToolTypes()) + 50
+					: EnumToolType.getAverageFuelTime(this.getToolTypes());
 		}
 		return 0;
 	}

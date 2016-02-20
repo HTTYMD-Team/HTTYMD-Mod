@@ -1,6 +1,6 @@
 package com.httymd.api.item;
 
-import com.httymd.util.Utils;
+import com.httymd.util.AddonUtils.Battlegear2;
 
 import cpw.mods.fml.common.Optional.Interface;
 import cpw.mods.fml.common.Optional.InterfaceList;
@@ -13,11 +13,11 @@ import cpw.mods.fml.common.Optional.InterfaceList;
  */
 
 @InterfaceList(value = {
-		@Interface(iface = "mods.battlegear2.api.shield.IShield", modid = Utils.bg2Id, striprefs = true),
-		@Interface(iface = "mods.battlegear2.api.shield.IArrowCatcher", modid = Utils.bg2Id, striprefs = true),
-		@Interface(iface = "mods.battlegear2.api.shield.IArrowDisplay", modid = Utils.bg2Id, striprefs = true),
-		@Interface(iface = "mods.battlegear2.api.IEnchantable", modid = Utils.bg2Id, striprefs = true),
-		@Interface(iface = "mods.battlegear2.api.ISheathed", modid = Utils.bg2Id, striprefs = true) 
+		@Interface(iface = "mods.battlegear2.api.shield.IShield", modid = Battlegear2.modId, striprefs = true),
+		@Interface(iface = "mods.battlegear2.api.shield.IArrowCatcher", modid = Battlegear2.modId, striprefs = true),
+		@Interface(iface = "mods.battlegear2.api.shield.IArrowDisplay", modid = Battlegear2.modId, striprefs = true),
+		@Interface(iface = "mods.battlegear2.api.IEnchantable", modid = Battlegear2.modId, striprefs = true),
+		@Interface(iface = "mods.battlegear2.api.ISheathed", modid = Battlegear2.modId, striprefs = true) 
 })
 public interface IShield extends mods.battlegear2.api.shield.IShield, mods.battlegear2.api.shield.IArrowCatcher,
 		mods.battlegear2.api.shield.IArrowDisplay, mods.battlegear2.api.IEnchantable, mods.battlegear2.api.ISheathed {

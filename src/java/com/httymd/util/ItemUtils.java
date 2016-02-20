@@ -1,10 +1,12 @@
-package com.httymd.item.util;
+package com.httymd.util;
 
 import java.util.Locale;
 
 import com.httymd.HTTYMDMod;
 import com.httymd.item.ItemArmorExtension;
 
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemArmor.ArmorMaterial;
@@ -15,7 +17,60 @@ import net.minecraftforge.common.util.EnumHelper;
 
 public class ItemUtils {
 
-	private static boolean supportsFishHooking = true;
+	/**
+	 * A utility enum for determining a difference between armor types (for easy
+	 * of access)
+	 */
+	public static enum EnumArmorType {
+		/**
+		 * Represents boots
+		 */
+		BOOTS,
+		/**
+		 * Represents leggings (pants)
+		 */
+		LEGGINGS,
+		/**
+		 * Represents a chestplate
+		 */
+		CHESTPLATE,
+		/**
+		 * Represents a helmet
+		 */
+		HELMET;
+	
+		/**
+		 * Retrieves the reverse of the ordinal, cause Minecraft screws up armor
+		 * location horribly
+		 *
+		 * <p>
+		 * Eg: 0 = Helmet, 1 = Chestplate, 2 = Leggings, 3 = Boots
+		 * </p>
+		 */
+		public int ordinalReverse() {
+			return values().length - this.ordinal() - 1;
+		}
+	}
+
+	/**
+	 * Retrieves whether a specific item exists in a entity's inventory
+	 * (provides consistency for entities, currently only for players).
+	 */
+	public static boolean hasItem(EntityLivingBase entity, Item item) {
+		if (entity instanceof EntityPlayer)
+			return ((EntityPlayer) entity).inventory.hasItem(item);
+	
+		return false;
+	}
+
+	/**
+	 * Inserts an ItemStack into an entity's inventory (provides consistency for
+	 * entities, currently only for players)
+	 */
+	public static void insertItem(EntityLivingBase entity, ItemStack stack) {
+		if (entity instanceof EntityPlayer)
+			((EntityPlayer) entity).inventory.addItemStackToInventory(stack);
+	}
 
 	/**
 	 * Creates and retrieves a new {@link ItemArmor.ArmorMaterial}
@@ -40,7 +95,7 @@ public class ItemUtils {
 	 * @return whether adding fishing hooks is possible in current version
 	 */
 	public static boolean addFish(ItemStack stack, int occurence) {
-		if (!supportsFishHooking)
+		if (!ItemUtils.supportsFishHooking)
 			return false;
 		try {
 			Class.forName("net.minecraftforge.common.FishingHooks").getMethod("addFish", WeightedRandomFishable.class)
@@ -49,10 +104,12 @@ public class ItemUtils {
 		} catch (Exception e) {
 			HTTYMDMod.getLogger()
 					.warn("Probable Unsupported Forge Version, please update for all features\n\nExeception:\n" + e);
-			supportsFishHooking = false;
+			ItemUtils.supportsFishHooking = false;
 			return false;
 		}
 	}
+
+	private static boolean supportsFishHooking = true;
 
 	/**
 	 * Creates and retrieves a new {@link Item.ToolMaterial}
@@ -115,7 +172,7 @@ public class ItemUtils {
 	 *            The {@link ArmorMaterial} of the new armor
 	 */
 	public static Item[] generateArmor(Class<? extends ItemArmorExtension> clazz, String baseName, ArmorMaterial mat) {
-		EnumArmorType[] armors = EnumArmorType.values();
+		ItemUtils.EnumArmorType[] armors = ItemUtils.EnumArmorType.values();
 		ItemArmorExtension[] armor = new ItemArmorExtension[armors.length];
 		for (int i = 0; i < armors.length; i++)
 			try {
@@ -135,37 +192,16 @@ public class ItemUtils {
 	}
 
 	/**
-	 * A utility enum for determining a difference between armor types (for easy
-	 * of access)
+	 * Removes (consumes) an Item inside an entity's inventory (provides
+	 * consistency for entities, currently only for players).
+	 *
+	 * @return whether removal was possible
 	 */
-	public static enum EnumArmorType {
-		/**
-		 * Represents boots
-		 */
-		BOOTS,
-		/**
-		 * Represents leggings (pants)
-		 */
-		LEGGINGS,
-		/**
-		 * Represents a chestplate
-		 */
-		CHESTPLATE,
-		/**
-		 * Represents a helmet
-		 */
-		HELMET;
-
-		/**
-		 * Retrieves the reverse of the ordinal, cause Minecraft screws up armor
-		 * location horribly
-		 *
-		 * <p>
-		 * Eg: 0 = Helmet, 1 = Chestplate, 2 = Leggings, 3 = Boots
-		 * </p>
-		 */
-		public int ordinalReverse() {
-			return values().length - this.ordinal() - 1;
-		}
+	public static boolean consumeItem(EntityLivingBase entity, Item item) {
+		if (entity instanceof EntityPlayer)
+			return ((EntityPlayer) entity).inventory.consumeInventoryItem(item);
+	
+		return false;
 	}
+
 }

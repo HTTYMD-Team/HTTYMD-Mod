@@ -2,8 +2,8 @@ package com.httymd.item;
 
 import java.util.List;
 
-import com.httymd.util.CreativeTab;
-import com.httymd.util.Utils;
+import com.httymd.creativetab.CreativeTab;
+import com.httymd.util.ItemUtils;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -27,7 +27,7 @@ import net.minecraftforge.event.entity.player.ArrowNockEvent;
 
 /**
  * A crossbow item which is able to hold a charge a later fire (aka: charge and forget)
- * 
+ *
  * @author George Albany
  *
  */
@@ -77,7 +77,7 @@ public class ItemWeaponCrossbow extends ItemExtension {
 		if (this.iconArray.length <= deltaDuration)
 			deltaDuration = this.iconArray.length - 1;
 		//else
-			//this.lastIcon = this.iconArray[deltaDuration];
+		//this.lastIcon = this.iconArray[deltaDuration];
 		return this.iconArray[deltaDuration];
 	}
 
@@ -113,7 +113,7 @@ public class ItemWeaponCrossbow extends ItemExtension {
 	}
 
 	private void insertToInventory(EntityLivingBase entity, ItemStack itemStack) {
-		Utils.insertItem(entity, itemStack);
+		ItemUtils.insertItem(entity, itemStack);
 	}
 
 	public boolean isBowDrawn(ItemStack stack) {
@@ -213,7 +213,7 @@ public class ItemWeaponCrossbow extends ItemExtension {
 				|| EnchantmentHelper.getEnchantmentLevel(Enchantment.infinity.effectId, itemStack) > 0)
 			return true;
 
-		return Utils.consumeItem(entity, item);
+		return ItemUtils.consumeItem(entity, item);
 	}
 
 	@Override

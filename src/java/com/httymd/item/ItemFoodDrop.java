@@ -1,7 +1,7 @@
 package com.httymd.item;
 
 import com.httymd.api.item.IDrop;
-import com.httymd.util.EventRegistry;
+import com.httymd.registry.DropRegistry;
 
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
@@ -10,7 +10,7 @@ import net.minecraft.util.MathHelper;
 
 /**
  * A dropable food class based on {@link ItemFoodExtension} and {@link IDrop}
- * 
+ *
  * @author George Albany
  *
  */
@@ -29,9 +29,10 @@ public class ItemFoodDrop extends ItemFoodExtension implements IDrop {
 		this.entityToDropFor = dropFrom;
 		this.isCooked = isCooked;
 		if (this.entityToDropFor != null)
-			EventRegistry.registerDrop(this);
+			DropRegistry.registerDrop(this);
 	}
 
+	@Override
 	public ItemStack getDrop(EntityLivingBase entity, DamageSource source, int lootLevel, boolean recentHit,
 			int value) {
 		boolean isCookedFood = this.isCooked && entity.isBurning();

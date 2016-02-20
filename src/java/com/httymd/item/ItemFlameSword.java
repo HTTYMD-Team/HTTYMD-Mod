@@ -2,7 +2,7 @@ package com.httymd.item;
 
 import java.util.List;
 
-import com.httymd.util.CreativeTab;
+import com.httymd.creativetab.CreativeTab;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -18,7 +18,7 @@ import net.minecraft.world.World;
 
 /**
  * Base Item class for Hiccup's Inferno
- * 
+ *
  * @author George Albany
  *
  */
@@ -38,7 +38,7 @@ public class ItemFlameSword extends ItemWeapon {
 		super(name, toolMaterial, defAttackDamage, CreativeTab.DRAGON_TAB);
 		this.defaultDamage = this.attackDamage;
 	}
-	
+
 	/**
 	 * Creates an explosion usable by this item
 	 */

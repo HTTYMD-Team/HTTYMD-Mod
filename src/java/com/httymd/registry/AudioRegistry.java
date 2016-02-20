@@ -1,9 +1,10 @@
-package com.httymd.client.audio;
+package com.httymd.registry;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import com.httymd.HTTYMDMod;
+import com.httymd.client.audio.SoundEntry;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;

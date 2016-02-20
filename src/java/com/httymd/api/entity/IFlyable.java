@@ -1,6 +1,6 @@
 package com.httymd.api.entity;
 
-import com.httymd.util.Utils;
+import com.httymd.util.StringUtils;
 
 import net.minecraft.entity.ai.attributes.IAttribute;
 import net.minecraft.entity.ai.attributes.RangedAttribute;
@@ -21,19 +21,19 @@ public interface IFlyable {
 	/**
 	 * The Flight speed
 	 */
-	public static final IAttribute flyingSpeed = new RangedAttribute(Utils.getModString("flyingSpeed"), 1D, 0.0D,
+	public static final IAttribute flyingSpeed = new RangedAttribute(StringUtils.getModString("flyingSpeed"), 1D, 0.0D,
 			Double.MAX_VALUE).setDescription("Flying Speed").setShouldWatch(true);
 
 	/**
 	 * The Flying Yaw delta speed
 	 */
-	public static final IAttribute flyingYaw = new RangedAttribute(Utils.getModString("flyingYaw"), 25D, 0.0D,
+	public static final IAttribute flyingYaw = new RangedAttribute(StringUtils.getModString("flyingYaw"), 25D, 0.0D,
 			Double.MAX_VALUE).setDescription("Flying Yaw Speed").setShouldWatch(true);
 
 	/**
 	 * The Flying Pitch delta speed
 	 */
-	public static final IAttribute flyingPitch = new RangedAttribute(Utils.getModString("flyingPitch"), 20D, 0.0D,
+	public static final IAttribute flyingPitch = new RangedAttribute(StringUtils.getModString("flyingPitch"), 20D, 0.0D,
 			Double.MAX_VALUE).setDescription("Flying Pitch Speed").setShouldWatch(true);
 
 	/**

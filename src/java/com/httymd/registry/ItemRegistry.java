@@ -1,4 +1,4 @@
-package com.httymd.item.registry;
+package com.httymd.registry;
 
 import java.util.HashMap;
 
@@ -16,7 +16,7 @@ import com.httymd.item.ItemToolExtension;
 import com.httymd.item.ItemWeapon;
 import com.httymd.item.ItemWeaponCrossbow;
 import com.httymd.item.util.EnumToolType;
-import com.httymd.item.util.ItemUtils;
+import com.httymd.util.ItemUtils;
 
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.item.Item;

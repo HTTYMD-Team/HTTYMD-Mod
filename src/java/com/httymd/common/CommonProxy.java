@@ -1,16 +1,16 @@
 package com.httymd.common;
 
 import com.httymd.HTTYMDMod;
-import com.httymd.block.registry.BlockRegistry;
 import com.httymd.common.network.PlyJumpMessage;
 import com.httymd.entity.dragon.EntityNadder;
 import com.httymd.entity.dragon.EntityNightFury;
 import com.httymd.entity.dragon.EntitySkrill;
 import com.httymd.entity.dragon.EntityTerribleTerror;
 import com.httymd.event.ForgeEventHandler;
-import com.httymd.item.registry.ItemRegistry;
-import com.httymd.item.registry.MaterialRegistry;
-import com.httymd.item.registry.WorldItemRegistry;
+import com.httymd.registry.BlockRegistry;
+import com.httymd.registry.ItemRegistry;
+import com.httymd.registry.MaterialRegistry;
+import com.httymd.registry.WorldRegistry;
 
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
@@ -49,7 +49,7 @@ public class CommonProxy {
 		MaterialRegistry.init();
 		ItemRegistry.init();
 		BlockRegistry.init();
-		WorldItemRegistry.init();
+		WorldRegistry.init();
 	}
 
 	///////////////////////////////////////

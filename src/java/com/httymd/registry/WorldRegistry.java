@@ -1,4 +1,4 @@
-package com.httymd.item.registry;
+package com.httymd.registry;
 
 import java.util.HashMap;
 import java.util.Random;
@@ -19,7 +19,7 @@ import net.minecraft.village.MerchantRecipe;
 import net.minecraft.village.MerchantRecipeList;
 import net.minecraftforge.common.ChestGenHooks;
 
-public class WorldItemRegistry {
+public class WorldRegistry {
 
 	public static void init() {
 		// Village Blacksmith Chests

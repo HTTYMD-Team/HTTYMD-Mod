@@ -4,7 +4,7 @@ import com.google.common.collect.Multimap;
 import com.httymd.HTTYMDMod;
 import com.httymd.api.item.WeaponType;
 import com.httymd.item.ItemWeapon;
-import com.httymd.util.Utils;
+import com.httymd.util.AddonUtils.Battlegear2;
 
 import cpw.mods.fml.common.Optional.Interface;
 import cpw.mods.fml.common.Optional.InterfaceList;
@@ -21,9 +21,9 @@ import net.minecraft.util.EntityDamageSource;
  *
  */
 @InterfaceList(value = {
-		@Interface(iface = "mods.battlegear2.api.weapons.IBackStabbable", modid = Utils.bg2Id, striprefs = true),
-		@Interface(iface = "mods.battlegear2.api.weapons.IHitTimeModifier", modid = Utils.bg2Id, striprefs = true),
-		@Interface(iface = "mods.battlegear2.api.weapons.IExtendedReachWeapon", modid = Utils.bg2Id, striprefs = true)
+		@Interface(iface = "mods.battlegear2.api.weapons.IBackStabbable", modid = Battlegear2.modId, striprefs = true),
+		@Interface(iface = "mods.battlegear2.api.weapons.IHitTimeModifier", modid = Battlegear2.modId, striprefs = true),
+		@Interface(iface = "mods.battlegear2.api.weapons.IExtendedReachWeapon", modid = Battlegear2.modId, striprefs = true)
 })
 public class ItemDaggerBg2 extends ItemWeapon implements mods.battlegear2.api.weapons.IBackStabbable, 
 		mods.battlegear2.api.weapons.IHitTimeModifier, mods.battlegear2.api.weapons.IExtendedReachWeapon {
@@ -44,22 +44,22 @@ public class ItemDaggerBg2 extends ItemWeapon implements mods.battlegear2.api.we
 	}
 	
 	public boolean onBackStab(EntityLivingBase entityHit, EntityLivingBase entityHitting) {
-		if(!Utils.shouldForceBg2Daggers()) return false;
+		if(!Battlegear2.shouldForceDaggers()) return false;
 		return entityHit.attackEntityFrom(new EntityDamageSource(mods.battlegear2.Battlegear.CUSTOM_DAMAGE_SOURCE+".backstab", entityHitting), this.attackDamage);
 	}
 
 	public float getReachModifierInBlocks(ItemStack stack) {
-		return getModifiedAmount(stack, Utils.shouldForceBg2Daggers() ? extendedReach.getAttributeUnlocalizedName() : "");
+		return getModifiedAmount(stack, Battlegear2.shouldForceDaggers() ? extendedReach.getAttributeUnlocalizedName() : "");
 	}
 
 	public int getHitTime(ItemStack stack, EntityLivingBase arg1) {
-		return -(int)getModifiedAmount(stack, Utils.shouldForceBg2Daggers() ? attackSpeed.getAttributeUnlocalizedName() : "");
+		return -(int)getModifiedAmount(stack, Battlegear2.shouldForceDaggers() ? attackSpeed.getAttributeUnlocalizedName() : "");
 	}
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public Multimap getAttributeModifiers(ItemStack stack) {
 		Multimap map = super.getAttributeModifiers(stack);
-		if(Utils.shouldForceBg2Daggers()) {
+		if(Battlegear2.shouldForceDaggers()) {
 			map.put(extendedReach.getAttributeUnlocalizedName(), 
 					new AttributeModifier(extendReachUUID, "Reach Modifier", this.reach, 0));
 			map.put(attackSpeed.getAttributeUnlocalizedName(), 

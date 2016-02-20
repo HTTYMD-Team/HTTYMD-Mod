@@ -8,10 +8,10 @@ import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import com.httymd.api.item.IItemWeapon;
 import com.httymd.api.item.WeaponType;
-import com.httymd.item.registry.ItemRegistry;
-import com.httymd.item.util.ItemUtils;
-import com.httymd.util.CreativeTab;
-import com.httymd.util.Utils;
+import com.httymd.creativetab.CreativeTab;
+import com.httymd.registry.ItemRegistry;
+import com.httymd.util.AddonUtils.Battlegear2;
+import com.httymd.util.ItemUtils;
 
 import cpw.mods.fml.common.Optional.Method;
 import cpw.mods.fml.common.registry.GameRegistry;
@@ -28,14 +28,14 @@ import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 
 /**
  * A generic ItemWeapon class for ease of weapon creation, and handles fuel for fuel items
- * 
+ *
  * @author George Albany
  *
  */
 public class ItemWeapon extends ItemSword implements IItemWeapon {
-	
+
 	private static final Map<ToolMaterial, HashMap<WeaponType, IItemWeapon>> weaponMap = new HashMap<ToolMaterial, HashMap<WeaponType, IItemWeapon>>();
-	
+
 	protected float attackDamage;
 	protected ToolMaterial material;
 	protected WeaponType type;
@@ -46,7 +46,7 @@ public class ItemWeapon extends ItemSword implements IItemWeapon {
 		if(this.type != null && this.type.getFuelTime() > 0) GameRegistry.registerFuelHandler(this);
 		registerWeapon(this);
 	}
-	
+
 	public ItemWeapon(ToolMaterial toolMaterial, String weaponName, float weaponDamage) {
 		this(toolMaterial, weaponName, weaponDamage, CreativeTab.DRAGON_TAB);
 	}
@@ -68,7 +68,7 @@ public class ItemWeapon extends ItemSword implements IItemWeapon {
 	public Multimap<String, AttributeModifier> getAttributeModifiers(ItemStack stack) {
 		Multimap<String, AttributeModifier> multimap = HashMultimap.create();
 		multimap.put(SharedMonsterAttributes.attackDamage.getAttributeUnlocalizedName(),
-				new AttributeModifier(field_111210_e, "Weapon Modifier", this.attackDamage, 0)); 
+				new AttributeModifier(field_111210_e, "Weapon Modifier", this.attackDamage, 0));
 		//1.8: field_111210_e to itemModifierUUID
 		return multimap;
 	}
@@ -78,6 +78,7 @@ public class ItemWeapon extends ItemSword implements IItemWeapon {
 		return 72000;
 	}
 
+	@Override
 	public String getRegistryName() {
 		return ItemUtils.findRegistryName(this.getUnlocalizedName());
 	}
@@ -96,26 +97,28 @@ public class ItemWeapon extends ItemSword implements IItemWeapon {
 		return this.func_150893_a(item, block); //getStrVsBlock in 1.8
 	}
 
+	@Override
 	public Item register() {
 		ItemRegistry.registerItem(this, this.getRegistryName());
 		return this;
 	}
-	
+
 	/**
 	 * Whether item is effective against block
 	 */
+	@Override
 	public boolean func_150897_b(Block block) {
 		return this.type == WeaponType.WARAXE && block.getMaterial() == Material.wood;
 	}
-	
+
 	/**
 	 * Retrieves the total modifier amount on an item stack using a modifier name
-	 * 
+	 *
 	 * <p>See Battlegear 2's ItemWeapon class for original implementation</p>
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public float getModifiedAmount(ItemStack stack, String modifierName) {
-		if(modifierName.isEmpty()) return 0; 
+		if(modifierName.isEmpty()) return 0;
 		Iterator itr = stack.getAttributeModifiers().get(modifierName).iterator();
 		float f = 0;
 		while (itr.hasNext()) {
@@ -127,22 +130,23 @@ public class ItemWeapon extends ItemSword implements IItemWeapon {
 	/**
 	 * Retrieves the amount of time able to spend on burning an item
 	 */
+	@Override
 	public int getBurnTime(ItemStack fuel) {
 		if (fuel.getItem() == this) {
-			return this.getToolMaterialName().equals(ToolMaterial.WOOD.toString()) ? 
+			return this.getToolMaterialName().equals(ToolMaterial.WOOD.toString()) ?
 					this.type.getFuelTime() + 100 : this.type.getFuelTime();
 		}
 		return 0;
 	}
-	
+
 	public static HashMap<WeaponType, IItemWeapon> getWeaponMap(ToolMaterial mat) {
 		return weaponMap.get(mat);
 	}
-	
+
 	public static IItemWeapon getWeaponFor(ToolMaterial mat, WeaponType type) {
 		return getWeaponMap(mat).get(type);
 	}
-	
+
 	public static void registerWeapon(IItemWeapon item) {
 		if(!(item instanceof Item)) return;
 		if(item.getMaterial() != null && item.getWeaponType() != null) {
@@ -174,7 +178,7 @@ public class ItemWeapon extends ItemSword implements IItemWeapon {
 	}
 
 	@Override
-	@Method(modid = Utils.bg2Id)
+	@Method(modid = Battlegear2.modId)
 	public boolean offhandAttackEntity(mods.battlegear2.api.PlayerEventChild.OffhandAttackEvent event, ItemStack main, ItemStack offhand) {
 		return true;
 	}

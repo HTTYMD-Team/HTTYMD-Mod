@@ -1,7 +1,7 @@
 package com.httymd.api.item;
 
 import com.httymd.api.IRegisterable;
-import com.httymd.util.Utils;
+import com.httymd.util.AddonUtils.Battlegear2;
 
 import cpw.mods.fml.common.IFuelHandler;
 import cpw.mods.fml.common.Optional.Interface;
@@ -17,8 +17,8 @@ import net.minecraft.item.Item.ToolMaterial;
  *
  */
 @InterfaceList(value = {
-	@Interface(iface = "mods.battlegear2.api.weapons.IBattlegearWeapon", modid = Utils.bg2Id, striprefs = true),
-	@Interface(iface = "mods.battlegear2.api.weapons.Attributes", modid = Utils.bg2Id, striprefs = true),
+	@Interface(iface = "mods.battlegear2.api.weapons.IBattlegearWeapon", modid = Battlegear2.modId, striprefs = true),
+	@Interface(iface = "mods.battlegear2.api.weapons.Attributes", modid = Battlegear2.modId, striprefs = true),
 })
 public interface IItemWeapon extends IRegisterable<Item>, IFuelHandler, mods.battlegear2.api.weapons.IBattlegearWeapon,
 		mods.battlegear2.api.weapons.Attributes {

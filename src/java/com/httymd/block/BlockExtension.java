@@ -2,8 +2,8 @@ package com.httymd.block;
 
 import com.httymd.HTTYMDMod;
 import com.httymd.api.IRegisterable;
-import com.httymd.block.registry.BlockRegistry;
-import com.httymd.item.util.ItemUtils;
+import com.httymd.registry.BlockRegistry;
+import com.httymd.util.ItemUtils;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;

@@ -1,4 +1,4 @@
-package com.httymd.util;
+package com.httymd.creativetab;
 
 import com.httymd.HTTYMDMod;
 import com.httymd.item.ItemExtension;

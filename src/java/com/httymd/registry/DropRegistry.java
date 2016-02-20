@@ -1,4 +1,4 @@
-package com.httymd.util;
+package com.httymd.registry;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -9,7 +9,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 
-public class EventRegistry {
+public class DropRegistry {
 	private static ArrayList<IDrop> drops = new ArrayList<IDrop>();
 
 	public static ArrayList<IDrop> getDropsFor(EntityLivingBase entity) {

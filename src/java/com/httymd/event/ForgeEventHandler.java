@@ -1,7 +1,7 @@
 package com.httymd.event;
 
-import com.httymd.util.EventRegistry;
-import com.httymd.util.NameManager;
+import com.httymd.registry.DropRegistry;
+import com.httymd.registry.NameRegistry;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.entity.item.EntityItem;
@@ -16,7 +16,7 @@ public class ForgeEventHandler {
 	 */
 	@SubscribeEvent
 	public void onEvent(LivingDropsEvent event) {
-		for (ItemStack stack : EventRegistry.handleDropStacks(event.entityLiving, event.source, event.lootingLevel,
+		for (ItemStack stack : DropRegistry.handleDropStacks(event.entityLiving, event.source, event.lootingLevel,
 				event.recentlyHit, event.specialDropValue))
 			event.drops.add(new EntityItem(event.entity.worldObj, event.entity.posX, event.entity.posY,
 					event.entity.posZ, stack));
@@ -27,6 +27,6 @@ public class ForgeEventHandler {
 	 */
 	@SubscribeEvent
 	public void onEvent(NameFormat event) {
-		event.displayname = NameManager.getInstance().getDisplayName(event.entityLiving, event.username);
+		event.displayname = NameRegistry.getDisplayName(event.entityLiving, event.username);
 	}
 }

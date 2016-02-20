@@ -6,8 +6,8 @@ import org.lwjgl.opengl.GL11;
 
 import com.httymd.client.model.ModelGlideSuit;
 import com.httymd.item.ItemGlideArmor;
-import com.httymd.item.util.ItemUtils.EnumArmorType;
-import com.httymd.util.Utils;
+import com.httymd.util.ModUtils;
+import com.httymd.util.ItemUtils;
 
 import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.model.ModelBiped;
@@ -138,7 +138,7 @@ public class RenderGlide extends RenderPlayer {
 
 		GL11.glPushMatrix();
 		GL11.glRotated(pitchTiltAngle, -playerYawCos, 0, -playerYawSin);
-		if(Utils.experimental())
+		if(ModUtils.isExperimental())
 			this.renderWings(player, 0.0625F);
 		
 		super.doRender(player, p_76986_2, p_76986_4, p_76986_6, p_76986_8, p_76986_9_);
@@ -147,7 +147,7 @@ public class RenderGlide extends RenderPlayer {
 
 	private boolean checkForWingRender(ItemStack stack, int slot) {
 		return stack != null && stack.getItem() instanceof ItemGlideArmor
-				&& Arrays.asList(((ItemGlideArmor)stack.getItem()).getRequiredSlotsForFlight()).contains(EnumArmorType.values()[slot]);
+				&& Arrays.asList(((ItemGlideArmor)stack.getItem()).getRequiredSlotsForFlight()).contains(ItemUtils.EnumArmorType.values()[slot]);
 	}
 
 	public void renderWings(Entity e, float f5) {
@@ -155,7 +155,7 @@ public class RenderGlide extends RenderPlayer {
 			ResourceLocation textureResource = null;
 			ItemStack stack = null;
 			if (e instanceof EntityLivingBase) {
-				for (int i = 0; i < EnumArmorType.values().length; i++) {
+				for (int i = 0; i < ItemUtils.EnumArmorType.values().length; i++) {
 					stack = ((EntityLivingBase) e).getEquipmentInSlot(i + 1);
 					if (this.checkForWingRender(stack, i)) {
 						break;

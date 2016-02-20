@@ -1,7 +1,7 @@
 package com.httymd.entity.dragon.ai;
 
 import com.httymd.entity.EntityDragon;
-import com.httymd.util.Utils;
+import com.httymd.util.WorldUtils;
 
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.RandomPositionGenerator;
@@ -20,7 +20,7 @@ public class EntityDragonAIWander extends EntityAIBase {
 	public boolean continueExecuting() {
 		final float minTargetDist = 15f;
 		this.dragon.moveEntityWithHeading(1, 0.25F);
-		return this.target != null && Utils.isTraceOpen(this.dragon.worldObj, this.dragon.getPosition(1), this.target)
+		return this.target != null && WorldUtils.isTraceOpen(this.dragon.worldObj, this.dragon.getPosition(1), this.target)
 				&& this.dragon.getPosition(1).squareDistanceTo(this.target) > minTargetDist * minTargetDist;
 	}
 
@@ -38,7 +38,7 @@ public class EntityDragonAIWander extends EntityAIBase {
 				return false;
 			else {
 				this.target = vec3;
-				return Utils.isTraceOpen(this.dragon.worldObj, this.dragon.getPosition(1), this.target);
+				return WorldUtils.isTraceOpen(this.dragon.worldObj, this.dragon.getPosition(1), this.target);
 			}
 		}
 	}

@@ -2,7 +2,7 @@ package com.httymd.client.event;
 
 import com.httymd.client.render.RenderGlide;
 import com.httymd.item.ItemGlideArmor;
-import com.httymd.item.util.ItemUtils.EnumArmorType;
+import com.httymd.util.ItemUtils;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.client.renderer.entity.RenderManager;
@@ -25,7 +25,7 @@ public class PlayerClientHandler {
 			return;
 
 		ItemStack stack = null;
-		for (EnumArmorType type : EnumArmorType.values()) {
+		for (ItemUtils.EnumArmorType type : ItemUtils.EnumArmorType.values()) {
 			stack = event.entity.getEquipmentInSlot(type.ordinal() + 1);
 			if (stack != null && stack.getItem() instanceof ItemGlideArmor)
 				break;
@@ -49,7 +49,7 @@ public class PlayerClientHandler {
 	@SubscribeEvent
 	public void terminateItemRenderOnGlide(RenderPlayerEvent.Specials.Pre event) {
 		ItemStack stack = null;
-		for (EnumArmorType type : EnumArmorType.values()) {
+		for (ItemUtils.EnumArmorType type : ItemUtils.EnumArmorType.values()) {
 			stack = event.entityLiving.getEquipmentInSlot(type.ordinal() + 1);
 			if (stack != null && stack.getItem() instanceof ItemGlideArmor)
 				break;

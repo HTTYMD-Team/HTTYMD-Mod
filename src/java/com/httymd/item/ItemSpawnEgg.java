@@ -6,7 +6,7 @@ import org.apache.logging.log4j.Logger;
 
 import com.httymd.HTTYMDMod;
 import com.httymd.api.IRegisterable;
-import com.httymd.item.util.ItemUtils;
+import com.httymd.util.ItemUtils;
 
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
@@ -33,7 +33,7 @@ import net.minecraft.world.World;
 
 /**
  * Creates a custom spawn egg which well handles custom entities
- * 
+ *
  * @author George Albany (using Jabelar's Spawn Egg class)
  *
  */
@@ -101,6 +101,7 @@ public class ItemSpawnEgg extends ItemMonsterPlacer implements IRegisterable<Ite
 				this.getEntityLocalName(stack));
 	}
 
+	@Override
 	public String getRegistryName() {
 		return ItemUtils.findRegistryName(this.getUnlocalizedName());
 	}
@@ -201,6 +202,7 @@ public class ItemSpawnEgg extends ItemMonsterPlacer implements IRegisterable<Ite
 		this.theIcon = par1IconRegister.registerIcon(this.getIconString() + "_overlay");
 	}
 
+	@Override
 	public ItemMonsterPlacer register() {
 		GameRegistry.registerItem(this, this.getRegistryName());
 		return this;

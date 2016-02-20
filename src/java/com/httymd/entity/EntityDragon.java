@@ -3,8 +3,7 @@ package com.httymd.entity;
 import com.httymd.HTTYMDMod;
 import com.httymd.api.entity.IDragon;
 import com.httymd.api.entity.IDragonAbility;
-import com.httymd.item.registry.ItemRegistry;
-import com.httymd.item.util.ItemUtils;
+import com.httymd.registry.ItemRegistry;
 import com.httymd.util.DragonDamageSource;
 
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -97,7 +96,7 @@ public class EntityDragon extends EntityTameableFlying implements IDragon {
 			if (HTTYMDMod.getConfig().isDebugMode() && hand.getItem() == ItemRegistry.wing) {
 				this.onTakeoff();
 				return true;
-			} else if (ItemUtils.isFood(hand) && !this.canTame(ply, hand) && 
+			} else if (com.httymd.util.ItemUtils.isFood(hand) && !this.canTame(ply, hand) && 
 					this.onFeed(ply, hand) && !ply.capabilities.isCreativeMode && --hand.stackSize <= 0) 
 						ply.inventory.setInventorySlotContents(ply.inventory.currentItem, (ItemStack) null);
 		}

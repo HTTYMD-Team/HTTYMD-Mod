@@ -1,8 +1,8 @@
 package com.httymd.item;
 
 import com.httymd.api.item.IShield;
-import com.httymd.item.util.ItemUtils;
-import com.httymd.util.Utils;
+import com.httymd.util.AddonUtils.Battlegear2;
+import com.httymd.util.ItemUtils;
 
 import cpw.mods.fml.common.IFuelHandler;
 import cpw.mods.fml.common.registry.GameRegistry;
@@ -20,11 +20,10 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.IIcon;
 
-
 /**
- * A Shield item class, that heavily manipulates Battlegear 2 (only class to be left in com.httymd.item 
+ * A Shield item class, that heavily manipulates Battlegear 2 (only class to be left in com.httymd.item
  * package that heavily manipulates Battlegear 2)
- * 
+ *
  * @author George Albany
  *
  */
@@ -59,6 +58,7 @@ public class ItemShield extends ItemExtension implements IFuelHandler, IShield {
 		this("", material);
 	}
 
+	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerIcons(IIconRegister par1IconRegister) {
 		super.registerIcons(par1IconRegister);
@@ -82,10 +82,12 @@ public class ItemShield extends ItemExtension implements IFuelHandler, IShield {
 		return this.material != null;
 	}
 
+	@Override
 	public void blockAnimation(EntityPlayer player, float dmg) {
 		player.worldObj.playSoundAtEntity(player, "battlegear2:shield", 1, 1);
 	}
 
+	@Override
 	public boolean canBlock(ItemStack stack, DamageSource src) {
 		float chance = 1F;
 		if (src.isProjectile())
@@ -97,48 +99,56 @@ public class ItemShield extends ItemExtension implements IFuelHandler, IShield {
 		return itemRand.nextFloat() <= chance && !src.isUnblockable();
 	}
 
+	@Override
 	public int getBashTimer(ItemStack arg0) {
-		return Utils.shouldUseBg2() ? 15 : 0;
+		return Battlegear2.shouldUse() ? 15 : 0;
 	}
 
+	@Override
 	public float getBlockAngle(ItemStack arg0) {
 		return 60;
 	}
 
+	@Override
 	public float getDamageDecayRate(ItemStack shield, float amt) {
 		return damDecay * amt;
 	}
 
+	@Override
 	public float getDamageReduction(ItemStack arg0, DamageSource arg1) {
 		return 0;
 	}
 
+	@Override
 	public float getDecayRate(ItemStack shield) {
 		int use = 0;
-		if (Utils.shouldUseBg2()) {
+		if (Battlegear2.shouldUse()) {
 			use = mods.battlegear2.api.EnchantmentHelper
-				.getEnchantmentLevel(mods.battlegear2.enchantments.BaseEnchantment.shieldUsage, shield);
+					.getEnchantmentLevel(mods.battlegear2.enchantments.BaseEnchantment.shieldUsage, shield);
 			return this.natDecay * (1 - use * 0.1F);
 		}
 		return use;
 	}
 
+	@Override
 	public float getRecoveryRate(ItemStack shield) {
 		int recover = 0;
-		if (Utils.shouldUseBg2()) {
+		if (Battlegear2.shouldUse()) {
 			recover = mods.battlegear2.api.EnchantmentHelper
-				.getEnchantmentLevel(mods.battlegear2.enchantments.BaseEnchantment.shieldRecover, shield);
+					.getEnchantmentLevel(mods.battlegear2.enchantments.BaseEnchantment.shieldRecover, shield);
 			return 0.01F * (1 + recover * 0.2F);// should take 5 seconds to fully  recover without enchantment
 		}
 		return recover;
 	}
 
+	@Override
 	public int getArrowCount(ItemStack stack) {
 		if (stack.hasTagCompound() && stack.getTagCompound().hasKey(NBT_ARROW_COUNT))
 			return stack.getTagCompound().getInteger(NBT_ARROW_COUNT);
 		return 0;
 	}
 
+	@Override
 	public void setArrowCount(ItemStack stack, int count) {
 		if (!stack.hasTagCompound()) stack.setTagCompound(new NBTTagCompound());
 		// Should never happen, you would need A LOT of arrows for this to happen
@@ -146,6 +156,7 @@ public class ItemShield extends ItemExtension implements IFuelHandler, IShield {
 		stack.getTagCompound().setInteger(NBT_ARROW_COUNT, count);
 	}
 
+	@Override
 	public boolean catchArrow(ItemStack shield, EntityPlayer player, IProjectile arrow) {
 		if (arrow instanceof EntityArrow) {
 			setArrowCount(shield, getArrowCount(shield) + 1);
@@ -156,6 +167,7 @@ public class ItemShield extends ItemExtension implements IFuelHandler, IShield {
 		return false;
 	}
 
+	@Override
 	public int getBurnTime(ItemStack fuel) {
 		if (fuel.getItem() == this) {
 			return this.material.equals(ToolMaterial.WOOD) ? 300 : 200;
@@ -163,18 +175,22 @@ public class ItemShield extends ItemExtension implements IFuelHandler, IShield {
 		return 0;
 	}
 
+	@Override
 	public boolean sheatheOnBack(ItemStack shield) {
 		return true;
 	}
 
+	@Override
 	public boolean isEnchantable(Enchantment ench, ItemStack shield) {
 		return ench.type == EnumEnchantmentType.all;
 	}
 
+	@Override
 	public int getItemEnchantability(ItemStack shield) {
 		return this.hasMaterial() ? this.getMaterial().getEnchantability() : 1;
 	}
 
+	@Override
 	public boolean getIsRepairable(ItemStack itemStack, ItemStack repair) {
 		return this.material.customCraftingMaterial == repair.getItem();
 	}

@@ -1,16 +1,16 @@
 package com.httymd.item;
 
 import com.httymd.api.IRegisterable;
-import com.httymd.item.registry.ItemRegistry;
-import com.httymd.item.util.ItemUtils;
-import com.httymd.util.CreativeTab;
+import com.httymd.creativetab.CreativeTab;
+import com.httymd.registry.ItemRegistry;
+import com.httymd.util.ItemUtils;
 
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 
 /**
  * An {@link IRegisterable} of {@link Item}
- * 
+ *
  * @author George Albany
  *
  */
@@ -26,6 +26,7 @@ public class ItemExtension extends Item implements IRegisterable<Item> {
 		this.setTextureName(ItemUtils.findTextureName(this.getUnlocalizedName()));
 	}
 
+	@Override
 	public String getRegistryName() {
 		return ItemUtils.findRegistryName(this.getUnlocalizedName());
 	}

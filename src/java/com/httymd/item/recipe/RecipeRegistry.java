@@ -3,8 +3,8 @@ package com.httymd.item.recipe;
 import java.util.Collection;
 
 import com.httymd.api.item.FoodType;
-import com.httymd.block.registry.BlockRegistry;
-import com.httymd.item.registry.ItemRegistry;
+import com.httymd.registry.BlockRegistry;
+import com.httymd.registry.ItemRegistry;
 
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.init.Blocks;

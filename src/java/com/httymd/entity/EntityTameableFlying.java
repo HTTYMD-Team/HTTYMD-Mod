@@ -5,7 +5,7 @@ import java.util.Iterator;
 import com.httymd.HTTYMDMod;
 import com.httymd.api.entity.IFlyable;
 import com.httymd.api.entity.ITameable;
-import com.httymd.item.registry.ItemRegistry;
+import com.httymd.registry.ItemRegistry;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;

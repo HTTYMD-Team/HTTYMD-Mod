@@ -2,7 +2,7 @@ package com.httymd.item;
 
 import java.util.List;
 
-import com.httymd.util.Utils;
+import com.httymd.util.StringUtils;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -17,11 +17,12 @@ import net.minecraft.util.MathHelper;
 
 /**
  * May eventually be container for dragon byproducts
- * 
+ *
  * @author George Albany
- * 
+ *
  * @deprecated Currently useless
  */
+@Deprecated
 public class ItemContainer extends ItemExtension {
 
 	public static float getMaxHoldable(ItemStack stack) {
@@ -72,11 +73,11 @@ public class ItemContainer extends ItemExtension {
 	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack stack, EntityPlayer player, List textList, boolean p_77624_4_) {
 		String text = EnumChatFormatting.DARK_PURPLE.toString() + EnumChatFormatting.ITALIC
-				+ Utils.getLocalString(this.getRegistryName() + ".produceType") + ": ";
+				+ StringUtils.getLocalString(this.getRegistryName() + ".produceType") + ": ";
 		if (hasProduce(stack))
-			text += getProduceHeld(stack) + " " + Utils.getLocalString("itemNBT.milliliter");
+			text += getProduceHeld(stack) + " " + StringUtils.getLocalString("itemNBT.milliliter");
 		else
-			text += Utils.getLocalString("itemNBT.empty");
+			text += StringUtils.getLocalString("itemNBT.empty");
 
 		textList.add(text);
 	}

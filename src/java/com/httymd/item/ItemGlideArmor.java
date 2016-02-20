@@ -2,7 +2,7 @@ package com.httymd.item;
 
 import com.httymd.HTTYMDMod;
 import com.httymd.client.model.ModelGlideSuit;
-import com.httymd.item.util.ItemUtils.EnumArmorType;
+import com.httymd.util.ItemUtils;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.Side;
@@ -20,7 +20,7 @@ import net.minecraftforge.event.entity.living.LivingFallEvent;
 
 /**
  * The Item class for Hiccup's Glide Suit in HTTYD
- * 
+ *
  * @author George Albany,<br>
  *         Stephan Spengler
  *
@@ -38,8 +38,8 @@ public class ItemGlideArmor extends ItemArmorExtension {
 	/**
 	 * Returns the required slot sections for flight
 	 */
-	public EnumArmorType[] getRequiredSlotsForFlight() {
-		return new EnumArmorType[] { EnumArmorType.CHESTPLATE, EnumArmorType.LEGGINGS };
+	public ItemUtils.EnumArmorType[] getRequiredSlotsForFlight() {
+		return new ItemUtils.EnumArmorType[] { ItemUtils.EnumArmorType.CHESTPLATE, ItemUtils.EnumArmorType.LEGGINGS };
 	}
 
 	private boolean isInLiquid(EntityLivingBase entity) {
@@ -49,7 +49,7 @@ public class ItemGlideArmor extends ItemArmorExtension {
 
 	/**
 	 * Determines if the glide suit enables the ability to glide on an entity
-	 * 
+	 *
 	 * @param entity
 	 *            The entity to check
 	 */
@@ -60,7 +60,7 @@ public class ItemGlideArmor extends ItemArmorExtension {
 			flag = flag && !((EntityPlayer) entity).capabilities.isFlying;
 		flag = flag && !entity.isRiding() && entity.riddenByEntity == null;
 
-		for (EnumArmorType slot : this.getRequiredSlotsForFlight()) {
+		for (ItemUtils.EnumArmorType slot : this.getRequiredSlotsForFlight()) {
 			ItemStack armor = entity.getEquipmentInSlot(slot.ordinal() + 1);
 			flag = flag && (armor != null && armor.getItem() instanceof ItemGlideArmor);
 		}
@@ -70,7 +70,7 @@ public class ItemGlideArmor extends ItemArmorExtension {
 	/**
 	 * Whether an entity's item can glide, for anything not covered in
 	 * {@link #isFlyable(EntityLivingBase)}
-	 * 
+	 *
 	 * @param entity
 	 *            The entity to check
 	 * @param stack
@@ -92,7 +92,7 @@ public class ItemGlideArmor extends ItemArmorExtension {
 	/**
 	 * Determines whether an itemstack has the {@link #NBT_GLIDING} boolean
 	 * enabled
-	 * 
+	 *
 	 * @param stack
 	 *            The itemstack to check
 	 */
@@ -104,7 +104,7 @@ public class ItemGlideArmor extends ItemArmorExtension {
 
 	/**
 	 * Sets the the {@link #NBT_GLIDING} boolean
-	 * 
+	 *
 	 * @param stack
 	 *            The stack to set on
 	 * @param gliding
@@ -126,7 +126,7 @@ public class ItemGlideArmor extends ItemArmorExtension {
 	/**
 	 * For manipulation outside of just player ticks, for anything to be covered
 	 * by {@link #onArmorTick(World, EntityPlayer, ItemStack)}
-	 * 
+	 *
 	 * @param world
 	 *            The world this event takes place in
 	 * @param entity
@@ -150,6 +150,7 @@ public class ItemGlideArmor extends ItemArmorExtension {
 		}
 	}
 
+	@Override
 	public boolean onDroppedByPlayer(ItemStack stack, EntityPlayer player) {
 		this.setGliding(stack, false);
 		return super.onDroppedByPlayer(stack, player);
@@ -161,7 +162,7 @@ public class ItemGlideArmor extends ItemArmorExtension {
 		if (this.isGliding(itemStack)) {
 			ModelGlideSuit gsuit;
 			// For some reason, armorSlot is the opposite of  PlayerInventory.armorInventory
-			if (armorSlot == EnumArmorType.LEGGINGS.ordinalReverse()) { 
+			if (armorSlot == ItemUtils.EnumArmorType.LEGGINGS.ordinalReverse()) {
 				gsuit = new ModelGlideSuit(0.5F);
 			} else {
 				gsuit = new ModelGlideSuit(1.0F);
@@ -184,7 +185,7 @@ public class ItemGlideArmor extends ItemArmorExtension {
 	 */
 	@SubscribeEvent
 	public void onFall(LivingFallEvent event) {
-		ItemStack boots = event.entityLiving.getEquipmentInSlot(EnumArmorType.BOOTS.ordinal() + 1);
+		ItemStack boots = event.entityLiving.getEquipmentInSlot(ItemUtils.EnumArmorType.BOOTS.ordinal() + 1);
 		if (boots != null && boots.getItem() instanceof ItemGlideArmor) {
 			event.setCanceled(true);
 		}

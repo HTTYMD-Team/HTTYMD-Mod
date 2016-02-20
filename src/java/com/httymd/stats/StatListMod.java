@@ -1,9 +1,10 @@
-package com.httymd.util;
+package com.httymd.stats;
 
 import java.util.HashMap;
 import java.util.Iterator;
 
 import com.httymd.HTTYMDMod;
+import com.httymd.util.DragonUtils;
 
 import net.minecraft.stats.StatBase;
 import net.minecraft.util.ChatComponentTranslation;
@@ -25,7 +26,7 @@ public class StatListMod {
 			new ChatComponentTranslation(startSection + endSection[0])).initIndependentStat().registerStat();
 
 	private static void registerDragonsRidden() {
-		Iterator<String> dragonIt = HTTYMDMod.getDragonList().iterator();
+		Iterator<String> dragonIt = DragonUtils.getDragonList().iterator();
 		StatBase stat;
 
 		while (dragonIt.hasNext()) {

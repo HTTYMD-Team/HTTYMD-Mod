@@ -14,8 +14,8 @@ public class DragonDamageSource {
 	}
 	
 	public static EntityDamageSource getAbilityDamage(Entity attacker, Entity source, String add) {
-		return attacker == null ? new EntityDamageSource(Utils.getModString("dragon.ability") + add, source)
-				: new EntityDamageSourceIndirect(Utils.getModString("dragon.ability") + add, source, attacker);
+		return attacker == null ? new EntityDamageSource(StringUtils.getModString("dragon.ability") + add, source)
+				: new EntityDamageSourceIndirect(StringUtils.getModString("dragon.ability") + add, source, attacker);
 	}
 
 	public static EntityDamageSource getProjectileDamage(Entity attacker, Entity source) {
@@ -35,7 +35,7 @@ public class DragonDamageSource {
 	}
 
 	public static EntityDamageSource getDirectDamage(Entity attacker) {
-		return new EntityDamageSource(Utils.getModString("dragon.direct." + Integer.toString(rng.nextInt(2) + 1)),
+		return new EntityDamageSource(StringUtils.getModString("dragon.direct." + Integer.toString(rng.nextInt(2) + 1)),
 				attacker);
 	}
 }

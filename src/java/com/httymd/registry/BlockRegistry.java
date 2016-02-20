@@ -1,4 +1,4 @@
-package com.httymd.block.registry;
+package com.httymd.registry;
 
 import java.util.HashMap;
 
