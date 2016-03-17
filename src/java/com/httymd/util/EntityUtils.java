@@ -11,7 +11,7 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.world.World;
 
-public class EntityUtils {
+public final class EntityUtils {
 	
 	public static CreativeTabs currentTab = HTTYMDMod.getCreativeTab();
 	public static int nextID;

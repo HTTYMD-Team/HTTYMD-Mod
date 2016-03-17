@@ -39,11 +39,13 @@ public class ItemWeapon extends ItemSword implements IItemWeapon {
 	protected float attackDamage;
 	protected ToolMaterial material;
 	protected WeaponType type;
+	protected int fuelTime = 0;
 
 	public ItemWeapon(ToolMaterial mat, WeaponType wepType) {
 		this(mat, wepType.getName(), wepType.getDamage());
 		this.type = wepType;
-		if(this.type != null && this.type.getFuelTime() > 0) GameRegistry.registerFuelHandler(this);
+		this.fuelTime = (this.type != null ? this.type.getFuelTime() : 0) + (mat == ToolMaterial.WOOD ? 100 : 0);
+		if(this.fuelTime > 0) GameRegistry.registerFuelHandler(this);
 		registerWeapon(this);
 	}
 
@@ -132,9 +134,8 @@ public class ItemWeapon extends ItemSword implements IItemWeapon {
 	 */
 	@Override
 	public int getBurnTime(ItemStack fuel) {
-		if (fuel.getItem() == this) {
-			return this.getToolMaterialName().equals(ToolMaterial.WOOD.toString()) ?
-					this.type.getFuelTime() + 100 : this.type.getFuelTime();
+		if (fuel != null && fuel.getItem() == this) {
+			return this.fuelTime;
 		}
 		return 0;
 	}

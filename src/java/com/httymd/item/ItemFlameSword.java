@@ -2,6 +2,7 @@ package com.httymd.item;
 
 import java.util.List;
 
+import com.httymd.api.item.WeaponType;
 import com.httymd.creativetab.CreativeTab;
 
 import cpw.mods.fml.relauncher.Side;
@@ -34,8 +35,8 @@ public class ItemFlameSword extends ItemWeapon {
 	@SideOnly(Side.CLIENT)
 	private IIcon defaultIcon;
 
-	public ItemFlameSword(Item.ToolMaterial toolMaterial, String name, float defAttackDamage) {
-		super(name, toolMaterial, defAttackDamage, CreativeTab.DRAGON_TAB);
+	public ItemFlameSword(ToolMaterial toolMaterial, WeaponType type) {
+		super(type.getName(), toolMaterial, type.getDamage(), CreativeTab.DRAGON_TAB);
 		this.defaultDamage = this.attackDamage;
 	}
 

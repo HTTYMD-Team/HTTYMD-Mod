@@ -3,7 +3,7 @@ package com.httymd.util;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 
-public class WorldUtils {
+public final class WorldUtils {
 
 	/**
 	 * Determines whether it is possible to draw a straight line from rayStart

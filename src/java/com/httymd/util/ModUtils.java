@@ -7,7 +7,7 @@ import org.apache.logging.log4j.Logger;
 import com.httymd.Config;
 import com.httymd.HTTYMDMod;
 
-public class ModUtils {
+public final class ModUtils {
 
 	/**
 	 * Shorthand for {@link Config#isDebugMode() HTTYMDMod.getConfig().isDebugMode()}

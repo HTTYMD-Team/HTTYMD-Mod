@@ -1,35 +1,62 @@
 package com.httymd.util;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import com.httymd.Config;
 import com.httymd.HTTYMDMod;
 
 import cpw.mods.fml.common.Loader;
 
-public class AddonUtils {
+public final class AddonUtils {
 
+	/**
+	 * A extendible utility class for determining mod accessibility
+	 * 
+	 * @author George Albany
+	 *
+	 */
+	public static abstract class ModUtil {
+		
+		private static Map<String, Boolean> isLoadedMap = new HashMap<String, Boolean>();
+		
+		/**
+		 * Retrieves mod id
+		 */
+		public String getId() { return ""; }
+		
+		/**
+		 * Returns whether mod is installed
+		 */
+		public final boolean isInstalled() {
+			if(getId().isEmpty()) return false;
+			if(isLoadedMap.get(getId()) == null) {
+				isLoadedMap.put(getId(), Loader.isModLoaded(getId()));
+			}
+			return isLoadedMap.get(getId()) == Boolean.TRUE;
+		}
+	}
+	
 	/**
 	 * Contains Battlegear2 Addon Utilities
 	 */
-	public static class Battlegear2 {
-
-		static Boolean isLoaded;
+	public static final class Battlegear2 extends ModUtil {
+		
 		public static final String modId = "battlegear2";
+		public static final Battlegear2 INSTANCE = new Battlegear2();
+		
+		private Battlegear2() {}
 		
 		/**
 		 * Retrieves Battlegear 2's id
 		 */
 		public static String getModId() {
-			return Battlegear2.modId;
+			return INSTANCE.getId();
 		}
-
-		/**
-		 * Retrieves whether Battlegear 2 is installed (saves result at runtime for efficiency)
-		 */
-		public static boolean isInstalled() {
-			if(isLoaded == null) {
-				isLoaded = Loader.isModLoaded(AddonUtils.Battlegear2.getModId());
-			}
-			return isLoaded.booleanValue();
+		
+		@Override
+		public String getId() {
+			return Battlegear2.modId;
 		}
 
 		/**
@@ -39,7 +66,7 @@ public class AddonUtils {
 		 * @see Config#useBg2Daggers()
 		 */
 		public static boolean shouldForceDaggers() {
-			return Battlegear2.shouldUse() && HTTYMDMod.getConfig().useBg2Daggers();
+			return shouldUse() && HTTYMDMod.getConfig().useBg2Daggers();
 		}
 
 		/**
@@ -49,7 +76,7 @@ public class AddonUtils {
 		 * @see Config#useBg2ForWarhammer()
 		 */
 		public static boolean shouldForceWarhammer() {
-			return Battlegear2.shouldUse() && HTTYMDMod.getConfig().useBg2ForWarhammer();
+			return shouldUse() && HTTYMDMod.getConfig().useBg2ForWarhammer();
 		}
 
 		/**
@@ -59,7 +86,7 @@ public class AddonUtils {
 		 * @see Config#canUseBg2()
 		 */
 		public static boolean shouldUse() {
-			return HTTYMDMod.getConfig().canUseBg2() && isInstalled();
+			return HTTYMDMod.getConfig().canUseBg2() && INSTANCE.isInstalled();
 		}
 	}
 }

@@ -19,10 +19,6 @@ public class EntityDragon extends EntityTameableFlying implements IDragon {
 
 	private static final int BOOL_IS_ANGRY = 2;
 
-	private static final String NBT_IS_STARTLED = "IsStartled";
-
-	protected boolean startled;
-
 	public EntityDragon(World world) {
 		super(world);
 		this.isImmuneToFire = true;
@@ -150,10 +146,6 @@ public class EntityDragon extends EntityTameableFlying implements IDragon {
 		return (this.dataWatcher.getWatchableObjectByte(BOOL_WATCHER) & BOOL_IS_ANGRY) != 0;
 	}
 
-	public boolean isStartled() {
-		return this.startled;
-	}
-
 	public boolean isTameable(EntityLivingBase tamer) {
 		return !this.isAngry();
 	}
@@ -161,7 +153,6 @@ public class EntityDragon extends EntityTameableFlying implements IDragon {
 	@Override
 	public void readEntityFromNBT(NBTTagCompound tag) {
 		super.readEntityFromNBT(tag);
-		this.setStartled(tag.getBoolean(NBT_IS_STARTLED));
 	}
 
 	/**
@@ -185,14 +176,9 @@ public class EntityDragon extends EntityTameableFlying implements IDragon {
 			this.setAngry(true);
 	}
 
-	public void setStartled(boolean startled) {
-		this.startled = startled;
-	}
-
 	@Override
 	public void writeEntityToNBT(NBTTagCompound tag) {
 		super.writeEntityToNBT(tag);
-		tag.setBoolean(NBT_IS_STARTLED, this.isStartled());
 	}
 
 	/**

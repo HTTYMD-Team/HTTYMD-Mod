@@ -10,6 +10,8 @@ import com.httymd.event.ForgeEventHandler;
 import com.httymd.registry.BlockRegistry;
 import com.httymd.registry.ItemRegistry;
 import com.httymd.registry.MaterialRegistry;
+import com.httymd.registry.NameRegistry;
+import com.httymd.registry.RecipeRegistry;
 import com.httymd.registry.WorldRegistry;
 
 import cpw.mods.fml.common.event.FMLInitializationEvent;
@@ -40,6 +42,8 @@ public class CommonProxy {
 
 		this.network = NetworkRegistry.INSTANCE.newSimpleChannel(HTTYMDMod.ID+"Channel");
 		this.network.registerMessage(PlyJumpMessage.PlyJumpMsgHandler.class, PlyJumpMessage.class, 0, Side.SERVER);
+		ItemRegistry.trueInit();
+		RecipeRegistry.init();
 	}
 
 	public void onPostInit(FMLPostInitializationEvent event) {
@@ -50,6 +54,7 @@ public class CommonProxy {
 		ItemRegistry.init();
 		BlockRegistry.init();
 		WorldRegistry.init();
+		NameRegistry.init();
 	}
 
 	///////////////////////////////////////

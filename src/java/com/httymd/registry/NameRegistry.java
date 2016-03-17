@@ -14,15 +14,15 @@ import net.minecraft.stats.StatList;
 import net.minecraft.util.StatCollector;
 
 public class NameRegistry {
-
-	static {
-		init();
-	}
+	
+	private static boolean initiated = false;
 	
 	private static final ArrayList<String> randomNames = new ArrayList<String>();
 	private static final ArrayList<ISpecialName> specialNames = new ArrayList<ISpecialName>();
 
-	private static void init() {
+	public static void init() {
+		if(initiated) return;
+		initiated = true;
 		registerRandomName("smelly");
 		registerRandomName("angry");
 		registerRandomName("fat");

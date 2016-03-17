@@ -42,7 +42,7 @@ archivesBaseName = "HTTYMD"
 
 minecraft {
 	version = config.mcversion+"-"+config.forgeversion //"1.7.10-10.13.2.1230"
-	runDir = "src/.minecraft"
+	runDir = 'minecraft'
 }
 
 

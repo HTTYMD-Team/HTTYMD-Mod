@@ -42,7 +42,7 @@ public class WorldRegistry {
 		// Mineshaft Chests
 		hook = ChestGenHooks.getInfo(ChestGenHooks.MINESHAFT_CORRIDOR);
 		addGeneratedItem(hook, ItemRegistry.pickaxeGron, 0, 1, 1, 1);
-		addGeneratedItem(hook, ItemRegistry.waraxeStone, 0, 1, 1, 1);
+		addGeneratedItem(hook, ItemRegistry.weaponMap.get(ToolMaterial.STONE).get(WeaponType.WARAXE), 0, 1, 1, 1);
 		
 		// Jungle Pyramid Chests
 		hook = ChestGenHooks.getInfo(ChestGenHooks.PYRAMID_JUNGLE_CHEST);

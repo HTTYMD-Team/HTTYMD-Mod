@@ -4,7 +4,7 @@ import com.httymd.HTTYMDMod;
 
 import net.minecraft.util.StatCollector;
 
-public class StringUtils {
+public final class StringUtils {
 
 	/**
 	 * Retrieves a localized string (using HTTYMDMod.ID) from an unlocalized

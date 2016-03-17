@@ -2,6 +2,7 @@ package com.httymd.api.entity;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.util.Vec3;
+import net.minecraft.world.World;
 
 /**
  * An interface for Dragon Abilities
@@ -14,6 +15,8 @@ public interface IDragonAbility {
 	/**
 	 * Performs an ability start
 	 * 
+	 * @param world
+	 *            World the ability starts in
 	 * @param pos
 	 *            Position the ability starts
 	 * @param rot
@@ -21,15 +24,17 @@ public interface IDragonAbility {
 	 * @param user
 	 *            The Ability user
 	 */
-	public void onStartUse(Vec3 pos, Vec3 rot, Entity user);
+	public void onStartUse(World world, Vec3 pos, Vec3 rot, Entity user);
 
 	/**
 	 * Runs when an ability is ending
 	 * 
+	 * @param world
+	 *            World the ability ended in
 	 * @param pos
-	 *            The position the ability ended at
+	 *            Position the ability ended at
 	 */
-	public void onEndUseDuration(Vec3 pos);
+	public void onEndUseDuration(World world, Vec3 pos);
 
 	/**
 	 * Retrieves the duration of the ability

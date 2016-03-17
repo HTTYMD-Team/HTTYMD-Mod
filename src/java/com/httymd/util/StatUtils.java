@@ -4,7 +4,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.stats.StatBase;
 
-public class StatUtils {
+public final class StatUtils {
 
 	/**
 	 * Adds a value to a statistic field

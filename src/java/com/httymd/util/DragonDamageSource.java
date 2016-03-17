@@ -5,7 +5,7 @@ import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.EntityDamageSourceIndirect;
 import scala.util.Random;
 
-public class DragonDamageSource {
+public final class DragonDamageSource {
 
 	private static final Random rng = new Random();
 	

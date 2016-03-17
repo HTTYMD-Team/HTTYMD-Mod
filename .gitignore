@@ -10,9 +10,10 @@
 .classpath
 bin/
 classes/
+build/
 
 # Useless Temp folder
-*/.minecraft/
+minecraft/
 
 # Prevents project file generation (build never contructs a HTTYMD named file)
 HTTYMD.*

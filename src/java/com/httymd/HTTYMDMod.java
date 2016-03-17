@@ -2,11 +2,12 @@ package com.httymd;
 
 import java.io.File;
 
+import net.minecraft.entity.Entity;
+
 import org.apache.logging.log4j.Logger;
 
 import com.httymd.common.CommonProxy;
 import com.httymd.creativetab.CreativeTab;
-import com.httymd.item.recipe.RecipeRegistry;
 import com.httymd.stats.StatListMod;
 import com.httymd.util.AddonUtils.Battlegear2;
 import com.httymd.util.EntityUtils;
@@ -24,7 +25,6 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartedEvent;
 import cpw.mods.fml.common.event.FMLServerStoppedEvent;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import net.minecraft.entity.Entity;
 
 @Mod(modid = HTTYMDMod.ID, name = HTTYMDMod.NAME, guiFactory = HTTYMDMod.GUIFACORY, dependencies = "after:"
 		+ Battlegear2.modId)
@@ -96,7 +96,6 @@ public class HTTYMDMod {
 
 	@EventHandler
 	public void modInit(FMLInitializationEvent event) {
-		RecipeRegistry.init();
 		FMLCommonHandler.instance().bus().register(this);
 		proxy.onInit(event);
 	}

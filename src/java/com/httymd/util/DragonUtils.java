@@ -2,8 +2,10 @@ package com.httymd.util;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
-public class DragonUtils {
+public final class DragonUtils {
+	
 	private static ArrayList<String> dragonNameList = new ArrayList<String>();
 
 	/**
@@ -11,8 +13,8 @@ public class DragonUtils {
 	 * 
 	 * @see Collections#unmodifiableList(java.util.List)
 	 */
-	public static ArrayList<String> getDragonList() {
-		return (ArrayList<String>) Collections.unmodifiableList(dragonNameList);
+	public static List<String> getDragonList() {
+		return Collections.unmodifiableList(dragonNameList);
 	}
 
 	/**
