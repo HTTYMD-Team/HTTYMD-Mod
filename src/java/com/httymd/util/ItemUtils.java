@@ -87,7 +87,7 @@ public final class ItemUtils {
 	public static ItemArmor.ArmorMaterial addArmorMaterial(String name,
 			int durability, int[] reductionAmounts, int enchantability,
 			Item craftingMaterial) {
-		ItemArmor.ArmorMaterial mat = EnumHelper.addArmorMaterial(name,
+		final ItemArmor.ArmorMaterial mat = EnumHelper.addArmorMaterial(name,
 				durability, reductionAmounts, enchantability);
 		mat.customCraftingMaterial = craftingMaterial;
 		return mat;
@@ -105,15 +105,11 @@ public final class ItemUtils {
 		if (!ItemUtils.supportsFishHooking)
 			return false;
 		try {
-			Class.forName("net.minecraftforge.common.FishingHooks")
-					.getMethod("addFish", WeightedRandomFishable.class)
-					.invoke(null, new WeightedRandomFishable(stack, occurence));
+			Class.forName("net.minecraftforge.common.FishingHooks").getMethod("addFish", WeightedRandomFishable.class)
+			.invoke(null, new WeightedRandomFishable(stack, occurence));
 			return true;
-		} catch (Exception e) {
-			HTTYMDMod
-					.getLogger()
-					.warn("Probable Unsupported Forge Version, please update for all features\n\nExeception:\n"
-							+ e);
+		} catch (final Exception e) {
+			HTTYMDMod.getLogger().warn("Probable Unsupported Forge Version, please update for all features\n\nExeception:\n" + e);
 			ItemUtils.supportsFishHooking = false;
 			return false;
 		}
@@ -129,10 +125,8 @@ public final class ItemUtils {
 	 *            enum
 	 */
 	public static Item.ToolMaterial addToolMaterial(String name,
-			int harvestLevel, int maxUses, float efficiency, float damage,
-			int enchantability, Item craftingMaterial) {
-		Item.ToolMaterial mat = EnumHelper.addToolMaterial(name, harvestLevel,
-				maxUses, efficiency, damage, enchantability);
+			int harvestLevel, int maxUses, float efficiency, float damage, int enchantability, Item craftingMaterial) {
+		final Item.ToolMaterial mat = EnumHelper.addToolMaterial(name, harvestLevel, maxUses, efficiency, damage, enchantability);
 		mat.customCraftingMaterial = craftingMaterial;
 		return mat;
 	}
@@ -169,7 +163,7 @@ public final class ItemUtils {
 	 */
 	public static String findUnlocName(String name) {
 		String modid = HTTYMDMod.ID;
-		int colonIndex = name.indexOf(':');
+		final int colonIndex = name.indexOf(':');
 		if (colonIndex != -1) {
 			modid = name.substring(0, colonIndex - 1);
 			name = name.substring(colonIndex);
@@ -188,22 +182,15 @@ public final class ItemUtils {
 	 * @param mat
 	 *            The {@link ArmorMaterial} of the new armor
 	 */
-	public static Item[] generateArmor(
-			Class<? extends ItemArmorExtension> clazz, String baseName,
-			ArmorMaterial mat) {
-		ItemUtils.EnumArmorType[] armors = ItemUtils.EnumArmorType.values();
-		ItemArmorExtension[] armor = new ItemArmorExtension[armors.length];
+	public static Item[] generateArmor(Class<? extends ItemArmorExtension> clazz, String baseName, ArmorMaterial mat) {
+		final ItemUtils.EnumArmorType[] armors = ItemUtils.EnumArmorType.values();
+		final ItemArmorExtension[] armor = new ItemArmorExtension[armors.length];
 		for (int i = 0; i < armors.length; i++)
 			try {
-				armor[i] = clazz.getConstructor(String.class,
-						ArmorMaterial.class, int.class).newInstance(
-						baseName
-								+ "_"
-								+ armors[i].toString().toLowerCase(
-										Locale.ENGLISH), mat,
-						armors[i].ordinalReverse());
+				armor[i] = clazz.getConstructor(String.class, ArmorMaterial.class, int.class).newInstance(baseName
+						+ "_" + armors[i].toString().toLowerCase(Locale.ENGLISH), mat, armors[i].ordinalReverse());
 				armor[i] = (ItemArmorExtension) armor[i].register();
-			} catch (Exception ex) {
+			} catch (final Exception ex) {
 				HTTYMDMod.getLogger().fatal(ex);
 			}
 		return armor;
@@ -211,29 +198,27 @@ public final class ItemUtils {
 
 	/**
 	 * Generates a weapon map based on a material and a groupd of types
-	 * 
+	 *
 	 * @param material
 	 *            Material to generate for
 	 * @param types
 	 *            Types to generate for
 	 */
-	public static Map<WeaponType, Item> generateWeaponList(
-			ToolMaterial material, WeaponType... types) {
-		Map<WeaponType, Item> result = new HashMap<WeaponType, Item>();
+	public static Map<WeaponType, Item> generateWeaponList(ToolMaterial material, WeaponType... types) {
+		final Map<WeaponType, Item> result = new HashMap<WeaponType, Item>();
 
-		for (WeaponType t : types) {
-			if (t.getFactory() != null) {
+		for (final WeaponType t : types)
+			if (t.getFactory() != null)
 				result.put(t, t.getFactory().createWeapon(material, t));
-			} else
+			else
 				result.put(t, new ItemWeapon(material, t).register());
-		}
 
 		return result;
 	}
 
 	/**
 	 * Determines whether item is food
-	 * 
+	 *
 	 * @param item
 	 *            The stack to test
 	 */
@@ -252,8 +237,6 @@ public final class ItemUtils {
 	public static boolean consumeItem(EntityLivingBase entity, Item item) {
 		if (entity instanceof EntityPlayer)
 			return ((EntityPlayer) entity).inventory.consumeInventoryItem(item);
-
 		return false;
 	}
-
 }

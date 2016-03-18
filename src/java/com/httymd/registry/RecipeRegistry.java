@@ -14,20 +14,13 @@ import com.httymd.api.item.WeaponType;
 import cpw.mods.fml.common.registry.GameRegistry;
 
 public class RecipeRegistry {
-	
+
 	public static void init() {
-		
-		WeaponType.DAGGER.createRecipe("#","|", '|', Items.stick);
-		WeaponType.WARAXE.createRecipe("#|#", "#|#", " | ", '|', Items.stick);
-		WeaponType.CLUB.createRecipe("#|#", " | ", " | ", '|', Items.stick);
-		WeaponType.HAMMER.createRecipe("###", "#|#", " | ", '|', Items.stick);
-		WeaponType.MACE.createRecipe(" # ", "#|#", " | ", '|', Items.stick);
-		
 		addRecipesForType(WeaponType.DAGGER);
 		addRecipesForType(WeaponType.CLUB);
 		addRecipesForType(WeaponType.MACE);
 		addRecipesForType(WeaponType.HAMMER);
-		addRecipesForType(WeaponType.WARAXE);		
+		addRecipesForType(WeaponType.WARAXE);
 
 		GameRegistry.addRecipe(new ItemStack(ItemRegistry.shieldWood),
 				"###", "$#$", "###", '#', Blocks.planks, '$', Items.stick);
@@ -74,10 +67,10 @@ public class RecipeRegistry {
 		GameRegistry.addRecipe(new ItemStack(BlockRegistry.gronkleIronBlock),
 				"III", "III", "III", 'I', ItemRegistry.gronkleIronIngot);
 		GameRegistry.addShapelessRecipe(new ItemStack(ItemRegistry.gronkleIronIngot, 9), BlockRegistry.gronkleIronBlock);
-		
-		Item[] muttonArr = getFoodArrByEnum(FoodType.MUTTON);
+
+		final Item[] muttonArr = getFoodArrByEnum(FoodType.MUTTON);
 		GameRegistry.addSmelting(muttonArr[0], new ItemStack(muttonArr[1]), 0.35F);
-		
+
 		/*
 		 * ItemStack stack = new ItemStack(ItemRegistry.zippleGasContainer);
 		 * ItemContainer.setProduceHeld(stack, 15.0F);
@@ -89,15 +82,15 @@ public class RecipeRegistry {
 		// GameRegistry.addRecipe(ItemRegistry.nightmareSalivaContainer.getEmptyContainer(),
 		// "I-I", "I I", "III", 'I', Items.iron_ingot, '-', Blocks.trapdoor);
 	}
-	
+
 	/**
 	 * Retrieves food array based on {@link FoodType}
 	 */
 	private static Item[] getFoodArrByEnum(FoodType type) {
-		Collection<Item> list = ItemRegistry.foods.get(type);
+		final Collection<Item> list = ItemRegistry.foods.get(type);
 		return list.toArray(new Item[list.size()]);
 	}
-	
+
 	private static void addRecipesForType(WeaponType type) {
 		type
 		.addMaterial(ToolMaterial.WOOD)
