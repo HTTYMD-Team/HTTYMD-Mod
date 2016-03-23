@@ -6,7 +6,7 @@ Fully describe your issue here, if its a crash, move to Steps to Reproduce
 ## Steps to Reproduce
 If you can consistently cause this through certain steps, please provide them
 
-## Log (is applicable)
+## Log (if applicable)
 Either [pastebin](http://www.pastebin.com) or [gist](https://gist.github.com) log (Direct posted logs will be ignored until properly posted, also, DON'T OMIT ANYTHING)
 
 If this is a crash and there is no log, it did not happen
